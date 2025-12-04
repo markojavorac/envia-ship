@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { useMarketplace } from "@/contexts/MarketplaceContext";
 import { ZoneModal } from "@/components/marketplace/ZoneModal";
+import { MarketplaceControlBar } from "@/components/marketplace/MarketplaceControlBar";
 import { ProductCard } from "@/components/marketplace/ProductCard";
 import { FilterSidebar } from "@/components/marketplace/FilterSidebar";
 import { CategoryTabs } from "@/components/marketplace/CategoryTabs";
@@ -70,32 +71,8 @@ function MarketplaceContent() {
       {/* Zone Modal */}
       <ZoneModal />
 
-      {/* Hero Section */}
-      <section className="bg-secondary py-12">
-        <div className="container mx-auto px-4">
-          <div className="text-center">
-            <div className="flex items-center justify-center mb-4">
-              <div className="h-16 w-16 rounded-full bg-primary flex items-center justify-center">
-                <ShoppingBag className="h-8 w-8 text-white" />
-              </div>
-            </div>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
-              Product Marketplace
-            </h1>
-            <p className="text-lg text-white/80 max-w-2xl mx-auto">
-              Browse products from our trusted partners. Instant shipping estimates to your zone.
-            </p>
-            {userZone && (
-              <div className="mt-4 inline-flex items-center gap-2 bg-primary/20 px-4 py-2 rounded-lg">
-                <MapPin className="h-4 w-4 text-white" />
-                <span className="text-sm font-semibold text-white">
-                  Delivering to {userZone.replace("-", " ")}
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
+      {/* Marketplace Control Bar */}
+      <MarketplaceControlBar />
 
       {/* Category Tabs (Uber Eats view) */}
       {currentView === MarketplaceView.UBER_EATS && (

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useMarketplace } from "@/contexts/MarketplaceContext";
 import { getProductById } from "@/lib/marketplace/product-data";
 import { calculateProductShipping, formatPrice } from "@/lib/marketplace/shipping-integration";
+import { MarketplaceControlBar } from "@/components/marketplace/MarketplaceControlBar";
 import { ProductImageGallery } from "@/components/marketplace/ProductImageGallery";
 import { ShippingEstimateBadge } from "@/components/marketplace/ShippingEstimateBadge";
 import { QuickCheckoutModal } from "@/components/marketplace/QuickCheckoutModal";
@@ -49,7 +50,7 @@ function ProductDetailContent() {
           <Package className="h-16 w-16 text-gray-300 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-secondary mb-2">Product Not Found</h2>
           <p className="text-gray-600 mb-6">
-            The product you're looking for doesn't exist or has been removed.
+            The product you&rsquo;re looking for doesn&rsquo;t exist or has been removed.
           </p>
           <Button asChild className="bg-primary text-white hover:bg-primary/90">
             <Link href="/marketplace">
@@ -66,6 +67,9 @@ function ProductDetailContent() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Marketplace Control Bar */}
+      <MarketplaceControlBar />
+
       {/* Breadcrumb */}
       <div className="bg-white border-b border-gray-200">
         <div className="container mx-auto px-4 py-4">

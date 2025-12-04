@@ -22,11 +22,11 @@ export function ZoneSelector() {
 
   return (
     <Select value={userZone || ""} onValueChange={setUserZone}>
-      <SelectTrigger className="w-48 bg-white text-secondary border-2 border-white hover:bg-white/90 focus:ring-primary/50 font-semibold">
-        <MapPin className="h-4 w-4 mr-2" />
+      <SelectTrigger className="w-48 bg-white text-secondary border-2 border-gray-200 hover:border-primary/50 focus:border-primary focus:ring-primary/20 font-semibold">
+        <MapPin className="h-4 w-4 mr-2 text-primary" />
         <SelectValue placeholder="Set Zone" />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="z-[100]">
         {GUATEMALA_ZONES.map((zone) => (
           <SelectItem key={zone.value} value={zone.value}>
             {zone.label}

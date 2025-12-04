@@ -4,7 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { MarketplaceProvider } from "@/contexts/MarketplaceContext";
 import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import ConditionalFooter from "@/components/ConditionalFooter";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -42,7 +42,7 @@ export default function RootLayout({
             <div className="flex min-h-screen flex-col">
               <Header />
               <main className="flex-1">{children}</main>
-              <Footer />
+              <ConditionalFooter />
             </div>
           </MarketplaceProvider>
         </ThemeProvider>

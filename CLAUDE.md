@@ -162,6 +162,21 @@ See `/MARKETPLACE.md` for quick reference
 - **CHANGELOG.md**: Version history and updates
 - **Code comments**: Why decisions were made (not what code does)
 
+### When to Update Documentation
+
+**"Update documentation" typically means:**
+- ✅ **CHANGELOG.md**: Always update for feature additions, fixes, changes
+- ✅ **README.md**: Update if necessary for user-facing features
+- ✅ **MARKETPLACE.md**: Update if marketplace-specific changes
+
+**Do NOT update CLAUDE.md unless:**
+- ❌ Large-scale fundamental project changes (tech stack, architecture)
+- ❌ Workflow changes that affect how development is done
+- ❌ New critical constraints or patterns that must be followed
+- ❌ Changes to design system fundamentals
+
+**Keep documentation updates efficient and lean.**
+
 ## Support
 
 - Next.js: https://nextjs.org/docs

@@ -74,7 +74,9 @@ function randomIntInRange(min: number, max: number): number {
 }
 
 function randomZone(): string {
-  return randomFromArray(GUATEMALA_ZONES).value;
+  const allZones = [...GUATEMALA_ZONES];
+  const zone = randomFromArray(allZones);
+  return zone.value;
 }
 
 function generateSellerName(): string {

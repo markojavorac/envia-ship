@@ -1,0 +1,44 @@
+here i the website https://envia.com.gt/
+
+Basically what I wanna do is make a shipping calculator for this company. The only reason I'm providing the screenshots and linked to it just so you can reference like the theme and the colour way we're still sticking with our react shots and design. It's literally just to extract the color the kind of orange and blue find the one that matches and I like how the logo at the top left, you know fits well there we want to just make a classic shipping calculator aware like I want you to research online like Weather UPS FedEx what other companies do like what are the obvious things that shipping calculators have so we can pick dimension they can pick weight they should be able to pick like you know immediate delivery as soon as possible or schedule deliveries there should be like some sort of calendar widgets by Chad CN clock widgets or whatever maybe even potential pick up location drop off location initial provide an estimate. Let's do the context of Guatemala City even on the application for right now should be full English. You don't need to connect like math, API or anything. This is more of an MVP kind of proof of concept visual kind of thing I'm getting do research and find examples of like shipping calculators and like planners. Find some basic gas calculations nothing too crazy but yeah.
+
+markojavorac@Markos-MacBook-Air envia-ship % claude --dangerously-skip-permissions
+
+ ▐▛███▜▌   Claude Code v2.0.58
+▝▜█████▛▘  Sonnet 4.5 · Claude API
+  ▘▘ ▝▝    ~/envia-ship
+
+> OK, we were recently working on a lot of stuff. We implemented the AI estimate generator and I'm pretty pleased with it now I wanna move onto something else 
+that's good so just a little background I'm designing this for my girlfriend Cristina because this company is her family's company and I want to come in and do some
+ cool things and she has some good ideas and the points. I want to like prototype and create proof for concept stuff that would excite her and then maybe in the 
+future actually is like real but right now we're just focussed on kind of experimentation cool ideas so she had the idea for the pricing calculator and I introduced
+ that AI thing and one thing she kind of mentioned essentially for context is this company does like last mile logistics in Guatemala and they have a lot of 
+interesting client summer banks. A lot of them are like pharmacies you know for delivering like supplies are usually on like motorbikes and they have a lot of very 
+clients and one thing she was thinking about doing she just very briefly mentioned a potential marketplace, where if their clients are already like using their 
+services to deliver they thought she I think what she's thinking is that would be a good idea to like whatever products and services they're already kind of moving 
+and have deals with. They could also post them here publicly obviously not like you credit cards or thanks for a little bit different but maybe there's other 
+companies like I know one of their clients is like a chicken a franchise chicken place and they deliver for them and then they have other companies usually deliver 
+like things for and then she wants to make this like sort of marketplace and that this marketplace would like acts like a pseudo Amazon where they would be able to 
+like see what products are available like search and then like instantly get like the price estimate, including the shipping, which is obviously done through the 
+company and they can get a price estimate depending on what zone so yeah that's the general idea is like a marketplace for some products that they already kind of 
+have companies with so what I want to do is think about mocking up a new component that's a marketplace component and at the high-level I want like three different 
+variations of it one let's say closer to Amazo another like one maybe like an Uber type deal or like I don't actually know really what we wanna want you to kind of 
+infer from what I'm saying here and come up with like logical ways to present this. Remember, this is mock up prototype MVP level the focusses right now more on 
+styling and visualization versus like super logic and actually having it like working fully. I think the idea is that we have the marketplace page a basic search 
+thing and filtering by the categories, you could pre-build a vast array of like generic like products just for test testing right now then if they click on the 
+product, there's a product details and in similar way where they can put which zone delivery in which time they want delivered, we could kind oft's what I'm 
+thinking. I want you to take some time in for what I'm saying here maybe do some more research and come up with abroad list of like Q&A questions that mean, you 
+could work back-and-forth to maybe like hammer out some things before we proceed with an implementation 
+
+∴ Thinking…
+
+· Waddling… (esc to interrupt)
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+>  
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  ⏸ plan mode on (shift+tab to cycle)
+
+
+
+

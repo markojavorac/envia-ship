@@ -6,7 +6,6 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
 import { Layout } from "lucide-react";
 import { VIEW_OPTIONS } from "@/lib/marketplace/types";
@@ -22,11 +21,11 @@ export function UIStyleSwitcher() {
 
   return (
     <Select value={currentView} onValueChange={setCurrentView}>
-      <SelectTrigger className="w-44 bg-white text-secondary border-2 border-white hover:bg-white/90 focus:ring-primary/50 font-semibold">
-        <Layout className="h-4 w-4 mr-2" />
-        <SelectValue />
+      <SelectTrigger className="w-32 bg-white text-secondary border-2 border-gray-200 hover:border-primary/50 focus:border-primary focus:ring-primary/20 font-semibold">
+        <Layout className="h-4 w-4 mr-2 text-primary" />
+        <span>Layout</span>
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="z-[100]">
         {VIEW_OPTIONS.map((view) => (
           <SelectItem key={view.value} value={view.value}>
             <div className="flex flex-col">

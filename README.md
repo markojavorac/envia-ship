@@ -55,6 +55,7 @@ Visit `http://localhost:3000`
   /calculator           # Shipping calculator
   /marketplace          # Product marketplace
     /[productId]        # Product detail pages
+  /contact              # Contact page
   layout.tsx            # Root layout with providers
   globals.css           # Tailwind CSS with theme
 

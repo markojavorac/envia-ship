@@ -13,7 +13,7 @@ export const checkoutSchema = z.object({
     .min(10, "Please enter a complete delivery address")
     .max(200, "Address is too long"),
   serviceType: z.nativeEnum(ServiceType, {
-    errorMap: () => ({ message: "Please select a service type" }),
+    message: "Please select a service type",
   }),
   customerName: z
     .string()

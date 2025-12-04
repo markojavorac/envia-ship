@@ -106,3 +106,53 @@ input[type="number"] {
   -moz-appearance: textfield;
   appearance: textfield;
 }
+
+/* Admin Dashboard Dark Theme */
+[data-theme="admin"] {
+  /* Override base CSS variables */
+  --background: hsl(222 47% 11%);        /* slate-900 #0f172a */
+  --card: hsl(217 33% 17%);              /* slate-800 #1e293b */
+  --border: hsl(215 20% 30%);            /* More subtle border */
+  --primary: hsl(33 100% 50%);           /* Orange #FF8C00 */
+  --secondary: hsl(217 91% 60%);         /* Lightened blue for dark mode */
+  --foreground: hsl(210 40% 98%);        /* slate-50 #f8fafc */
+  --muted-foreground: hsl(215 16% 65%);  /* slate-300 #cbd5e1 */
+  --popover: hsl(217 33% 17%);           /* slate-800 */
+  --popover-foreground: hsl(210 40% 98%);
+  --muted: hsl(215 20% 27%);             /* slate-700 */
+  --destructive: hsl(0 84% 60%);         /* red-500 */
+  --destructive-foreground: hsl(210 40% 98%);
+  --input: hsl(215 20% 27%);             /* slate-700 */
+  --ring: hsl(33 100% 50%);              /* Orange */
+  --radius: 0.25rem;                     /* 4px - industrial sharp corners */
+  --chart-1: hsl(33 75% 62%);            /* Orange - enhanced contrast */
+  --chart-2: hsl(195 70% 60%);           /* Teal - distinct from orange */
+  --chart-3: hsl(275 45% 65%);           /* Purple - completes triad */
+  --chart-4: hsl(38 65% 55%);            /* amber - muted but visible */
+  --chart-5: hsl(271 55% 62%);           /* purple - muted but visible */
+
+  /* CRITICAL: Override Tailwind v4 color tokens directly */
+  --color-background: hsl(222 47% 11%);
+  --color-foreground: hsl(210 40% 98%);
+  --color-card: hsl(217 33% 17%);
+  --color-card-foreground: hsl(210 40% 98%);
+  --color-popover: hsl(217 33% 17%);
+  --color-popover-foreground: hsl(210 40% 98%);
+  --color-primary: hsl(33 100% 50%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-secondary: hsl(217 91% 60%);
+  --color-secondary-foreground: hsl(210 40% 98%);
+  --color-muted: hsl(215 20% 27%);
+  --color-muted-foreground: hsl(215 16% 65%);
+  --color-destructive: hsl(0 84% 60%);
+  --color-destructive-foreground: hsl(210 40% 98%);
+  --color-border: hsl(215 20% 30%);
+  --color-input: hsl(215 20% 27%);
+  --color-ring: hsl(33 100% 50%);
+  --color-radius: 0.25rem;
+  --color-chart-1: hsl(33 70% 55%);
+  --color-chart-2: hsl(217 60% 65%);
+  --color-chart-3: hsl(215 20% 70%);
+  --color-chart-4: hsl(38 65% 55%);
+  --color-chart-5: hsl(271 55% 62%);
+}
