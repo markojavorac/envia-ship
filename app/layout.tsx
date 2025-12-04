@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { MarketplaceProvider } from "@/contexts/MarketplaceContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -37,11 +38,13 @@ export default function RootLayout({
         className={`${inter.variable} ${dmSans.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
         <ThemeProvider>
-          <div className="flex min-h-screen flex-col">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
+          <MarketplaceProvider>
+            <div className="flex min-h-screen flex-col">
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
+          </MarketplaceProvider>
         </ThemeProvider>
       </body>
     </html>

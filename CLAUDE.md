@@ -39,31 +39,56 @@ npm run lint
 
 ```
 /app
-  - layout.tsx           # Root layout with fonts and theme provider
+  - layout.tsx           # Root layout with fonts, theme, and marketplace providers
   - globals.css          # Tailwind CSS v4 with theme inline
   - page.tsx             # Home page with hero, features, CTA
   - icon.tsx             # Dynamic favicon using Next.js icon route
   /calculator
     - page.tsx           # Calculator page with form
+  /marketplace
+    - page.tsx           # Marketplace with 5 UI variations
+    /[productId]
+      - page.tsx         # Product detail page with shipping estimates
 
 /components
-  - Header.tsx           # Navigation with logo (2 links only)
+  - Header.tsx           # Navigation with zone/UI switchers (marketplace)
   - Footer.tsx           # Footer with 3-column layout
   /calculator
     - ShippingCalculatorForm.tsx  # Main calculator form
     - PricingResultsCard.tsx      # Results display
+  /marketplace
+    - ProductCard.tsx              # Product card with 5 variants
+    - ProductGrid.tsx              # Grid/masonry layout manager
+    - ZoneModal.tsx                # First-visit zone selection
+    - ZoneSelector.tsx             # Header zone dropdown
+    - UIStyleSwitcher.tsx          # Header UI variation switcher
+    - FilterSidebar.tsx            # Amazon-style filters
+    - CategoryTabs.tsx             # Uber Eats-style tabs
+    - ProductSearch.tsx            # Search bar
+    - SortDropdown.tsx             # Sort options
+    - ShippingEstimateBadge.tsx    # Shipping cost display
+    - QuickCheckoutModal.tsx       # Single product checkout
+    - ProductImageGallery.tsx      # Image viewer
   /ui                    # shadcn/ui components
 
 /contexts
-  - ThemeContext.tsx     # React Context for theming
+  - ThemeContext.tsx       # React Context for theming
+  - MarketplaceContext.tsx # Zone, view, filters state (global)
 
 /lib
   - types.ts             # TypeScript interfaces and enums
   - themes.ts            # Envia Guatemala theme configuration
   - utils.ts             # Utility functions (cn, etc.)
   - shipping-calculator.ts  # Pricing calculation engine
+  /marketplace
+    - types.ts                 # Product, MarketplaceView types
+    - product-data.ts          # 70 mock products generator
+    - product-filters.ts       # Filter/search/sort utilities
+    - shipping-integration.ts  # Bridge to calculator
+    - storage.ts               # localStorage helpers
   /validations
-    - shipping-schema.ts # Zod validation schemas
+    - shipping-schema.ts   # Zod shipping validation
+    - checkout-schema.ts   # Zod checkout validation
 
 /public
   - envia-logo.png       # Envia brand logo
@@ -211,10 +236,15 @@ input[type="number"] {
 - Sticky header: `bg-secondary` (solid navy, no backdrop blur)
 - **NO border** between header and content
 - Envia logo (120px width)
-- **Only 2 navigation links**: Home, Calculator
+- **Navigation links**: Home, Calculator, Marketplace
 - **Simple text links** (NOT NavigationMenu component):
   - Desktop: `font-bold text-white hover:text-primary`
   - Mobile: Clean hamburger menu, NO duplicate logo, NO border lines between items
+- **Marketplace Controls** (conditionally rendered on `/marketplace` routes):
+  - **ZoneSelector**: White dropdown (`bg-white text-secondary font-semibold`)
+  - **UIStyleSwitcher**: White dropdown (matches ZoneSelector styling exactly)
+  - Both visible only when `pathname?.startsWith("/marketplace")`
+  - Desktop only (hidden on mobile)
 - "Get Quote" CTA button (orange)
 - Height: `h-14`
 - **Seamless navigation** - blends perfectly with navy header
@@ -461,6 +491,352 @@ Uses Next.js icon route to generate a favicon with brand initials in Envia orang
 - **CRITICAL**: Required for Tailwind CSS v4
 - Must include `@tailwindcss/postcss` plugin
 
+---
+
+## Marketplace Feature
+
+### Overview
+
+The marketplace is a complete product browsing and purchasing system that allows ENVÍA's clients (restaurants, pharmacies, retail stores) to list products publicly. Users can browse products, see instant shipping estimates to their zone, and complete single-product purchases.
+
+**Key Features:**
+- 5 switchable UI variations (Amazon, Uber Eats, Pinterest, Minimalist, Proximity)
+- 70 mock products across 3 categories
+- Zone-based shipping price integration
+- Single product instant checkout (no cart)
+- Filtering, sorting, and search
+- Responsive design for all variations
+
+### The 5 UI Variations
+
+#### 1. **Amazon-Style** (Classic E-commerce)
+- **Layout**: Dense 3-4 column grid with left sidebar filters
+- **Cards**: Text-heavy, ratings, short descriptions
+- **Filters**: Left sidebar (category, price, zone, rating, stock)
+- **Sorting**: Top bar dropdown
+- **Use Case**: Users who want detailed info and robust filtering
+
+#### 2. **Uber Eats-Style** (Visual Browse)
+- **Layout**: 2-3 column grid with sticky category tabs
+- **Cards**: Large 16:9 images, delivery time focus
+- **Navigation**: Horizontal category tabs with icons
+- **Hover**: Scale + shadow effects
+- **Use Case**: Food-focused browsing, visual discovery
+
+#### 3. **Pinterest-Style** (Masonry Discovery)
+- **Layout**: CSS columns masonry grid (variable height)
+- **Cards**: Image-first, minimal text initially
+- **Interaction**: Hover overlay slides up with details
+- **Use Case**: Visual discovery, image-heavy products
+
+#### 4. **Minimalist/Apple-Style** (Premium Clean)
+- **Layout**: Spacious 2-3 column grid with maximum whitespace
+- **Cards**: Huge 1:1 images (400-500px), product name + price only
+- **Buttons**: Outline style "View Details"
+- **Borders**: None - subtle shadows only
+- **Use Case**: Premium products, lifestyle brands
+
+#### 5. **Proximity/Local-Style** (Zone-Focused)
+- **Layout**: Zone-grouped sections (user's zone first, then nearby)
+- **Cards**: Location badges prominent, delivery time emphasized
+- **Grouping**: "Available in Zona 10" → "Nearby Zones"
+- **Use Case**: Local delivery focus, same-zone priority
+
+### Architecture
+
+#### State Management
+
+**MarketplaceContext** (`/contexts/MarketplaceContext.tsx`):
+- **CRITICAL**: Wrapped at root layout level (`app/layout.tsx`)
+- **Why**: Header components (ZoneSelector, UIStyleSwitcher) need context access
+- **State**:
+  - `userZone`: Selected delivery zone
+  - `currentView`: Active UI variation (amazon, ubereats, etc.)
+  - `serviceType`: Shipping service (standard, express, international)
+  - `filterState`: Category, price range, ratings, search query
+  - `sortOption`: Sort method (price, rating, newest, nearest)
+
+**localStorage Keys**:
+- `envia_user_delivery_zone`: Persisted zone selection
+- `envia_marketplace_view`: Persisted UI variation
+- `envia_service_type`: Persisted service preference
+- `envia_zone_set_date`: Timestamp of zone selection
+
+#### Mock Data System
+
+**Product Generation** (`/lib/marketplace/product-data.ts`):
+- Generates 70 products across 3 categories
+- **Categories**:
+  - Food & Beverages (23 products)
+  - Pharmacy & Medical (24 products)
+  - General Retail (23 products)
+- **Product Templates**: Predefined product types with price/weight/dimensions ranges
+- **Images**: Uses `placehold.co` with brand colors (orange/navy)
+- **Sellers**: Random Guatemala-themed names ("Casa de María", "Tienda Central")
+- **Zones**: Distributed across Zona 1-16
+
+**Image Strategy**:
+```typescript
+// IMPORTANT: Do NOT use Unsplash (fails with 503 errors)
+// Use placehold.co with brand colors
+https://placehold.co/400x400/FF8C00/FFFFFF/png?text=Food      // Orange bg
+https://placehold.co/400x400/1E3A5F/FFFFFF/png?text=Medical   // Navy bg
+https://placehold.co/400x400/FF8C00/1E3A5F/png?text=Retail    // Orange bg, navy text
+```
+
+#### Shipping Integration
+
+**Bridge to Calculator** (`/lib/marketplace/shipping-integration.ts`):
+- Uses existing `calculateShippingPrice()` from `/lib/shipping-calculator.ts`
+- Calculates shipping for each product based on:
+  - Product dimensions (L × W × H)
+  - Product weight
+  - Origin zone → Delivery zone
+  - Service type multiplier
+
+**Key Functions**:
+```typescript
+// Calculate shipping for single product
+calculateProductShipping(product, userZone, serviceType) → ShippingEstimate
+
+// Batch enrich all products with shipping
+enrichProductsWithShipping(products, userZone, serviceType) → ProductWithShipping[]
+```
+
+**Default Service**: Standard (1× multiplier, 3-5 day delivery)
+
+### Component Architecture
+
+#### Header Integration
+
+**ZoneSelector** (`components/marketplace/ZoneSelector.tsx`):
+- White background (`bg-white`) with navy text (`text-secondary`)
+- Semibold font (`font-semibold`)
+- Icon: MapPin
+- Shows selected zone or "Set Zone"
+- **CRITICAL**: Must have `bg-white` - NOT `bg-secondary/10` (causes unreadable text)
+
+**UIStyleSwitcher** (`components/marketplace/UIStyleSwitcher.tsx`):
+- Same styling as ZoneSelector (white bg, navy text, semibold)
+- Icon: Layout
+- Shows current view label
+- Dropdown includes view description
+- **CRITICAL**: Must match ZoneSelector styling exactly
+
+**Common Mistake to Avoid**:
+```typescript
+// ❌ BAD - Creates unreadable semi-transparent background
+className="bg-secondary/10 text-white border-white/20"
+
+// ✅ GOOD - Clean, readable, matches design system
+className="bg-white text-secondary border-2 border-white hover:bg-white/90 font-semibold"
+```
+
+#### ProductCard Variants
+
+**ProductCard** (`components/marketplace/ProductCard.tsx`):
+- Single component with `variant` prop
+- Renders completely different layouts based on variation
+- All variants must follow design system:
+  - White card backgrounds (`bg-white border-2 border-primary/30`)
+  - Orange accents for buttons/badges (`bg-primary`)
+  - Navy text (`text-secondary`)
+  - Semibold/bold typography
+
+**Variant-Specific Features**:
+- **Amazon**: Dense info, stock badge, rating stars
+- **Uber Eats**: Large images, delivery time badge, hover scale
+- **Pinterest**: Minimal initial, full overlay on hover
+- **Minimalist**: Huge images, name + price only, spacious
+- **Proximity**: Zone badges, "Delivers today!" for same-zone
+
+#### Product Detail Page
+
+**Page** (`app/marketplace/[productId]/page.tsx`):
+- Image gallery with thumbnails (3 images per product)
+- Seller info card (name, rating, verified badge, origin zone)
+- Shipping estimate badge with breakdown
+- Product details table (weight, dimensions, category, origin)
+- Tags display
+- "Buy Now" button opens QuickCheckoutModal
+
+**Checkout Flow** (`components/marketplace/QuickCheckoutModal.tsx`):
+- Single product only (no cart)
+- Form fields:
+  - Quantity (stock-limited)
+  - Delivery zone (pre-filled from context)
+  - Delivery address
+  - Full name, phone, email (optional)
+  - Order notes (optional)
+- Order summary:
+  - Product total (price × quantity)
+  - Shipping cost (from calculator)
+  - Grand total
+- Zod validation (`/lib/validations/checkout-schema.ts`)
+- Mock order confirmation (no real backend)
+
+### Filtering and Sorting
+
+**Filter Options** (`/lib/marketplace/product-filters.ts`):
+- **Search**: Text search across product names and descriptions
+- **Category**: Food/Beverages, Pharmacy/Medical, General Retail
+- **Price Range**: Slider with min/max (dynamically calculated)
+- **Rating**: Minimum star rating filter
+- **Zone**: Filter by origin zone
+- **In Stock**: Toggle to show only available items
+
+**Sort Options**:
+- **Relevance**: Default, prioritizes featured products
+- **Price**: Low to high, High to low
+- **Rating**: Highest rated first
+- **Newest**: Most recently added
+- **Nearest**: Closest origin zone to user's zone
+
+### User Flow
+
+#### First Visit
+1. Navigate to `/marketplace`
+2. **ZoneModal** appears automatically (first visit only)
+3. User selects delivery zone from dropdown
+4. Zone saved to localStorage
+5. Products load with shipping estimates
+6. Modal doesn't show again (unless localStorage cleared)
+
+#### Browsing
+1. Products displayed in default view (Amazon-style on first load)
+2. User can switch UI variations via header dropdown
+3. Layout transforms without page reload
+4. Filter sidebar / category tabs / search available (depending on view)
+5. Shipping estimates shown on all cards
+
+#### Purchasing
+1. Click product card → Navigate to `/marketplace/[productId]`
+2. View full product details, images, seller info
+3. See shipping breakdown
+4. Click "Buy Now" → QuickCheckoutModal opens
+5. Fill form (quantity, address, contact)
+6. Review order summary with shipping
+7. Click "Place Order" → Mock confirmation
+8. **Note**: No cart, no multi-product checkout, no real payment
+
+### Design System Compliance
+
+**Critical Rules for Marketplace**:
+- ✅ **ALL card backgrounds**: `bg-white border-2 border-primary/30`
+- ✅ **Header dropdowns**: `bg-white text-secondary font-semibold` (NOT semi-transparent)
+- ✅ **Primary buttons**: `bg-primary text-white font-semibold`
+- ✅ **Orange accents**: Badges, focus states, icons
+- ✅ **Navy text**: Headings, labels, body text
+- ✅ **Bold typography**: All headings, navigation, labels
+- ✅ **No gradients**: Solid colors only
+- ✅ **No teal**: Orange + Navy + White ONLY
+
+**Image Placeholders**:
+- ❌ **NEVER use Unsplash**: Service unreliable, causes 503 errors
+- ✅ **ALWAYS use placehold.co**: Reliable, customizable, supports brand colors
+- ✅ **Include category in filename**: Easy to distinguish products
+
+### Troubleshooting
+
+#### Context Errors
+**Error**: `useMarketplace must be used within a MarketplaceProvider`
+
+**Cause**: Component trying to use context outside provider scope
+
+**Solution**: Ensure `MarketplaceProvider` wraps entire app in `app/layout.tsx`:
+```typescript
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>
+        <ThemeProvider>
+          <MarketplaceProvider>  {/* CRITICAL: Must wrap Header */}
+            <Header />
+            <main>{children}</main>
+            <Footer />
+          </MarketplaceProvider>
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+**DO NOT** wrap individual pages - context must be global for Header access.
+
+#### Image Loading Failures
+**Error**: Upstream image response failed, images showing broken/corrupt
+
+**Cause 1**: Using Unsplash API (unreliable, rate-limited)
+- **Fix**: Switch to `placehold.co` in `/lib/marketplace/product-data.ts`
+
+**Cause 2**: Next.js Image optimization failing
+- **Fix**: Add `unoptimized` prop to Image component OR configure `next.config.ts` remote patterns
+
+**Cause 3**: DNS resolution failing for placeholder service
+- **Fix**: Verify internet connection, try alternative service (e.g., `placehold.co`, `dummyimage.com`)
+
+#### Header Dropdowns Unreadable
+**Error**: Zone selector and UI switcher have blue semi-transparent background, text unreadable
+
+**Cause**: Using `bg-secondary/10 text-white border-white/20` (wrong styling)
+
+**Fix**: Change to `bg-white text-secondary border-2 border-white font-semibold`
+- Both components must match this styling exactly
+- Located in:
+  - `/components/marketplace/ZoneSelector.tsx`
+  - `/components/marketplace/UIStyleSwitcher.tsx`
+
+#### UI Variation Not Switching
+**Error**: Clicking UI switcher doesn't change layout
+
+**Cause**: MarketplaceContext state not updating OR ProductGrid not responding to view changes
+
+**Debug**:
+1. Check browser console for context errors
+2. Verify `currentView` state updates in React DevTools
+3. Ensure marketplace page reads `currentView` from context
+4. Check conditional rendering logic in marketplace page
+
+### Testing
+
+**Playwright Tests** (`test-marketplace-simple.mjs`):
+- Navigates to marketplace
+- Handles zone modal (selects Zona 10)
+- Captures full-page screenshot
+- Clicks first product, navigates to detail
+- Captures product detail screenshot
+- Opens checkout modal
+- Captures checkout screenshot
+
+**Run Tests**:
+```bash
+node test-marketplace-simple.mjs
+```
+
+**Screenshots Generated**:
+- `marketplace-initial.png`: Full marketplace grid
+- `marketplace-product-detail.png`: Product detail page
+- `marketplace-checkout.png`: Checkout modal open
+
+### Future Enhancements
+
+**Not Yet Implemented** (out of MVP scope):
+- Shopping cart (multi-product checkout)
+- Real payment integration
+- Backend product database
+- Seller accounts and product management
+- User accounts and order history
+- Product reviews and ratings submission
+- Advanced filtering (by tags, sellers, etc.)
+- Pagination or infinite scroll
+- Wishlist / favorites
+- Product comparison
+- Real-time inventory updates
+- Order tracking
+
+---
+
 ## Key Constraints and Best Practices
 
 ### DO:
@@ -571,6 +947,23 @@ Components are added to `/components/ui`.
 ## Project Evolution
 
 **Recent Updates** (December 2025):
+
+### Marketplace Feature (NEW)
+- **Complete product browsing system** with 5 switchable UI variations
+- **70 mock products** across Food/Beverages, Pharmacy/Medical, General Retail
+- **Zone-based shipping integration** with existing calculator
+- **Single product checkout** with Zod validation
+- **Global MarketplaceContext** wrapped at root layout for Header access
+- **Header controls**: ZoneSelector and UIStyleSwitcher with proper white backgrounds
+- **Image system**: placehold.co with brand colors (orange/navy)
+- **Filtering & sorting**: Category, price, rating, zone, stock, search
+- **Responsive design**: All 5 variations mobile-optimized
+- **Critical fixes**:
+  - Fixed context provider scope (must wrap entire app)
+  - Fixed header dropdown styling (white bg, navy text, semibold)
+  - Fixed image loading (switched from Unsplash to placehold.co)
+
+### Design System Updates
 - **Theme Standardization**: Removed all teal/accent colors, strict orange + navy only
 - **CSS Variable Fix**: Corrected Tailwind v4 HSL format with `hsl()` wrapper
 - **Navigation Redesign**: Bold text links, removed NavigationMenu component, no borders
@@ -586,12 +979,14 @@ Components are added to `/components/ui`.
 - **Inline Styles**: Removed ALL inline `style={{}}` props
 - **Design Consistency**: Solid orange icon backgrounds, white cards, no gradients
 
-**Current Version**: Unreleased (Modern UI/UX Redesign)
+**Current Version**: Unreleased (Marketplace MVP + Modern UI/UX)
+- Complete marketplace with 5 UI variations
 - Modern, condensed design system
 - shadcn/ui components exclusively
 - Strict two-color palette (orange + navy)
 - Professional, bold typography
 - Clean, modern form elements
+- Zone-based shipping calculator integration
 
 **Previous Version**: 0.1.0 (Initial MVP)
 - Basic shipping calculator

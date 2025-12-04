@@ -1,17 +1,23 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ZoneSelector } from "./marketplace/ZoneSelector";
+import { UIStyleSwitcher } from "./marketplace/UIStyleSwitcher";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const isMarketplace = pathname?.startsWith("/marketplace");
 
   const navigationLinks = [
     { href: "/", label: "Home" },
     { href: "/calculator", label: "Calculator" },
+    { href: "/marketplace", label: "Marketplace" },
   ];
 
   return (
@@ -41,6 +47,14 @@ export default function Header() {
             </Link>
           ))}
         </nav>
+
+        {/* Marketplace Controls - Desktop Only */}
+        {isMarketplace && (
+          <div className="hidden md:flex items-center gap-3">
+            <ZoneSelector />
+            <UIStyleSwitcher />
+          </div>
+        )}
 
         {/* Call to Action Button - Desktop */}
         <div className="hidden md:flex">
