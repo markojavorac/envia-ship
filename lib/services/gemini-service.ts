@@ -10,7 +10,8 @@ export async function analyzePackageWithGemini(
   }
 
   const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY);
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+  // Using Gemini 2.5 Flash - GA model optimized for vision analysis
+  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
   const prompt = buildGeminiPrompt();
 
