@@ -122,11 +122,11 @@ export function ReviewEditStep({
         <CardContent className="space-y-4">
           {/* Product Name */}
           <div>
-            <Label htmlFor="name" className="font-semibold">Product Name</Label>
+            <Label htmlFor="name" className="font-semibold text-foreground">Product Name</Label>
             <Input
               id="name"
               {...register("name")}
-              className="mt-1 bg-white border-2 border-gray-200 focus:border-primary focus:ring-primary/20"
+              className="mt-1 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20"
             />
             {errors.name && (
               <p className="text-sm text-red-500 mt-1">{errors.name.message}</p>
@@ -135,12 +135,12 @@ export function ReviewEditStep({
 
           {/* Category */}
           <div>
-            <Label htmlFor="category" className="font-semibold">Category</Label>
+            <Label htmlFor="category" className="font-semibold text-foreground">Category</Label>
             <Select
               defaultValue={analysis.category as string}
               onValueChange={(value) => setValue("category", value as ProductCategory)}
             >
-              <SelectTrigger className="mt-1 bg-white border-2 border-gray-200 focus:border-primary focus:ring-primary/20">
+              <SelectTrigger className="mt-1 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -189,12 +189,12 @@ export function ReviewEditStep({
         <CardContent className="space-y-4">
           {/* Full Description */}
           <div>
-            <Label htmlFor="description" className="font-semibold">Full Description</Label>
+            <Label htmlFor="description" className="font-semibold text-foreground">Full Description</Label>
             <Textarea
               id="description"
               {...register("description")}
               rows={4}
-              className="mt-1 bg-white border-2 border-gray-200 focus:border-primary focus:ring-primary/20"
+              className="mt-1 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20"
             />
             <p className="text-xs text-muted-foreground mt-1">
               {currentDescription?.length || 0} / 1000 characters
@@ -206,11 +206,11 @@ export function ReviewEditStep({
 
           {/* Short Description */}
           <div>
-            <Label htmlFor="shortDescription" className="font-semibold">Short Description</Label>
+            <Label htmlFor="shortDescription" className="font-semibold text-foreground">Short Description</Label>
             <Input
               id="shortDescription"
               {...register("shortDescription")}
-              className="mt-1 bg-white border-2 border-gray-200 focus:border-primary focus:ring-primary/20"
+              className="mt-1 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20"
             />
             {errors.shortDescription && (
               <p className="text-sm text-red-500 mt-1">{errors.shortDescription.message}</p>
@@ -245,13 +245,13 @@ export function ReviewEditStep({
 
           {/* Price Input */}
           <div>
-            <Label htmlFor="price" className="font-semibold">Your Price (GTQ) *</Label>
+            <Label htmlFor="price" className="font-semibold text-foreground">Your Price (GTQ) *</Label>
             <Input
               id="price"
               type="number"
               step="0.01"
               {...register("price", { valueAsNumber: true })}
-              className="mt-1 bg-white border-2 border-gray-200 focus:border-primary focus:ring-primary/20"
+              className="mt-1 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20"
               placeholder="Enter product price"
             />
             <p className="text-xs text-muted-foreground mt-1">
@@ -278,7 +278,7 @@ export function ReviewEditStep({
           {/* Dimensions */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <Label className="font-semibold">Dimensions (cm)</Label>
+              <Label className="font-semibold text-foreground">Dimensions (cm)</Label>
               <ConfidenceIndicator confidence={analysis.dimensions.confidence} size="sm" />
             </div>
 
@@ -296,39 +296,39 @@ export function ReviewEditStep({
 
             <div className="grid grid-cols-3 gap-3">
               <div>
-                <Label htmlFor="length" className="text-xs">Length</Label>
+                <Label htmlFor="length" className="text-xs text-foreground">Length</Label>
                 <Input
                   id="length"
                   type="number"
                   step="0.1"
                   {...register("dimensions.length", { valueAsNumber: true })}
-                  className="mt-1 bg-white border-2 border-gray-200 focus:border-primary focus:ring-primary/20"
+                  className="mt-1 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20"
                 />
                 {errors.dimensions?.length && (
                   <p className="text-xs text-red-500 mt-1">{errors.dimensions.length.message}</p>
                 )}
               </div>
               <div>
-                <Label htmlFor="width" className="text-xs">Width</Label>
+                <Label htmlFor="width" className="text-xs text-foreground">Width</Label>
                 <Input
                   id="width"
                   type="number"
                   step="0.1"
                   {...register("dimensions.width", { valueAsNumber: true })}
-                  className="mt-1 bg-white border-2 border-gray-200 focus:border-primary focus:ring-primary/20"
+                  className="mt-1 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20"
                 />
                 {errors.dimensions?.width && (
                   <p className="text-xs text-red-500 mt-1">{errors.dimensions.width.message}</p>
                 )}
               </div>
               <div>
-                <Label htmlFor="height" className="text-xs">Height</Label>
+                <Label htmlFor="height" className="text-xs text-foreground">Height</Label>
                 <Input
                   id="height"
                   type="number"
                   step="0.1"
                   {...register("dimensions.height", { valueAsNumber: true })}
-                  className="mt-1 bg-white border-2 border-gray-200 focus:border-primary focus:ring-primary/20"
+                  className="mt-1 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20"
                 />
                 {errors.dimensions?.height && (
                   <p className="text-xs text-red-500 mt-1">{errors.dimensions.height.message}</p>
@@ -340,7 +340,7 @@ export function ReviewEditStep({
           {/* Weight */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <Label htmlFor="weight" className="font-semibold">Weight (kg)</Label>
+              <Label htmlFor="weight" className="font-semibold text-foreground">Weight (kg)</Label>
               <ConfidenceIndicator confidence={analysis.weight.confidence} size="sm" />
             </div>
 
@@ -361,7 +361,7 @@ export function ReviewEditStep({
               type="number"
               step="0.01"
               {...register("weight", { valueAsNumber: true })}
-              className="bg-white border-2 border-gray-200 focus:border-primary focus:ring-primary/20"
+              className="bg-background border-border text-foreground focus:border-primary focus:ring-primary/20"
             />
             {errors.weight && (
               <p className="text-sm text-red-500 mt-1">{errors.weight.message}</p>
@@ -370,9 +370,9 @@ export function ReviewEditStep({
 
           {/* AI Notes */}
           {analysis.notes && analysis.notes.length > 0 && (
-            <div className="p-3 bg-muted rounded-md">
+            <div className="p-3 bg-card border border-border rounded-md">
               <p className="text-xs font-semibold text-foreground mb-1">AI Notes</p>
-              <ul className="text-xs text-muted-foreground space-y-1">
+              <ul className="text-xs text-foreground space-y-1">
                 {analysis.notes.map((note, i) => (
                   <li key={i}>• {note}</li>
                 ))}
@@ -395,7 +395,7 @@ export function ReviewEditStep({
         <CardContent className="space-y-4">
           {/* Tags */}
           <div>
-            <Label htmlFor="tags" className="font-semibold">Tags (comma-separated)</Label>
+            <Label htmlFor="tags" className="font-semibold text-foreground">Tags (comma-separated)</Label>
             <Input
               id="tags"
               {...register("tags", {
@@ -408,7 +408,7 @@ export function ReviewEditStep({
                 },
               })}
               defaultValue={analysis.suggestedTags.join(", ")}
-              className="mt-1 bg-white border-2 border-gray-200 focus:border-primary focus:ring-primary/20"
+              className="mt-1 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20"
               placeholder="coffee, guatemalan, premium"
             />
             {errors.tags && (
@@ -418,12 +418,12 @@ export function ReviewEditStep({
 
           {/* Origin Zone */}
           <div>
-            <Label htmlFor="originZone" className="font-semibold">Origin Zone</Label>
+            <Label htmlFor="originZone" className="font-semibold text-foreground">Origin Zone</Label>
             <Select
               defaultValue="zona-10"
               onValueChange={(value) => setValue("originZone", value)}
             >
-              <SelectTrigger className="mt-1 bg-white border-2 border-gray-200 focus:border-primary focus:ring-primary/20">
+              <SelectTrigger className="mt-1 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -441,12 +441,12 @@ export function ReviewEditStep({
 
           {/* Stock */}
           <div>
-            <Label htmlFor="stock" className="font-semibold">Stock Quantity</Label>
+            <Label htmlFor="stock" className="font-semibold text-foreground">Stock Quantity</Label>
             <Input
               id="stock"
               type="number"
               {...register("stock", { valueAsNumber: true })}
-              className="mt-1 bg-white border-2 border-gray-200 focus:border-primary focus:ring-primary/20"
+              className="mt-1 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20"
               placeholder="0"
             />
             {errors.stock && (

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X, LayoutDashboard, Store, BarChart3, Package, ShoppingBag, type LucideIcon } from "lucide-react";
+import { Menu, X, LayoutDashboard, Store, BarChart3, Package, ShoppingBag, Truck, type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function Header() {
@@ -25,6 +25,7 @@ export default function Header() {
   const adminNavigationLinks = [
     { href: "/admin", label: "Dashboard", icon: BarChart3 },
     { href: "/admin/orders", label: "Orders", icon: Package },
+    { href: "/admin/dispatch", label: "Dispatch", icon: Truck },
     { href: "/admin/products", label: "Products", icon: ShoppingBag },
   ];
 

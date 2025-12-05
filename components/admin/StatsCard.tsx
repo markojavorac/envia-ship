@@ -19,11 +19,11 @@ interface StatsCardProps {
 export function StatsCard({ label, value, icon: Icon, trend, badge }: StatsCardProps) {
   return (
     <Card className="bg-card border-border hover:border-primary/50 transition-colors rounded-md">
-      <CardContent className="pt-4 pb-4 px-4">
+      <CardContent className="pt-8 pb-8 px-4">
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <p className="text-sm text-muted-foreground mb-1">{label}</p>
-            <h3 className="text-2xl font-bold text-foreground">{value}</h3>
+            <p className="text-base text-muted-foreground mb-2">{label}</p>
+            <h3 className="text-6xl font-bold text-foreground">{value}</h3>
 
             {trend && (
               <div className="flex items-center gap-1 mt-2">

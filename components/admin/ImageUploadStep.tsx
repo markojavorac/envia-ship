@@ -119,7 +119,7 @@ export function ImageUploadStep({ onImagesSelected, onContinue }: ImageUploadSte
           </p>
 
           <div className="text-xs text-muted-foreground space-y-1">
-            <p className="font-semibold">For best results, include:</p>
+            <p className="font-semibold text-foreground">For best results, include:</p>
             <ul className="list-disc list-inside space-y-0.5">
               <li>Front view of product</li>
               <li>Side or back views</li>

@@ -8,6 +8,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Dispatch Terminal** - Airport-style departure board for logistics hub operations
+  - Live dispatch board optimized for large TV displays (1920x1080)
+  - Real-time status tracking with 15-20 second automatic updates
+  - 4-column layout: Driver ID, Shipment ID, Destination Zone, Status
+  - Status flow: UPCOMING → LOADING → READY → DEPARTED
+  - "Now Loading" indicator highlighting current loading operation with package progress
+  - 3 KPI cards: Active Drivers, Loading Now, Ready to Depart
+  - Large real-time clock with date display (updates every second)
+  - Color-coded status badges (amber/sky/emerald/slate for dark admin theme)
+  - Flash animation on status changes for visual feedback
+  - Enforces single LOADING driver at a time for realistic workflow
+  - Mock data generation with realistic status distribution (50% waiting, 12.5% loading, 25% ready, 12.5% departed)
+  - Guatemala City delivery zone integration (15 zones)
+  - Admin dark theme with optimized typography for TV viewing
+  - Responsive grid layout with thin row separators (no individual cards)
+  - Route: `/admin/dispatch`
 - **AI-Powered Product Onboarding** - Revolutionary seller onboarding experience
   - 3-step wizard: Upload Photos → AI Analysis → Review & Publish
   - Gemini 2.5 Flash vision AI analyzes 1-5 product images
