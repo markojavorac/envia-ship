@@ -8,6 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **AI-Powered Product Onboarding** - Revolutionary seller onboarding experience
+  - 3-step wizard: Upload Photos → AI Analysis → Review & Publish
+  - Gemini 2.5 Flash vision AI analyzes 1-5 product images
+  - Auto-generates: product name, description (3 tones), dimensions, weight, category, tags
+  - Confidence indicators for AI estimations with warnings for low-confidence fields
+  - 3 description tones: Casual, Professional, Technical (regenerate with one click)
+  - Price suggestions based on category and market analysis
+  - Inline editing for all fields with real-time validation
+  - Mock AI mode for testing without API calls (`NEXT_PUBLIC_USE_MOCK_AI=true`)
+  - Reduces onboarding time from 15 minutes to 30 seconds
+  - Add Product button on /admin/products page
+  - New route: `/admin/products/new` with complete wizard UI
+  - Admin dark theme styling throughout wizard components
 - **Admin Dashboard** - Complete merchant back office for marketplace operations
   - Dark theme with orange/navy brand colors preserved
   - Context-aware navigation: Header transforms between user-facing and admin modes

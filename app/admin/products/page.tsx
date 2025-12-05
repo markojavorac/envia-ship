@@ -1,9 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useAdmin } from "@/lib/admin/admin-context";
 import { ProductsTable } from "@/components/admin/ProductsTable";
 import { StatsCard } from "@/components/admin/StatsCard";
-import { Package, AlertCircle, TrendingUp, ShoppingBag } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Package, AlertCircle, TrendingUp, ShoppingBag, Plus } from "lucide-react";
 
 export default function ProductsPage() {
   const { products, updateProduct } = useAdmin();
@@ -56,11 +58,19 @@ export default function ProductsPage() {
 
       {/* Products Table */}
       <div className="bg-card rounded-md border border-border p-4">
-        <div className="mb-3">
-          <h2 className="text-xl font-bold text-foreground">Product Catalog</h2>
-          <p className="text-sm text-muted-foreground">
-            Manage your marketplace products and inventory
-          </p>
+        <div className="mb-3 flex items-start justify-between">
+          <div>
+            <h2 className="text-xl font-bold text-foreground">Product Catalog</h2>
+            <p className="text-sm text-muted-foreground">
+              Manage your marketplace products and inventory
+            </p>
+          </div>
+          <Link href="/admin/products/new">
+            <Button className="bg-primary text-white hover:bg-primary/90 font-semibold">
+              <Plus className="h-4 w-4 mr-2" />
+              Add Product
+            </Button>
+          </Link>
         </div>
 
         <ProductsTable products={products} onUpdateProduct={updateProduct} />

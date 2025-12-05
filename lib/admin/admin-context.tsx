@@ -33,6 +33,7 @@ interface AdminContextType {
   // Product operations
   updateProduct: (productId: string, updates: Partial<Product>) => void;
   getProductById: (productId: string) => Product | undefined;
+  addProduct: (product: Omit<Product, "id" | "rating" | "reviews" | "featured" | "createdAt">) => void;
 
   // Analytics (memoized)
   metrics: DashboardMetrics;
@@ -84,6 +85,18 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     [products]
   );
 
+  const addProduct = useCallback((productData: Omit<Product, "id" | "rating" | "reviews" | "featured" | "createdAt">) => {
+    const newProduct: Product = {
+      ...productData,
+      id: `prod-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      rating: 4.5,
+      reviews: 0,
+      featured: false,
+      createdAt: new Date(),
+    };
+    setProducts(prevProducts => [newProduct, ...prevProducts]);
+  }, []);
+
   // Memoized analytics computations (recompute only when orders change)
   const metrics = useMemo(() => calculateMetrics(orders), [orders]);
   const revenueData = useMemo(() => aggregateRevenueByWeek(orders), [orders]);
@@ -98,6 +111,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     getOrderById,
     updateProduct,
     getProductById,
+    addProduct,
     metrics,
     revenueData,
     categoryData,
