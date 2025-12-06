@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Truck } from "lucide-react";
+import { Truck, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { AdminPageTitle } from "@/components/admin/ui/AdminPageTitle";
-import { AdminInfoBox } from "@/components/admin/ui/AdminInfoBox";
 import { AddTicketCard } from "@/components/admin/driver-assist/AddTicketCard";
 import { AddTicketDialog } from "@/components/admin/driver-assist/AddTicketDialog";
 import { TicketCard } from "@/components/admin/driver-assist/TicketCard";
@@ -14,7 +14,9 @@ import {
   updateTicket,
   completeTicket,
   deleteTicket,
+  loadMockTickets,
 } from "@/lib/admin/driver-assist-storage";
+import { toast } from "sonner";
 
 /**
  * Driver Assist Page
@@ -93,6 +95,12 @@ export default function DriverAssistPage() {
     setTickets(updated);
   };
 
+  const handleLoadMockData = () => {
+    const mockTickets = loadMockTickets();
+    setTickets(mockTickets);
+    toast.success("Loaded 5 mock delivery tickets");
+  };
+
   if (isLoading) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
@@ -101,37 +109,103 @@ export default function DriverAssistPage() {
     );
   }
 
+  // Split tickets into pending and completed, sorted by creation date
+  const pendingTickets = tickets
+    .filter((t) => !t.isCompleted)
+    .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime()); // FIFO - oldest first
+
+  const completedTickets = tickets
+    .filter((t) => t.isCompleted)
+    .sort((a, b) => (b.completedAt?.getTime() ?? 0) - (a.completedAt?.getTime() ?? 0)); // Most recent first
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       <AdminPageTitle
         title="Driver Assist"
-        description="Manage delivery tickets and navigate to destinations"
+        actions={
+          <Button
+            onClick={handleLoadMockData}
+            variant="outline"
+            size="sm"
+            className="border-border text-foreground hover:bg-muted"
+          >
+            <Sparkles className="mr-2 h-4 w-4" />
+            Load Mock Data
+          </Button>
+        }
       />
 
-      {/* Info Box */}
-      <AdminInfoBox variant="info">
-        Upload ticket photos and enter addresses manually. Tap <strong>Navigate</strong> to open
-        Waze or Google Maps with the route. Mark tickets as <strong>Done</strong> when delivered.
-      </AdminInfoBox>
-
-      {/* Add Ticket Button */}
-      <AddTicketCard onClick={() => setIsAddDialogOpen(true)} />
-
-      {/* Ticket List - Full Width Rows */}
-      <div className="space-y-3">
-        {tickets.map((ticket) => (
+      {/* STICKY "UP NEXT" SECTION */}
+      {pendingTickets.length > 0 && (
+        <div className="bg-background sticky top-16 z-10 pb-3">
+          <h3 className="text-primary mb-1.5 text-xs font-bold uppercase tracking-wide">
+            Up Next
+          </h3>
           <TicketCard
-            key={ticket.id}
-            ticket={ticket}
+            ticket={pendingTickets[0]}
+            ticketNumber={1}
+            variant="up-next"
             onNavigate={handleNavigate}
             onComplete={handleComplete}
             onDelete={handleDelete}
             onUpdateCoordinates={handleUpdateCoordinates}
           />
-        ))}
-      </div>
+        </div>
+      )}
 
-      {/* Empty State */}
+      {/* REMAINING PENDING TICKETS */}
+      {pendingTickets.length > 1 && (
+        <div className="space-y-2">
+          <h3 className="text-muted-foreground text-sm font-semibold">Queue</h3>
+          <div className="relative">
+            {pendingTickets.slice(1).map((ticket, index) => {
+              const totalCards = pendingTickets.slice(1).length;
+              const zIndex = totalCards - index;
+              return (
+                <div
+                  key={ticket.id}
+                  className="relative"
+                  style={{
+                    zIndex,
+                    marginTop: index === 0 ? '0' : '-12px',
+                  }}
+                >
+                  <TicketCard
+                    ticket={ticket}
+                    ticketNumber={index + 2}
+                    variant="default"
+                    onNavigate={handleNavigate}
+                    onComplete={handleComplete}
+                    onDelete={handleDelete}
+                    onUpdateCoordinates={handleUpdateCoordinates}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* COMPLETED TICKETS */}
+      {completedTickets.length > 0 && (
+        <div className="space-y-2 pt-6">
+          <h3 className="text-muted-foreground text-sm font-semibold">Completed</h3>
+          {completedTickets.map((ticket, index) => (
+            <TicketCard
+              key={ticket.id}
+              ticket={ticket}
+              ticketNumber={index + 1}
+              variant="default"
+              onNavigate={handleNavigate}
+              onComplete={handleComplete}
+              onDelete={handleDelete}
+              onUpdateCoordinates={handleUpdateCoordinates}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* EMPTY STATE */}
       {tickets.length === 0 && (
         <div className="py-12 text-center">
           <Truck className="text-muted-foreground mx-auto mb-4 h-12 w-12" />
@@ -141,6 +215,9 @@ export default function DriverAssistPage() {
           </p>
         </div>
       )}
+
+      {/* ADD TICKET BUTTON - MOVED TO BOTTOM */}
+      <AddTicketCard onClick={() => setIsAddDialogOpen(true)} />
 
       {/* Add Ticket Dialog */}
       <AddTicketDialog

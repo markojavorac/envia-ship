@@ -21,9 +21,12 @@ import type { DeliveryTicket } from "@/lib/admin/driver-assist-types";
 import { getOrGeocodeCoordinates } from "@/lib/admin/driver-assist-geocoding";
 import { openNavigation } from "@/lib/admin/driver-assist-navigation";
 import { ViewTicketModal } from "./ViewTicketModal";
+import { NumberBadge } from "./NumberBadge";
 
 interface TicketCardProps {
   ticket: DeliveryTicket;
+  ticketNumber: number;
+  variant?: "default" | "up-next";
   onNavigate: (ticket: DeliveryTicket) => void;
   onComplete: (ticketId: string) => void;
   onDelete?: (ticketId: string) => void;
@@ -40,6 +43,8 @@ interface TicketCardProps {
  */
 export function TicketCard({
   ticket,
+  ticketNumber,
+  variant = "default",
   onNavigate,
   onComplete,
   onDelete,
@@ -101,29 +106,55 @@ export function TicketCard({
     }
   };
 
+  const isUpNext = variant === "up-next";
+
   return (
     <>
       <Card
-        className={cn("bg-card border-border transition-all", ticket.isCompleted && "opacity-50")}
+        className={cn(
+          "border-border transition-all",
+          isUpNext && "bg-primary border-primary border-4 shadow-lg",
+          !isUpNext && "bg-card border-2 shadow-md hover:shadow-lg",
+          ticket.isCompleted && !isUpNext && "opacity-50"
+        )}
       >
-        <div className="flex flex-col gap-2 p-3 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+        <div
+          className={cn(
+            "flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-3",
+            isUpNext ? "p-4" : "p-3"
+          )}
+        >
+          {/* Number Badge */}
+          <NumberBadge
+            number={ticketNumber}
+            size={isUpNext ? "lg" : "sm"}
+            variant={ticket.isCompleted ? "muted" : isUpNext ? "inverse" : "default"}
+          />
+
           {/* Left Section: Ticket Info + Addresses */}
           <div className="min-w-0 flex-1">
             {/* Header: Ticket # + Status */}
             <div className="mb-1.5 flex items-center gap-2">
               {ticket.ticketNumber && (
-                <span className="text-foreground shrink-0 text-xs font-bold">
+                <span
+                  className={cn(
+                    "shrink-0 font-bold",
+                    isUpNext ? "text-sm text-white" : "text-xs text-foreground"
+                  )}
+                >
                   #{ticket.ticketNumber}
                 </span>
               )}
               {ticket.isCompleted && (
                 // eslint-disable-next-line custom/no-admin-hardcoded-colors
-                <Badge className="shrink-0 bg-green-500 text-white">
-                  <CheckCircle className="mr-1 h-3 w-3" />
+                <Badge className={cn("shrink-0 bg-green-500 text-white", isUpNext && "text-sm")}>
+                  <CheckCircle className={cn(isUpNext ? "mr-1 h-4 w-4" : "mr-1 h-3 w-3")} />
                   Done
                 </Badge>
               )}
-              <span className="text-muted-foreground truncate text-xs">
+              <span
+                className={cn("truncate", isUpNext ? "text-sm text-white/80" : "text-xs text-muted-foreground")}
+              >
                 {ticket.isCompleted && ticket.completedAt
                   ? `Completed ${formatDistanceToNow(ticket.completedAt, { addSuffix: true })}`
                   : `Created ${formatDistanceToNow(ticket.createdAt, { addSuffix: true })}`}
@@ -131,20 +162,38 @@ export function TicketCard({
             </div>
 
             {/* Addresses: Compact Vertical Stack */}
-            <div className="space-y-1">
+            <div className={cn(isUpNext ? "space-y-2" : "space-y-1")}>
               <div className="flex items-center gap-1.5">
-                <MapPin className="text-primary h-3.5 w-3.5 shrink-0" />
-                <span className="text-muted-foreground text-xs font-medium">From:</span>
-                <span className="text-foreground truncate text-xs">
+                <MapPin
+                  className={cn("shrink-0", isUpNext ? "h-4 w-4 text-white" : "h-3.5 w-3.5 text-primary")}
+                />
+                <span
+                  className={cn(
+                    "font-medium",
+                    isUpNext ? "text-sm text-white/90" : "text-xs text-muted-foreground"
+                  )}
+                >
+                  From:
+                </span>
+                <span className={cn("truncate", isUpNext ? "text-sm text-white" : "text-xs text-foreground")}>
                   {ticket.originAddress.length > 60
                     ? `${ticket.originAddress.slice(0, 60)}...`
                     : ticket.originAddress}
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
-                <MapPin className="text-destructive h-3.5 w-3.5 shrink-0" />
-                <span className="text-muted-foreground text-xs font-medium">To:</span>
-                <span className="text-foreground truncate text-xs">
+                <MapPin
+                  className={cn("shrink-0", isUpNext ? "h-4 w-4 text-white" : "h-3.5 w-3.5 text-destructive")}
+                />
+                <span
+                  className={cn(
+                    "font-medium",
+                    isUpNext ? "text-sm text-white/90" : "text-xs text-muted-foreground"
+                  )}
+                >
+                  To:
+                </span>
+                <span className={cn("truncate", isUpNext ? "text-sm text-white" : "text-xs text-foreground")}>
                   {ticket.destinationAddress.length > 60
                     ? `${ticket.destinationAddress.slice(0, 60)}...`
                     : ticket.destinationAddress}
@@ -158,13 +207,15 @@ export function TicketCard({
             <Button
               onClick={handleNavigate}
               disabled={ticket.isCompleted || isGeocoding}
-              size="sm"
+              size={isUpNext ? "default" : "sm"}
               className="bg-primary hover:bg-primary/90 font-semibold text-white"
             >
               {isGeocoding ? (
-                <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+                <Loader2
+                  className={cn("animate-spin", isUpNext ? "mr-2 h-4 w-4" : "mr-1.5 h-3.5 w-3.5")}
+                />
               ) : (
-                <Navigation className="mr-1.5 h-3.5 w-3.5" />
+                <Navigation className={cn(isUpNext ? "mr-2 h-4 w-4" : "mr-1.5 h-3.5 w-3.5")} />
               )}
               {isGeocoding ? "Loading" : "Navigate"}
             </Button>
@@ -173,10 +224,10 @@ export function TicketCard({
               <Button
                 onClick={handleComplete}
                 variant="outline"
-                size="sm"
+                size={isUpNext ? "default" : "sm"}
                 className="border-green-500 font-semibold text-green-500 hover:bg-green-500/10"
               >
-                <CheckCircle className="mr-1.5 h-3.5 w-3.5" />
+                <CheckCircle className={cn(isUpNext ? "mr-2 h-4 w-4" : "mr-1.5 h-3.5 w-3.5")} />
                 Done
               </Button>
             ) : (
@@ -184,10 +235,10 @@ export function TicketCard({
                 <Button
                   onClick={handleDelete}
                   variant="outline"
-                  size="sm"
+                  size={isUpNext ? "default" : "sm"}
                   className="border-destructive text-destructive hover:bg-destructive/10"
                 >
-                  <Trash2 className="h-3.5 w-3.5" />
+                  <Trash2 className={cn(isUpNext ? "h-4 w-4" : "h-3.5 w-3.5")} />
                 </Button>
               )
             )}
@@ -195,23 +246,25 @@ export function TicketCard({
             <Button
               onClick={() => setIsViewModalOpen(true)}
               variant="outline"
-              size="sm"
+              size={isUpNext ? "default" : "sm"}
               className="border-border text-foreground hover:bg-muted"
             >
-              <Eye className="h-3.5 w-3.5" />
+              <Eye className={cn(isUpNext ? "h-4 w-4" : "h-3.5 w-3.5")} />
             </Button>
 
             {(ticket.recipientName || ticket.recipientPhone || ticket.notes) && (
               <Button
                 onClick={() => setIsExpanded(!isExpanded)}
                 variant="ghost"
-                size="sm"
-                className="text-muted-foreground hover:text-foreground"
+                size={isUpNext ? "default" : "sm"}
+                className={cn(
+                  isUpNext ? "text-white hover:bg-white/20 hover:text-white" : "text-muted-foreground hover:text-foreground"
+                )}
               >
                 {isExpanded ? (
-                  <ChevronUp className="h-3.5 w-3.5" />
+                  <ChevronUp className={cn(isUpNext ? "h-4 w-4" : "h-3.5 w-3.5")} />
                 ) : (
-                  <ChevronDown className="h-3.5 w-3.5" />
+                  <ChevronDown className={cn(isUpNext ? "h-4 w-4" : "h-3.5 w-3.5")} />
                 )}
               </Button>
             )}
@@ -220,24 +273,24 @@ export function TicketCard({
 
         {/* Collapsible Details Section */}
         {isExpanded && (ticket.recipientName || ticket.recipientPhone || ticket.notes) && (
-          <div className="border-border border-t px-4 pt-3 pb-4">
+          <div className={cn("border-t px-4 pt-3 pb-4", isUpNext ? "border-white/20" : "border-border")}>
             <div className="grid gap-2 md:grid-cols-3">
               {ticket.recipientName && (
                 <div>
-                  <p className="text-muted-foreground text-xs font-semibold uppercase">Recipient</p>
-                  <p className="text-foreground text-sm">{ticket.recipientName}</p>
+                  <p className={cn("text-xs font-semibold uppercase", isUpNext ? "text-white/80" : "text-muted-foreground")}>Recipient</p>
+                  <p className={cn("text-sm", isUpNext ? "text-white" : "text-foreground")}>{ticket.recipientName}</p>
                 </div>
               )}
               {ticket.recipientPhone && (
                 <div>
-                  <p className="text-muted-foreground text-xs font-semibold uppercase">Phone</p>
-                  <p className="text-foreground text-sm">{ticket.recipientPhone}</p>
+                  <p className={cn("text-xs font-semibold uppercase", isUpNext ? "text-white/80" : "text-muted-foreground")}>Phone</p>
+                  <p className={cn("text-sm", isUpNext ? "text-white" : "text-foreground")}>{ticket.recipientPhone}</p>
                 </div>
               )}
               {ticket.notes && (
                 <div className="md:col-span-3">
-                  <p className="text-muted-foreground text-xs font-semibold uppercase">Notes</p>
-                  <p className="text-foreground text-sm">{ticket.notes}</p>
+                  <p className={cn("text-xs font-semibold uppercase", isUpNext ? "text-white/80" : "text-muted-foreground")}>Notes</p>
+                  <p className={cn("text-sm", isUpNext ? "text-white" : "text-foreground")}>{ticket.notes}</p>
                 </div>
               )}
             </div>

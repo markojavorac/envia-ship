@@ -213,3 +213,13 @@ export function clearAllTickets(): void {
     console.error("Error clearing tickets:", error);
   }
 }
+
+/**
+ * Load mock tickets for development/testing
+ */
+export function loadMockTickets(): DeliveryTicket[] {
+  const { generateMockTickets } = require("./mock-driver-assist");
+  const mockTickets = generateMockTickets();
+  saveTickets(mockTickets);
+  return mockTickets;
+}
