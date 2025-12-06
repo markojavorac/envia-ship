@@ -66,9 +66,7 @@ export function enrichProductsWithShipping(
 ): ProductWithShipping[] {
   return products.map((product) => ({
     ...product,
-    shippingEstimate: userZone
-      ? calculateProductShipping(product, userZone, serviceType)
-      : null,
+    shippingEstimate: userZone ? calculateProductShipping(product, userZone, serviceType) : null,
   }));
 }
 

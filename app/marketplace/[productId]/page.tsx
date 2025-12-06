@@ -23,6 +23,7 @@ import {
   Shield,
   CheckCircle2,
   Truck,
+  ShoppingCart,
 } from "lucide-react";
 import { CATEGORY_OPTIONS } from "@/lib/marketplace/types";
 
@@ -45,16 +46,16 @@ function ProductDetailContent() {
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="text-center">
-          <Package className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-secondary mb-2">Product Not Found</h2>
-          <p className="text-gray-600 mb-6">
+          <Package className="mx-auto mb-4 h-16 w-16 text-gray-300" />
+          <h2 className="text-secondary mb-2 text-2xl font-bold">Product Not Found</h2>
+          <p className="mb-6 text-gray-600">
             The product you&rsquo;re looking for doesn&rsquo;t exist or has been removed.
           </p>
-          <Button asChild className="bg-primary text-white hover:bg-primary/90">
+          <Button asChild className="bg-primary hover:bg-primary/90 text-white">
             <Link href="/marketplace">
-              <ArrowLeft className="h-4 w-4 mr-2" />
+              <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Marketplace
             </Link>
           </Button>
@@ -71,14 +72,14 @@ function ProductDetailContent() {
       <MarketplaceControlBar />
 
       {/* Breadcrumb */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="border-b border-gray-200 bg-white">
         <div className="container mx-auto px-4 py-4">
           <Button
             variant="ghost"
             onClick={() => router.push("/marketplace")}
             className="text-primary hover:text-primary/80"
           >
-            <ArrowLeft className="h-4 w-4 mr-2" />
+            <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Marketplace
           </Button>
         </div>
@@ -87,7 +88,7 @@ function ProductDetailContent() {
       {/* Product Detail */}
       <section className="py-8">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             {/* Left: Image Gallery */}
             <div>
               <ProductImageGallery images={product.images} productName={product.name} />
@@ -104,7 +105,7 @@ function ProductDetailContent() {
 
               {/* Product Name */}
               <div>
-                <h1 className="text-3xl md:text-4xl font-bold text-secondary mb-3">
+                <h1 className="text-secondary mb-3 text-3xl font-bold md:text-4xl">
                   {product.name}
                 </h1>
 
@@ -130,8 +131,8 @@ function ProductDetailContent() {
 
               {/* Price */}
               <div>
-                <div className="flex items-baseline gap-2 mb-2">
-                  <span className="text-4xl font-bold text-primary">
+                <div className="mb-2 flex items-baseline gap-2">
+                  <span className="text-primary text-4xl font-bold">
                     {formatPrice(product.price)}
                   </span>
                   <span className="text-gray-500">per unit</span>
@@ -144,30 +145,30 @@ function ProductDetailContent() {
               <Separator />
 
               {/* Seller Info */}
-              <Card className="bg-white border-2 border-primary/20">
+              <Card className="border-primary/20 border-2 bg-white">
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-3">
-                      <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <Store className="h-6 w-6 text-primary" />
+                      <div className="bg-primary/10 flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full">
+                        <Store className="text-primary h-6 w-6" />
                       </div>
                       <div>
-                        <h3 className="font-bold text-secondary">{product.seller.name}</h3>
-                        <div className="flex items-center gap-2 mt-1">
+                        <h3 className="text-secondary font-bold">{product.seller.name}</h3>
+                        <div className="mt-1 flex items-center gap-2">
                           <div className="flex items-center gap-1">
-                            <Star className="h-3 w-3 text-primary fill-primary" />
+                            <Star className="text-primary fill-primary h-3 w-3" />
                             <span className="text-xs font-semibold">
                               {product.seller.rating.toFixed(1)}
                             </span>
                           </div>
                           {product.seller.verified && (
                             <Badge variant="secondary" className="text-xs">
-                              <CheckCircle2 className="h-3 w-3 mr-1" />
+                              <CheckCircle2 className="mr-1 h-3 w-3" />
                               Verified
                             </Badge>
                           )}
                         </div>
-                        <div className="flex items-center gap-1 mt-2 text-xs text-gray-600">
+                        <div className="mt-2 flex items-center gap-1 text-xs text-gray-600">
                           <MapPin className="h-3 w-3" />
                           <span>Ships from {product.originZone.replace("-", " ")}</span>
                         </div>
@@ -183,42 +184,42 @@ function ProductDetailContent() {
                 <span className="text-sm text-gray-600">
                   {product.stock > 0 ? (
                     <>
-                      <span className="font-semibold text-primary">{product.stock}</span> units
-                      in stock
+                      <span className="text-primary font-semibold">{product.stock}</span> units in
+                      stock
                     </>
                   ) : (
-                    <span className="font-semibold text-destructive">Out of stock</span>
+                    <span className="text-destructive font-semibold">Out of stock</span>
                   )}
                 </span>
               </div>
 
               {/* Buy Button */}
               <Button
-                className="w-full bg-primary text-white hover:bg-primary/90 font-semibold text-lg py-6"
+                className="bg-primary hover:bg-primary/90 w-full py-6 text-lg font-semibold text-white"
                 onClick={() => setCheckoutOpen(true)}
                 disabled={product.stock === 0}
               >
-                <ShoppingCart className="h-5 w-5 mr-2" />
+                <ShoppingCart className="mr-2 h-5 w-5" />
                 {product.stock === 0 ? "Out of Stock" : "Buy Now"}
               </Button>
 
               {/* Trust Badges */}
               <div className="grid grid-cols-3 gap-4 pt-4">
                 <div className="text-center">
-                  <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-2">
-                    <Shield className="h-6 w-6 text-primary" />
+                  <div className="bg-primary/10 mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full">
+                    <Shield className="text-primary h-6 w-6" />
                   </div>
                   <p className="text-xs font-semibold text-gray-700">Secure Payment</p>
                 </div>
                 <div className="text-center">
-                  <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-2">
-                    <Truck className="h-6 w-6 text-primary" />
+                  <div className="bg-primary/10 mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full">
+                    <Truck className="text-primary h-6 w-6" />
                   </div>
                   <p className="text-xs font-semibold text-gray-700">Fast Delivery</p>
                 </div>
                 <div className="text-center">
-                  <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-2">
-                    <CheckCircle2 className="h-6 w-6 text-primary" />
+                  <div className="bg-primary/10 mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full">
+                    <CheckCircle2 className="text-primary h-6 w-6" />
                   </div>
                   <p className="text-xs font-semibold text-gray-700">Quality Assured</p>
                 </div>
@@ -228,35 +229,35 @@ function ProductDetailContent() {
 
           {/* Product Description */}
           <div className="mt-12">
-            <Card className="bg-white border-2 border-primary/20">
+            <Card className="border-primary/20 border-2 bg-white">
               <CardContent className="p-6">
-                <h2 className="text-2xl font-bold text-secondary mb-4">Product Description</h2>
-                <p className="text-gray-700 leading-relaxed">{product.description}</p>
+                <h2 className="text-secondary mb-4 text-2xl font-bold">Product Description</h2>
+                <p className="leading-relaxed text-gray-700">{product.description}</p>
 
                 <Separator className="my-6" />
 
-                <h3 className="text-xl font-bold text-secondary mb-4">Product Details</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                  <div className="flex justify-between py-2 border-b border-gray-200">
+                <h3 className="text-secondary mb-4 text-xl font-bold">Product Details</h3>
+                <div className="grid grid-cols-1 gap-4 text-sm md:grid-cols-2">
+                  <div className="flex justify-between border-b border-gray-200 py-2">
                     <span className="text-gray-600">Weight</span>
-                    <span className="font-semibold text-secondary">
+                    <span className="text-secondary font-semibold">
                       {product.weight.toFixed(2)} kg
                     </span>
                   </div>
-                  <div className="flex justify-between py-2 border-b border-gray-200">
+                  <div className="flex justify-between border-b border-gray-200 py-2">
                     <span className="text-gray-600">Dimensions</span>
-                    <span className="font-semibold text-secondary">
+                    <span className="text-secondary font-semibold">
                       {product.dimensions.length} × {product.dimensions.width} ×{" "}
                       {product.dimensions.height} cm
                     </span>
                   </div>
-                  <div className="flex justify-between py-2 border-b border-gray-200">
+                  <div className="flex justify-between border-b border-gray-200 py-2">
                     <span className="text-gray-600">Category</span>
-                    <span className="font-semibold text-secondary">{category?.label}</span>
+                    <span className="text-secondary font-semibold">{category?.label}</span>
                   </div>
-                  <div className="flex justify-between py-2 border-b border-gray-200">
+                  <div className="flex justify-between border-b border-gray-200 py-2">
                     <span className="text-gray-600">Origin Zone</span>
-                    <span className="font-semibold text-secondary">
+                    <span className="text-secondary font-semibold">
                       {product.originZone.replace("-", " ")}
                     </span>
                   </div>
@@ -266,7 +267,7 @@ function ProductDetailContent() {
                   <>
                     <Separator className="my-6" />
                     <div>
-                      <h3 className="text-xl font-bold text-secondary mb-3">Tags</h3>
+                      <h3 className="text-secondary mb-3 text-xl font-bold">Tags</h3>
                       <div className="flex flex-wrap gap-2">
                         {product.tags.map((tag) => (
                           <Badge key={tag} variant="outline" className="text-sm">
@@ -294,9 +295,6 @@ function ProductDetailContent() {
     </div>
   );
 }
-
-// Missing import
-import { ShoppingCart } from "lucide-react";
 
 export default function ProductDetailPage() {
   return <ProductDetailContent />;

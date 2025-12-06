@@ -108,6 +108,13 @@ Modern shipping calculator and marketplace for ENVÍA de Guatemala. Built with N
 </Select>
 ```
 
+### Loading Indicator
+
+The app uses `nextjs-toploader` for route change loading feedback:
+- **Top progress bar**: Orange (#FF8C00) with subtle shadow
+- **Auto-configured**: Added to root layout, works globally
+- **No manual setup needed**: Automatically tracks all route changes
+
 ## Navigation
 
 **Header**: Sticky navy (`bg-secondary`), bold white links, orange CTA button
@@ -131,6 +138,60 @@ Modern shipping calculator and marketplace for ENVÍA de Guatemala. Built with N
 
 ### Key Files
 See `/MARKETPLACE.md` for quick reference
+
+## Admin Dark Theme Patterns (CRITICAL)
+
+### Admin Styling Rules (STRICT)
+
+✅ **ALWAYS use CSS variables in admin:**
+- `bg-card` (NOT `bg-white`)
+- `text-foreground` (NOT `text-gray-900` or `text-secondary`)
+- `border-border` (NOT `border-gray-200`)
+- `text-muted-foreground` (NOT `text-gray-600`)
+- `text-primary` for orange accents
+- `text-destructive` for errors
+- **Labels MUST include `text-foreground`**: `<Label className="font-semibold text-foreground">`
+
+✅ **Info boxes:**
+- Info/Warning: `bg-primary/10 border-l-4 border-primary`
+- Error: `bg-destructive/10 border-l-4 border-destructive`
+
+❌ **NEVER use in admin:**
+- Hardcoded colors: `bg-white`, `bg-blue-50`, `text-gray-600`
+- Inline `style={{}}` attributes
+
+### Admin Component Wrappers
+
+```tsx
+import { AdminCard, AdminInfoBox, AdminPageTitle } from "@/components/admin/ui";
+
+// Card with enforced styling
+<AdminCard title="Title" icon={Icon}>
+  <AdminCardContent>...</AdminCardContent>
+</AdminCard>
+
+// Info/warning/error boxes
+<AdminInfoBox variant="warning">Add at least 2 stops</AdminInfoBox>
+<AdminInfoBox variant="error">Maximum reached</AdminInfoBox>
+
+// Page title with actions
+<AdminPageTitle
+  title="Dashboard"
+  description="View analytics"
+  actions={<Button>Export</Button>}
+/>
+```
+
+### Linting Enforcement
+
+```bash
+npm run lint          # Check for errors
+npm run lint:fix      # Auto-fix errors
+npm run format        # Auto-format with Prettier
+npm run check         # Format + lint
+```
+
+Build process runs `npm run check` automatically via `prebuild` script.
 
 ## Troubleshooting
 

@@ -10,10 +10,10 @@ export default function ContactPage() {
       <section className="bg-secondary py-12">
         <div className="container mx-auto px-4">
           <div className="text-center">
-            <h1 className="text-2xl md:text-3xl lg:text-5xl font-bold text-white mb-4">
+            <h1 className="mb-4 text-2xl font-bold text-white md:text-3xl lg:text-5xl">
               Contact Us
             </h1>
-            <p className="text-lg text-white/80 max-w-2xl mx-auto">
+            <p className="mx-auto max-w-2xl text-lg text-white/80">
               Get in touch with our team for shipping quotes and inquiries
             </p>
           </div>
@@ -23,17 +23,17 @@ export default function ContactPage() {
       {/* Contact Information */}
       <section className="py-12">
         <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto">
-            <Card className="bg-white border-2 border-primary/30">
+          <div className="mx-auto max-w-2xl">
+            <Card className="border-primary/30 border-2 bg-white">
               <CardContent className="p-8">
                 <div className="space-y-6">
                   {/* Email */}
                   <div className="flex items-start gap-4">
-                    <div className="h-12 w-12 rounded-xl bg-primary flex items-center justify-center flex-shrink-0">
+                    <div className="bg-primary flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl">
                       <Mail className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-secondary mb-1">Email</h3>
+                      <h3 className="text-secondary mb-1 text-lg font-bold">Email</h3>
                       <a
                         href="mailto:info@enviaguatemala.com"
                         className="text-primary hover:text-primary/80 font-semibold"
@@ -45,11 +45,11 @@ export default function ContactPage() {
 
                   {/* Phone */}
                   <div className="flex items-start gap-4">
-                    <div className="h-12 w-12 rounded-xl bg-primary flex items-center justify-center flex-shrink-0">
+                    <div className="bg-primary flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl">
                       <Phone className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-secondary mb-1">Phone</h3>
+                      <h3 className="text-secondary mb-1 text-lg font-bold">Phone</h3>
                       <a
                         href="tel:+50212345678"
                         className="text-primary hover:text-primary/80 font-semibold"
@@ -61,13 +61,14 @@ export default function ContactPage() {
 
                   {/* Address */}
                   <div className="flex items-start gap-4">
-                    <div className="h-12 w-12 rounded-xl bg-primary flex items-center justify-center flex-shrink-0">
+                    <div className="bg-primary flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl">
                       <MapPin className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-secondary mb-1">Address</h3>
+                      <h3 className="text-secondary mb-1 text-lg font-bold">Address</h3>
                       <p className="text-gray-700">
-                        Guatemala City<br />
+                        Guatemala City
+                        <br />
                         Guatemala
                       </p>
                     </div>
@@ -75,14 +76,16 @@ export default function ContactPage() {
 
                   {/* Hours */}
                   <div className="flex items-start gap-4">
-                    <div className="h-12 w-12 rounded-xl bg-primary flex items-center justify-center flex-shrink-0">
+                    <div className="bg-primary flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl">
                       <Clock className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-secondary mb-1">Business Hours</h3>
+                      <h3 className="text-secondary mb-1 text-lg font-bold">Business Hours</h3>
                       <p className="text-gray-700">
-                        Monday - Friday: 8:00 AM - 6:00 PM<br />
-                        Saturday: 9:00 AM - 1:00 PM<br />
+                        Monday - Friday: 8:00 AM - 6:00 PM
+                        <br />
+                        Saturday: 9:00 AM - 1:00 PM
+                        <br />
                         Sunday: Closed
                       </p>
                     </div>

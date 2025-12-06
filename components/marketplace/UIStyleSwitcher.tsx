@@ -1,12 +1,7 @@
 "use client";
 
 import { useContext } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
 import { Layout } from "lucide-react";
 import { VIEW_OPTIONS } from "@/lib/marketplace/types";
 import { MarketplaceContext } from "@/contexts/MarketplaceContext";
@@ -21,8 +16,8 @@ export function UIStyleSwitcher() {
 
   return (
     <Select value={currentView} onValueChange={setCurrentView}>
-      <SelectTrigger className="w-32 bg-white text-secondary border-2 border-gray-200 hover:border-primary/50 focus:border-primary focus:ring-primary/20 font-semibold">
-        <Layout className="h-4 w-4 mr-2 text-primary" />
+      <SelectTrigger className="text-secondary hover:border-primary/50 focus:border-primary focus:ring-primary/20 w-32 border-2 border-gray-200 bg-white font-semibold">
+        <Layout className="text-primary mr-2 h-4 w-4" />
         <span>Layout</span>
       </SelectTrigger>
       <SelectContent className="z-[100]">

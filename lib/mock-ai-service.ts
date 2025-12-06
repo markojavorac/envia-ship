@@ -19,7 +19,7 @@ export async function mockAnalyzePackage(): Promise<PackageAnalysis> {
       method: "Estimated using visible door frame as reference object",
     },
     weight: {
-      estimate: Math.round((baseLength * baseWidth * baseHeight) / 15000 * 10) / 10,
+      estimate: Math.round(((baseLength * baseWidth * baseHeight) / 15000) * 10) / 10,
       confidence: 0.5 + Math.random() * 0.3,
       reasoning:
         "Based on cardboard material and apparent density. Package appears moderately packed.",

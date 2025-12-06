@@ -4,11 +4,11 @@
  */
 
 export interface GradientColorConfig {
-  baseHue?: number;      // Default: 33 (Envia orange)
+  baseHue?: number; // Default: 33 (Envia orange)
   minSaturation?: number; // Default: 75
   maxSaturation?: number; // Default: 100
-  minLightness?: number;  // Default: 45
-  maxLightness?: number;  // Default: 60
+  minLightness?: number; // Default: 45
+  maxLightness?: number; // Default: 60
 }
 
 /**
@@ -43,8 +43,8 @@ export function calculateGradientColor(
   const ratio = (value - min) / (max - min);
 
   // Interpolate saturation and lightness
-  const saturation = minSaturation + (ratio * (maxSaturation - minSaturation));
-  const lightness = minLightness + (ratio * (maxLightness - minLightness));
+  const saturation = minSaturation + ratio * (maxSaturation - minSaturation);
+  const lightness = minLightness + ratio * (maxLightness - minLightness);
 
   return `hsl(${baseHue} ${saturation.toFixed(0)}% ${lightness.toFixed(0)}%)`;
 }
@@ -63,11 +63,11 @@ export function applyGradientToData<T extends Record<string, any>>(
   valueKey: keyof T,
   config?: GradientColorConfig
 ): (T & { fill: string })[] {
-  const values = data.map(item => Number(item[valueKey]) || 0);
+  const values = data.map((item) => Number(item[valueKey]) || 0);
   const min = Math.min(...values);
   const max = Math.max(...values);
 
-  return data.map(item => ({
+  return data.map((item) => ({
     ...item,
     fill: calculateGradientColor(Number(item[valueKey]) || 0, min, max, config),
   }));

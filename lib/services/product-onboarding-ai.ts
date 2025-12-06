@@ -1,10 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { ProductCategory } from "@/lib/marketplace/types";
-import {
-  ProductAnalysis,
-  DescriptionTone,
-  PriceRange,
-} from "@/lib/types/product-analysis";
+import { ProductAnalysis, DescriptionTone, PriceRange } from "@/lib/types/product-analysis";
 import {
   mockAnalyzeProductPhotos,
   mockGenerateDescription,
@@ -166,7 +162,10 @@ Return ONLY valid JSON (no markdown):
  */
 function parseGeminiJSON<T>(text: string): T {
   try {
-    const cleanedText = text.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+    const cleanedText = text
+      .replace(/```json\n?/g, "")
+      .replace(/```\n?/g, "")
+      .trim();
     return JSON.parse(cleanedText);
   } catch (error) {
     console.error("Failed to parse Gemini response:", error);
@@ -231,9 +230,7 @@ export async function analyzeProductPhotos(
     };
   } catch (error) {
     console.error("Gemini API error:", error);
-    throw new Error(
-      error instanceof Error ? error.message : "Failed to analyze product photos"
-    );
+    throw new Error(error instanceof Error ? error.message : "Failed to analyze product photos");
   }
 }
 
@@ -290,9 +287,8 @@ export async function suggestPricing(
   const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY);
   const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-  const similarProducts = existingProducts
-    ?.filter((p) => p.category === category)
-    ?.slice(0, 10) || [];
+  const similarProducts =
+    existingProducts?.filter((p) => p.category === category)?.slice(0, 10) || [];
 
   const prompt = `You are a pricing analyst for a Guatemala marketplace.
 

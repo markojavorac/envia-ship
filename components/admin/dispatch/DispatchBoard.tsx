@@ -23,54 +23,50 @@ interface DispatchBoardProps {
  */
 export function DispatchBoard({ entries, lastUpdate = new Date() }: DispatchBoardProps) {
   // Filter out DEPARTED entries - only show active drivers
-  const activeEntries = entries.filter(entry => entry.status !== DispatchStatus.DEPARTED);
+  const activeEntries = entries.filter((entry) => entry.status !== DispatchStatus.DEPARTED);
   const sortedEntries = sortDispatchEntries(activeEntries);
 
   // Find the first LOADING entry to display in "Now Loading" indicator
-  const loadingEntry = sortedEntries.find(e => e.status === DispatchStatus.LOADING);
+  const loadingEntry = sortedEntries.find((e) => e.status === DispatchStatus.LOADING);
 
   return (
     <Card className="bg-card border-border rounded-md">
       <CardHeader className="pb-2">
         {/* Now Loading Indicator */}
         {loadingEntry && (
-          <div className="mb-6 p-4 bg-primary/10 border-l-4 border-primary rounded-md">
+          <div className="bg-primary/10 border-primary mb-6 rounded-md border-l-4 p-4">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
+                <div className="text-muted-foreground mb-1 text-xs font-bold tracking-wider uppercase">
                   Now Loading
                 </div>
                 <div className="flex items-center gap-4">
-                  <span className="text-2xl font-bold text-primary tabular-nums">
+                  <span className="text-primary text-2xl font-bold tabular-nums">
                     {loadingEntry.id}
                   </span>
-                  <span className="text-lg text-foreground font-semibold">
+                  <span className="text-foreground text-lg font-semibold">
                     {loadingEntry.shipmentId}
                   </span>
-                  <span className="text-sm text-muted-foreground">
+                  <span className="text-muted-foreground text-sm">
                     {loadingEntry.loadedPackages} / {loadingEntry.packageCount} packages
                   </span>
                 </div>
               </div>
-              <Badge className="bg-primary text-white text-base px-4 py-2">
-                LOADING
-              </Badge>
+              <Badge className="bg-primary px-4 py-2 text-base text-white">LOADING</Badge>
             </div>
           </div>
         )}
 
         {/* Column Headers - 4 columns now, bigger text */}
-        <div className="hidden xl:grid xl:grid-cols-[180px_180px_1fr_200px] gap-8 px-4 pb-4 border-b border-border">
-          <div className="text-xl font-bold uppercase tracking-wider text-muted-foreground">
-            ID
-          </div>
-          <div className="text-xl font-bold uppercase tracking-wider text-muted-foreground">
+        <div className="border-border hidden gap-8 border-b px-4 pb-4 xl:grid xl:grid-cols-[180px_180px_1fr_200px]">
+          <div className="text-muted-foreground text-xl font-bold tracking-wider uppercase">ID</div>
+          <div className="text-muted-foreground text-xl font-bold tracking-wider uppercase">
             Shipment
           </div>
-          <div className="text-xl font-bold uppercase tracking-wider text-muted-foreground">
+          <div className="text-muted-foreground text-xl font-bold tracking-wider uppercase">
             Destination
           </div>
-          <div className="text-xl font-bold uppercase tracking-wider text-muted-foreground">
+          <div className="text-muted-foreground text-xl font-bold tracking-wider uppercase">
             Status
           </div>
         </div>
@@ -80,13 +76,9 @@ export function DispatchBoard({ entries, lastUpdate = new Date() }: DispatchBoar
         {/* Board Rows */}
         <div>
           {sortedEntries.length === 0 ? (
-            <div className="text-center py-12 text-muted-foreground">
-              No active dispatches
-            </div>
+            <div className="text-muted-foreground py-12 text-center">No active dispatches</div>
           ) : (
-            sortedEntries.map((entry) => (
-              <DispatchRow key={entry.id} entry={entry} />
-            ))
+            sortedEntries.map((entry) => <DispatchRow key={entry.id} entry={entry} />)
           )}
         </div>
       </CardContent>

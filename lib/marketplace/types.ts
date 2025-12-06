@@ -13,27 +13,27 @@ export const VIEW_OPTIONS = [
   {
     value: MarketplaceView.AMAZON,
     label: "Classic Grid",
-    description: "Detailed product listings with filters"
+    description: "Detailed product listings with filters",
   },
   {
     value: MarketplaceView.UBER_EATS,
     label: "Visual Cards",
-    description: "Browse by category with delivery focus"
+    description: "Browse by category with delivery focus",
   },
   {
     value: MarketplaceView.PINTEREST,
     label: "Image Wall",
-    description: "Visual discovery with large images"
+    description: "Visual discovery with large images",
   },
   {
     value: MarketplaceView.MINIMALIST,
     label: "Minimalist",
-    description: "Clean & spacious design"
+    description: "Clean & spacious design",
   },
   {
     value: MarketplaceView.PROXIMITY,
     label: "Local Focus",
-    description: "Zone-based browsing"
+    description: "Zone-based browsing",
   },
 ] as const;
 
@@ -48,17 +48,17 @@ export const CATEGORY_OPTIONS = [
   {
     value: ProductCategory.FOOD_BEVERAGES,
     label: "Food & Beverages",
-    icon: "coffee"
+    icon: "coffee",
   },
   {
     value: ProductCategory.PHARMACY_MEDICAL,
     label: "Pharmacy & Medical",
-    icon: "pill"
+    icon: "pill",
   },
   {
     value: ProductCategory.GENERAL_RETAIL,
     label: "General Retail",
-    icon: "shopping-bag"
+    icon: "shopping-bag",
   },
 ] as const;
 
@@ -68,33 +68,33 @@ export interface Product {
   name: string;
   description: string;
   shortDescription: string;
-  price: number;                    // Product price in GTQ
-  images: string[];                 // Array of image URLs
-  thumbnail: string;                // Primary thumbnail
+  price: number; // Product price in GTQ
+  images: string[]; // Array of image URLs
+  thumbnail: string; // Primary thumbnail
   category: ProductCategory;
-  originZone: string;               // "zona-10", "zona-1", etc.
+  originZone: string; // "zona-10", "zona-1", etc.
   seller: {
     name: string;
-    rating: number;                 // 0-5
+    rating: number; // 0-5
     verified: boolean;
   };
-  stock: number;                    // Available quantity
-  weight: number;                   // kg (for shipping calculation)
+  stock: number; // Available quantity
+  weight: number; // kg (for shipping calculation)
   dimensions: {
-    length: number;                 // cm
-    width: number;                  // cm
-    height: number;                 // cm
+    length: number; // cm
+    width: number; // cm
+    height: number; // cm
   };
-  rating: number;                   // Product rating 0-5
-  reviews: number;                  // Review count
-  tags: string[];                   // ["fresh", "organic", "local", etc.]
-  featured: boolean;                // Featured product flag
+  rating: number; // Product rating 0-5
+  reviews: number; // Review count
+  tags: string[]; // ["fresh", "organic", "local", etc.]
+  featured: boolean; // Featured product flag
   createdAt: Date;
 }
 
 // Shipping Estimate
 export interface ShippingEstimate {
-  cost: number;                     // GTQ
+  cost: number; // GTQ
   serviceType: ServiceType;
   estimatedDays: number;
   fromZone: string;
@@ -110,7 +110,7 @@ export interface ProductWithShipping extends Product {
 export interface FilterState {
   category: ProductCategory | "all";
   priceRange: { min: number; max: number };
-  zones: string[];                  // Filter by origin zones
+  zones: string[]; // Filter by origin zones
   inStock: boolean;
   minRating: number;
   searchQuery: string;
@@ -123,7 +123,7 @@ export enum SortOption {
   PRICE_HIGH = "price_high",
   RATING = "rating",
   NEWEST = "newest",
-  NEAREST = "nearest",              // Sort by proximity to user's zone
+  NEAREST = "nearest", // Sort by proximity to user's zone
 }
 
 export const SORT_OPTIONS = [

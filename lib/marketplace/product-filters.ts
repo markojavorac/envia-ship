@@ -1,9 +1,4 @@
-import {
-  Product,
-  ProductWithShipping,
-  FilterState,
-  SortOption,
-} from "./types";
+import { Product, ProductWithShipping, FilterState, SortOption } from "./types";
 
 /**
  * Filter products based on filter state
@@ -19,10 +14,7 @@ export function filterProducts(
     }
 
     // Price range filter
-    if (
-      product.price < filters.priceRange.min ||
-      product.price > filters.priceRange.max
-    ) {
+    if (product.price < filters.priceRange.min || product.price > filters.priceRange.max) {
       return false;
     }
 
@@ -46,9 +38,7 @@ export function filterProducts(
       const query = filters.searchQuery.toLowerCase();
       const matchesName = product.name.toLowerCase().includes(query);
       const matchesDescription = product.description.toLowerCase().includes(query);
-      const matchesTags = product.tags.some((tag) =>
-        tag.toLowerCase().includes(query)
-      );
+      const matchesTags = product.tags.some((tag) => tag.toLowerCase().includes(query));
       const matchesSeller = product.seller.name.toLowerCase().includes(query);
 
       if (!matchesName && !matchesDescription && !matchesTags && !matchesSeller) {
@@ -81,9 +71,7 @@ export function sortProducts(
       return sorted.sort((a, b) => b.rating - a.rating);
 
     case SortOption.NEWEST:
-      return sorted.sort(
-        (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
-      );
+      return sorted.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
     case SortOption.NEAREST:
       if (!userZone) return sorted;
@@ -138,9 +126,7 @@ export function searchProducts(
 /**
  * Get price range from products
  */
-export function getPriceRange(
-  products: Product[]
-): { min: number; max: number } {
+export function getPriceRange(products: Product[]): { min: number; max: number } {
   if (products.length === 0) return { min: 0, max: 1000 };
 
   const prices = products.map((p) => p.price);

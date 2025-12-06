@@ -24,7 +24,7 @@ const chartConfig = {
 
 export function TopProductsChart({ data }: TopProductsChartProps) {
   // Calculate min/max for gradient
-  const values = data.map(d => d.unitsSold);
+  const values = data.map((d) => d.unitsSold);
   const minValue = Math.min(...values);
   const maxValue = Math.max(...values);
 
@@ -32,9 +32,7 @@ export function TopProductsChart({ data }: TopProductsChartProps) {
     <Card className="bg-card border-border rounded-md">
       <CardHeader className="pb-2">
         <CardTitle className="text-foreground">Top 10 Products</CardTitle>
-        <p className="text-sm text-muted-foreground">
-          Best selling products by units sold
-        </p>
+        <p className="text-muted-foreground text-sm">Best selling products by units sold</p>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
@@ -65,10 +63,7 @@ export function TopProductsChart({ data }: TopProductsChartProps) {
                 />
               }
             />
-            <Bar
-              dataKey="unitsSold"
-              radius={[0, 4, 4, 0]}
-            >
+            <Bar dataKey="unitsSold" radius={[0, 4, 4, 0]}>
               {data.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}

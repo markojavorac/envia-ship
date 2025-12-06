@@ -16,22 +16,22 @@ interface CategoryLegendProps {
 
 function CategoryLegend({ data }: CategoryLegendProps) {
   return (
-    <div className="w-full md:w-44 flex-shrink-0">
+    <div className="w-full flex-shrink-0 md:w-44">
       <div className="flex flex-col gap-3">
         {data.map((item) => (
           <div key={item.category} className="flex items-start gap-3">
             {/* Color indicator - larger and more visible */}
             <div
-              className="h-3 w-3 rounded-sm mt-0.5 flex-shrink-0"
+              className="mt-0.5 h-3 w-3 flex-shrink-0 rounded-sm"
               style={{ backgroundColor: item.fill }}
             />
 
             {/* Labels - two line format */}
             <div className="flex flex-col gap-0.5">
-              <span className="text-sm font-semibold text-foreground leading-tight">
+              <span className="text-foreground text-sm leading-tight font-semibold">
                 {item.category}
               </span>
-              <span className="text-xs text-muted-foreground">
+              <span className="text-muted-foreground text-xs">
                 {item.value} orders ({item.percentage}%)
               </span>
             </div>
@@ -62,19 +62,16 @@ export function OrdersByCategoryChart({ data }: OrdersByCategoryChartProps) {
     <Card className="bg-card border-border rounded-md">
       <CardHeader className="pb-2">
         <CardTitle className="text-foreground">Orders by Category</CardTitle>
-        <p className="text-sm text-muted-foreground">
-          Distribution across product categories
-        </p>
+        <p className="text-muted-foreground text-sm">Distribution across product categories</p>
       </CardHeader>
       <CardContent className="p-4">
         {/* Responsive flex container: stack on mobile, side-by-side on desktop */}
-        <div className="flex flex-col md:flex-row items-stretch gap-4 md:gap-2">
-
+        <div className="flex flex-col items-stretch gap-4 md:flex-row md:gap-2">
           {/* Custom Legend - LEFT side */}
           <CategoryLegend data={data} />
 
           {/* Chart - RIGHT side, larger and flexible */}
-          <ChartContainer config={chartConfig} className="h-[260px] md:h-[280px] w-full md:flex-1">
+          <ChartContainer config={chartConfig} className="h-[260px] w-full md:h-[280px] md:flex-1">
             <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
               <ChartTooltip
                 content={

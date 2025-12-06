@@ -85,10 +85,10 @@ export function OrderDetailModal({ order, open, onOpenChange }: OrderDetailModal
 
   return (
     <Sheet open={open} onOpenChange={handleClose}>
-      <SheetContent className="sm:max-w-lg w-full overflow-y-auto bg-card border-border">
+      <SheetContent className="bg-card border-border w-full overflow-y-auto sm:max-w-lg">
         <SheetHeader>
           <SheetTitle className="text-foreground flex items-center gap-2">
-            <Package className="h-5 w-5 text-primary" />
+            <Package className="text-primary h-5 w-5" />
             Order Details
           </SheetTitle>
           <SheetDescription className="text-muted-foreground">
@@ -105,7 +105,7 @@ export function OrderDetailModal({ order, open, onOpenChange }: OrderDetailModal
                 value={currentStatus}
                 onValueChange={(value) => setNewStatus(value as OrderStatus)}
               >
-                <SelectTrigger className="flex-1 bg-background border-border">
+                <SelectTrigger className="bg-background border-border flex-1">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -116,13 +116,17 @@ export function OrderDetailModal({ order, open, onOpenChange }: OrderDetailModal
                 </SelectContent>
               </Select>
               {newStatus && newStatus !== order.status && (
-                <Button onClick={handleSaveStatus} size="sm" className="bg-primary hover:bg-primary/90">
+                <Button
+                  onClick={handleSaveStatus}
+                  size="sm"
+                  className="bg-primary hover:bg-primary/90"
+                >
                   Save
                 </Button>
               )}
             </div>
-            <Badge className={cn("font-medium capitalize rounded-md", statusColors[currentStatus])}>
-              <StatusIcon className="h-3 w-3 mr-1" />
+            <Badge className={cn("rounded-md font-medium capitalize", statusColors[currentStatus])}>
+              <StatusIcon className="mr-1 h-3 w-3" />
               {currentStatus}
             </Badge>
           </div>
@@ -131,21 +135,21 @@ export function OrderDetailModal({ order, open, onOpenChange }: OrderDetailModal
 
           {/* Customer Information */}
           <div className="space-y-3">
-            <h3 className="font-semibold text-foreground flex items-center gap-2">
-              <User className="h-4 w-4 text-primary" />
+            <h3 className="text-foreground flex items-center gap-2 font-semibold">
+              <User className="text-primary h-4 w-4" />
               Customer Information
             </h3>
             <div className="space-y-2 text-sm">
-              <div className="flex items-center gap-2 text-muted-foreground">
+              <div className="text-muted-foreground flex items-center gap-2">
                 <User className="h-4 w-4" />
                 <span>{order.customerName}</span>
               </div>
-              <div className="flex items-center gap-2 text-muted-foreground">
+              <div className="text-muted-foreground flex items-center gap-2">
                 <Phone className="h-4 w-4" />
                 <span>{order.customerPhone}</span>
               </div>
               {order.customerEmail && (
-                <div className="flex items-center gap-2 text-muted-foreground">
+                <div className="text-muted-foreground flex items-center gap-2">
                   <Mail className="h-4 w-4" />
                   <span>{order.customerEmail}</span>
                 </div>
@@ -157,11 +161,11 @@ export function OrderDetailModal({ order, open, onOpenChange }: OrderDetailModal
 
           {/* Product Details */}
           <div className="space-y-3">
-            <h3 className="font-semibold text-foreground flex items-center gap-2">
-              <Box className="h-4 w-4 text-primary" />
+            <h3 className="text-foreground flex items-center gap-2 font-semibold">
+              <Box className="text-primary h-4 w-4" />
               Product Details
             </h3>
-            <div className="rounded-md border border-border p-3 bg-background">
+            <div className="border-border bg-background rounded-md border p-3">
               <div className="flex gap-3">
                 <img
                   src={order.product.thumbnail}
@@ -169,13 +173,13 @@ export function OrderDetailModal({ order, open, onOpenChange }: OrderDetailModal
                   className="h-16 w-16 rounded-md object-cover"
                 />
                 <div className="flex-1">
-                  <p className="font-medium text-foreground">{order.product.name}</p>
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className="text-foreground font-medium">{order.product.name}</p>
+                  <p className="text-muted-foreground mt-1 text-xs">
                     {order.product.shortDescription}
                   </p>
-                  <div className="flex items-center gap-4 mt-2 text-sm">
+                  <div className="mt-2 flex items-center gap-4 text-sm">
                     <span className="text-muted-foreground">Qty: {order.quantity}</span>
-                    <span className="font-semibold text-foreground">
+                    <span className="text-foreground font-semibold">
                       {formatPrice(order.product.price)} each
                     </span>
                   </div>
@@ -188,25 +192,25 @@ export function OrderDetailModal({ order, open, onOpenChange }: OrderDetailModal
 
           {/* Shipping Details */}
           <div className="space-y-3">
-            <h3 className="font-semibold text-foreground flex items-center gap-2">
-              <Truck className="h-4 w-4 text-primary" />
+            <h3 className="text-foreground flex items-center gap-2 font-semibold">
+              <Truck className="text-primary h-4 w-4" />
               Shipping Details
             </h3>
             <div className="space-y-2 text-sm">
-              <div className="flex items-start gap-2 text-muted-foreground">
-                <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />
+              <div className="text-muted-foreground flex items-start gap-2">
+                <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0" />
                 <div>
-                  <p className="font-medium text-foreground">
+                  <p className="text-foreground font-medium">
                     {order.deliveryZone.replace("zona-", "Zona ")}
                   </p>
                   <p>{order.deliveryAddress}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 text-muted-foreground">
+              <div className="text-muted-foreground flex items-center gap-2">
                 <Package className="h-4 w-4" />
                 <span className="capitalize">{order.serviceType.replace("_", " ")} Shipping</span>
               </div>
-              <div className="flex items-center gap-2 text-muted-foreground">
+              <div className="text-muted-foreground flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
                 <span>
                   Est. Delivery: {format(new Date(order.estimatedDelivery), "MMM d, yyyy")}
@@ -219,21 +223,21 @@ export function OrderDetailModal({ order, open, onOpenChange }: OrderDetailModal
 
           {/* Cost Breakdown */}
           <div className="space-y-3">
-            <h3 className="font-semibold text-foreground flex items-center gap-2">
-              <DollarSign className="h-4 w-4 text-primary" />
+            <h3 className="text-foreground flex items-center gap-2 font-semibold">
+              <DollarSign className="text-primary h-4 w-4" />
               Cost Breakdown
             </h3>
             <div className="space-y-2 text-sm">
-              <div className="flex justify-between text-muted-foreground">
+              <div className="text-muted-foreground flex justify-between">
                 <span>Product Total</span>
                 <span>{formatPrice(order.productTotal)}</span>
               </div>
-              <div className="flex justify-between text-muted-foreground">
+              <div className="text-muted-foreground flex justify-between">
                 <span>Shipping</span>
                 <span>{formatPrice(order.shippingCost)}</span>
               </div>
               <Separator className="bg-border" />
-              <div className="flex justify-between font-semibold text-foreground text-base">
+              <div className="text-foreground flex justify-between text-base font-semibold">
                 <span>Total</span>
                 <span>{formatPrice(order.totalCost)}</span>
               </div>
@@ -245,11 +249,11 @@ export function OrderDetailModal({ order, open, onOpenChange }: OrderDetailModal
             <>
               <Separator className="bg-border" />
               <div className="space-y-2">
-                <h3 className="font-semibold text-foreground flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-primary" />
+                <h3 className="text-foreground flex items-center gap-2 font-semibold">
+                  <FileText className="text-primary h-4 w-4" />
                   Order Notes
                 </h3>
-                <p className="text-sm text-muted-foreground bg-background p-3 rounded-lg border border-border">
+                <p className="text-muted-foreground bg-background border-border rounded-lg border p-3 text-sm">
                   {order.notes}
                 </p>
               </div>
@@ -260,8 +264,8 @@ export function OrderDetailModal({ order, open, onOpenChange }: OrderDetailModal
 
           {/* Order Timeline */}
           <div className="space-y-2">
-            <h3 className="font-semibold text-foreground">Order Timeline</h3>
-            <p className="text-xs text-muted-foreground">
+            <h3 className="text-foreground font-semibold">Order Timeline</h3>
+            <p className="text-muted-foreground text-xs">
               Created: {format(new Date(order.createdAt), "MMM d, yyyy h:mm a")}
             </p>
           </div>

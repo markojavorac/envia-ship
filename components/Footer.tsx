@@ -35,7 +35,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/"
-                  className="text-sm text-white/80 hover:text-primary transition-colors"
+                  className="hover:text-primary text-sm text-white/80 transition-colors"
                 >
                   Home
                 </Link>
@@ -43,7 +43,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/calculator"
-                  className="text-sm text-white/80 hover:text-primary transition-colors"
+                  className="hover:text-primary text-sm text-white/80 transition-colors"
                 >
                   Calculator
                 </Link>
@@ -57,24 +57,18 @@ export default function Footer() {
             <ul className="space-y-2">
               <li className="flex items-center gap-2 text-sm text-white/80">
                 <Phone className="h-4 w-4" />
-                <a
-                  href={`tel:${theme.phone}`}
-                  className="hover:text-primary transition-colors"
-                >
+                <a href={`tel:${theme.phone}`} className="hover:text-primary transition-colors">
                   {theme.phone}
                 </a>
               </li>
               <li className="flex items-center gap-2 text-sm text-white/80">
                 <Mail className="h-4 w-4" />
-                <a
-                  href={`mailto:${theme.email}`}
-                  className="hover:text-primary transition-colors"
-                >
+                <a href={`mailto:${theme.email}`} className="hover:text-primary transition-colors">
                   {theme.email}
                 </a>
               </li>
               <li className="flex items-start gap-2 text-sm text-white/80">
-                <MapPin className="h-4 w-4 mt-0.5" />
+                <MapPin className="mt-0.5 h-4 w-4" />
                 <span>Guatemala City, Guatemala</span>
               </li>
             </ul>

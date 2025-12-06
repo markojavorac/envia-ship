@@ -87,21 +87,24 @@ function MarketplaceContent() {
           {/* Amazon View: Sidebar + Grid */}
           {currentView === MarketplaceView.AMAZON && (
             <div className="flex gap-6">
-              <FilterSidebar priceRange={priceRange} className="hidden lg:block w-64 flex-shrink-0 self-start sticky top-20" />
+              <FilterSidebar
+                priceRange={priceRange}
+                className="sticky top-20 hidden w-64 flex-shrink-0 self-start lg:block"
+              />
               <div className="flex-1">
                 {/* Search and Sort Bar */}
-                <div className="flex gap-4 mb-6">
+                <div className="mb-6 flex gap-4">
                   <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
                     <Input
                       placeholder="Search products..."
                       value={filterState.searchQuery}
                       onChange={(e) => handleSearch(e.target.value)}
-                      className="pl-10 bg-white border-2 border-gray-200 focus:border-primary focus:ring-primary/20"
+                      className="focus:border-primary focus:ring-primary/20 border-2 border-gray-200 bg-white pl-10"
                     />
                   </div>
                   <Select value={sortOption} onValueChange={setSortOption}>
-                    <SelectTrigger className="w-48 bg-white border-2 border-gray-200">
+                    <SelectTrigger className="w-48 border-2 border-gray-200 bg-white">
                       <SelectValue placeholder="Sort by..." />
                     </SelectTrigger>
                     <SelectContent>
@@ -115,18 +118,14 @@ function MarketplaceContent() {
                 </div>
 
                 {/* Product Count */}
-                <p className="text-sm text-gray-600 mb-4">
+                <p className="mb-4 text-sm text-gray-600">
                   Showing {filteredProducts.length} products
                 </p>
 
                 {/* Products Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   {filteredProducts.map((product) => (
-                    <ProductCard
-                      key={product.id}
-                      product={product}
-                      variant={currentView}
-                    />
+                    <ProductCard key={product.id} product={product} variant={currentView} />
                   ))}
                 </div>
               </div>
@@ -139,16 +138,16 @@ function MarketplaceContent() {
               {/* Search and Sort Bar */}
               <div className="flex gap-4">
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
                   <Input
                     placeholder="Search products..."
                     value={filterState.searchQuery}
                     onChange={(e) => handleSearch(e.target.value)}
-                    className="pl-10 bg-white border-2 border-gray-200 focus:border-primary focus:ring-primary/20"
+                    className="focus:border-primary focus:ring-primary/20 border-2 border-gray-200 bg-white pl-10"
                   />
                 </div>
                 <Select value={sortOption} onValueChange={setSortOption}>
-                  <SelectTrigger className="w-48 bg-white border-2 border-gray-200">
+                  <SelectTrigger className="w-48 border-2 border-gray-200 bg-white">
                     <SelectValue placeholder="Sort by..." />
                   </SelectTrigger>
                   <SelectContent>
@@ -161,13 +160,9 @@ function MarketplaceContent() {
                 </Select>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {filteredProducts.map((product) => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    variant={currentView}
-                  />
+                  <ProductCard key={product.id} product={product} variant={currentView} />
                 ))}
               </div>
             </div>
@@ -177,23 +172,19 @@ function MarketplaceContent() {
           {currentView === MarketplaceView.PINTEREST && (
             <div className="space-y-6">
               {/* Search Bar */}
-              <div className="relative max-w-2xl mx-auto">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <div className="relative mx-auto max-w-2xl">
+                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
                 <Input
                   placeholder="Search products..."
                   value={filterState.searchQuery}
                   onChange={(e) => handleSearch(e.target.value)}
-                  className="pl-10 bg-white border-2 border-gray-200 focus:border-primary focus:ring-primary/20"
+                  className="focus:border-primary focus:ring-primary/20 border-2 border-gray-200 bg-white pl-10"
                 />
               </div>
 
-              <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-4">
+              <div className="columns-1 gap-4 md:columns-2 lg:columns-3 xl:columns-4">
                 {filteredProducts.map((product) => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    variant={currentView}
-                  />
+                  <ProductCard key={product.id} product={product} variant={currentView} />
                 ))}
               </div>
             </div>
@@ -203,23 +194,19 @@ function MarketplaceContent() {
           {currentView === MarketplaceView.MINIMALIST && (
             <div className="space-y-12">
               {/* Centered Search */}
-              <div className="relative max-w-xl mx-auto">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <div className="relative mx-auto max-w-xl">
+                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
                 <Input
                   placeholder="Search products..."
                   value={filterState.searchQuery}
                   onChange={(e) => handleSearch(e.target.value)}
-                  className="pl-10 bg-white border-2 border-gray-200 focus:border-primary focus:ring-primary/20 text-center"
+                  className="focus:border-primary focus:ring-primary/20 border-2 border-gray-200 bg-white pl-10 text-center"
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+              <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3">
                 {filteredProducts.map((product) => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    variant={currentView}
-                  />
+                  <ProductCard key={product.id} product={product} variant={currentView} />
                 ))}
               </div>
             </div>
@@ -231,16 +218,16 @@ function MarketplaceContent() {
               {/* Search and Sort Bar */}
               <div className="flex gap-4">
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
                   <Input
                     placeholder="Search products..."
                     value={filterState.searchQuery}
                     onChange={(e) => handleSearch(e.target.value)}
-                    className="pl-10 bg-white border-2 border-gray-200 focus:border-primary focus:ring-primary/20"
+                    className="focus:border-primary focus:ring-primary/20 border-2 border-gray-200 bg-white pl-10"
                   />
                 </div>
                 <Select value={sortOption} onValueChange={setSortOption}>
-                  <SelectTrigger className="w-48 bg-white border-2 border-gray-200">
+                  <SelectTrigger className="w-48 border-2 border-gray-200 bg-white">
                     <SelectValue placeholder="Sort by..." />
                   </SelectTrigger>
                   <SelectContent>
@@ -255,25 +242,21 @@ function MarketplaceContent() {
 
               {groupedProducts.map(({ zone, products }) => (
                 <section key={zone}>
-                  <div className="flex items-center gap-3 mb-6">
-                    <MapPin className="h-6 w-6 text-primary" />
-                    <h2 className="text-2xl font-bold text-secondary">
+                  <div className="mb-6 flex items-center gap-3">
+                    <MapPin className="text-primary h-6 w-6" />
+                    <h2 className="text-secondary text-2xl font-bold">
                       {zone === userZone ? "Available in Your Zone" : zone.replace("-", " ")}
                     </h2>
                     {zone === userZone && (
-                      <span className="bg-primary text-white text-xs font-bold px-2 py-1 rounded-full">
+                      <span className="bg-primary rounded-full px-2 py-1 text-xs font-bold text-white">
                         FAST DELIVERY
                       </span>
                     )}
                     <span className="text-sm text-gray-500">({products.length} products)</span>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {products.map((product) => (
-                      <ProductCard
-                        key={product.id}
-                        product={product}
-                        variant={currentView}
-                      />
+                      <ProductCard key={product.id} product={product} variant={currentView} />
                     ))}
                   </div>
                 </section>
@@ -284,13 +267,9 @@ function MarketplaceContent() {
           {/* Empty State */}
           {filteredProducts.length === 0 && (
             <div className="py-20 text-center">
-              <ShoppingBag className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-secondary mb-2">
-                No products found
-              </h2>
-              <p className="text-gray-600">
-                Try adjusting your filters or search query
-              </p>
+              <ShoppingBag className="mx-auto mb-4 h-16 w-16 text-gray-300" />
+              <h2 className="text-secondary mb-2 text-2xl font-bold">No products found</h2>
+              <p className="text-gray-600">Try adjusting your filters or search query</p>
             </div>
           )}
         </div>

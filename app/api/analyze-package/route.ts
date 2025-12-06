@@ -9,10 +9,7 @@ export async function POST(request: NextRequest) {
 
     // Basic validation
     if (!images || images.length === 0 || images.length > 5) {
-      return NextResponse.json(
-        { error: "Please provide 1-5 images" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Please provide 1-5 images" }, { status: 400 });
     }
 
     // Check if using mock mode
@@ -29,9 +26,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(result);
   } catch (error: unknown) {
     console.error("Analysis error:", error);
-    return NextResponse.json(
-      { error: "Analysis failed. Please try again." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Analysis failed. Please try again." }, { status: 500 });
   }
 }

@@ -9,14 +9,10 @@ interface CalculatorContextType {
   updateFormData: (data: Partial<ShippingFormValues>) => void;
 }
 
-const CalculatorContext = createContext<CalculatorContextType | undefined>(
-  undefined
-);
+const CalculatorContext = createContext<CalculatorContextType | undefined>(undefined);
 
 export function CalculatorProvider({ children }: { children: ReactNode }) {
-  const [formData, setFormDataState] = useState<Partial<ShippingFormValues>>(
-    {}
-  );
+  const [formData, setFormDataState] = useState<Partial<ShippingFormValues>>({});
 
   const setFormData = (data: Partial<ShippingFormValues>) => {
     setFormDataState(data);
@@ -27,9 +23,7 @@ export function CalculatorProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <CalculatorContext.Provider
-      value={{ formData, setFormData, updateFormData }}
-    >
+    <CalculatorContext.Provider value={{ formData, setFormData, updateFormData }}>
       {children}
     </CalculatorContext.Provider>
   );

@@ -81,7 +81,9 @@ export function ProductOnboardingWizard() {
       toast({
         title: "Analysis Failed",
         description:
-          error instanceof Error ? error.message : "Failed to analyze product images. Please try again.",
+          error instanceof Error
+            ? error.message
+            : "Failed to analyze product images. Please try again.",
         variant: "destructive",
       });
       setCurrentStep("upload");
@@ -189,20 +191,20 @@ export function ProductOnboardingWizard() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="mx-auto max-w-4xl">
       <Card className="bg-card border-border rounded-md">
-        <CardContent className="pt-6 pb-6 px-6">
+        <CardContent className="px-6 pt-6 pb-6">
           {/* Progress Indicator */}
           <div className="mb-6">
-            <div className="flex items-center justify-between mb-2">
+            <div className="mb-2 flex items-center justify-between">
               {[
                 { step: "upload", label: "Upload Photos" },
                 { step: "analyzing", label: "AI Analysis" },
                 { step: "review", label: "Review & Publish" },
               ].map((item, index) => (
-                <div key={item.step} className="flex items-center flex-1">
+                <div key={item.step} className="flex flex-1 items-center">
                   <div
-                    className={`flex items-center justify-center h-8 w-8 rounded-full font-semibold text-sm ${
+                    className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold ${
                       currentStep === item.step
                         ? "bg-primary text-white"
                         : index < ["upload", "analyzing", "review"].indexOf(currentStep)
@@ -212,12 +214,12 @@ export function ProductOnboardingWizard() {
                   >
                     {index + 1}
                   </div>
-                  <span className="ml-2 text-sm font-medium text-foreground hidden md:inline">
+                  <span className="text-foreground ml-2 hidden text-sm font-medium md:inline">
                     {item.label}
                   </span>
                   {index < 2 && (
                     <div
-                      className={`flex-1 h-0.5 mx-2 ${
+                      className={`mx-2 h-0.5 flex-1 ${
                         index < ["upload", "analyzing", "review"].indexOf(currentStep)
                           ? "bg-green-500"
                           : "bg-muted"
@@ -237,9 +239,7 @@ export function ProductOnboardingWizard() {
             />
           )}
 
-          {currentStep === "analyzing" && !analysis && (
-            <AnalyzingStep />
-          )}
+          {currentStep === "analyzing" && !analysis && <AnalyzingStep />}
 
           {currentStep === "review" && analysis && (
             <ReviewEditStep

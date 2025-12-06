@@ -23,7 +23,7 @@ export function ProductImageGallery({ images, productName }: ProductImageGallery
 
   if (images.length === 0) {
     return (
-      <div className="aspect-square bg-gray-100 flex items-center justify-center rounded-lg">
+      <div className="flex aspect-square items-center justify-center rounded-lg bg-gray-100">
         <p className="text-gray-400">No image available</p>
       </div>
     );
@@ -32,7 +32,7 @@ export function ProductImageGallery({ images, productName }: ProductImageGallery
   return (
     <div className="space-y-4">
       {/* Main Image */}
-      <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden group">
+      <div className="group relative aspect-square overflow-hidden rounded-lg bg-gray-100">
         <Image
           src={images[currentIndex]}
           alt={`${productName} - Image ${currentIndex + 1}`}
@@ -48,7 +48,7 @@ export function ProductImageGallery({ images, productName }: ProductImageGallery
             <Button
               variant="ghost"
               size="icon"
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white opacity-0 group-hover:opacity-100 transition-opacity"
+              className="absolute top-1/2 left-2 -translate-y-1/2 bg-white/80 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-white"
               onClick={goToPrevious}
             >
               <ChevronLeft className="h-6 w-6" />
@@ -56,7 +56,7 @@ export function ProductImageGallery({ images, productName }: ProductImageGallery
             <Button
               variant="ghost"
               size="icon"
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white opacity-0 group-hover:opacity-100 transition-opacity"
+              className="absolute top-1/2 right-2 -translate-y-1/2 bg-white/80 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-white"
               onClick={goToNext}
             >
               <ChevronRight className="h-6 w-6" />
@@ -66,7 +66,7 @@ export function ProductImageGallery({ images, productName }: ProductImageGallery
 
         {/* Image Counter */}
         {images.length > 1 && (
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 text-white px-3 py-1 rounded-full text-sm">
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-black/60 px-3 py-1 text-sm text-white">
             {currentIndex + 1} / {images.length}
           </div>
         )}
@@ -79,10 +79,10 @@ export function ProductImageGallery({ images, productName }: ProductImageGallery
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`aspect-square relative bg-gray-100 rounded-lg overflow-hidden border-2 transition-all ${
+              className={`relative aspect-square overflow-hidden rounded-lg border-2 bg-gray-100 transition-all ${
                 index === currentIndex
-                  ? "border-primary ring-2 ring-primary/20"
-                  : "border-gray-200 hover:border-primary/50"
+                  ? "border-primary ring-primary/20 ring-2"
+                  : "hover:border-primary/50 border-gray-200"
               }`}
             >
               <Image

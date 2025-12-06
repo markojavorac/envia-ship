@@ -92,9 +92,9 @@ export function ImageUploadStep({ onImagesSelected, onContinue }: ImageUploadSte
         onDragOver={handleDrag}
         onDrop={handleDrop}
         className={cn(
-          "relative border-2 border-dashed rounded-md p-8 transition-colors cursor-pointer",
+          "relative cursor-pointer rounded-md border-2 border-dashed p-8 transition-colors",
           dragActive ? "border-primary bg-primary/5" : "border-border hover:border-primary/50",
-          selectedFiles.length >= 5 && "opacity-50 cursor-not-allowed"
+          selectedFiles.length >= 5 && "cursor-not-allowed opacity-50"
         )}
         onClick={() => selectedFiles.length < 5 && fileInputRef.current?.click()}
       >
@@ -109,18 +109,19 @@ export function ImageUploadStep({ onImagesSelected, onContinue }: ImageUploadSte
         />
 
         <div className="flex flex-col items-center text-center">
-          <div className="h-12 w-12 rounded-md bg-primary flex items-center justify-center mb-3">
+          <div className="bg-primary mb-3 flex h-12 w-12 items-center justify-center rounded-md">
             <Upload className="h-6 w-6 text-white" />
           </div>
 
-          <h3 className="text-lg font-bold text-foreground mb-1">Upload Product Photos</h3>
-          <p className="text-sm text-muted-foreground mb-4">
-            Drag and drop or click to select {selectedFiles.length > 0 && `(${selectedFiles.length}/5 uploaded)`}
+          <h3 className="text-foreground mb-1 text-lg font-bold">Upload Product Photos</h3>
+          <p className="text-muted-foreground mb-4 text-sm">
+            Drag and drop or click to select{" "}
+            {selectedFiles.length > 0 && `(${selectedFiles.length}/5 uploaded)`}
           </p>
 
-          <div className="text-xs text-muted-foreground space-y-1">
-            <p className="font-semibold text-foreground">For best results, include:</p>
-            <ul className="list-disc list-inside space-y-0.5">
+          <div className="text-muted-foreground space-y-1 text-xs">
+            <p className="text-foreground font-semibold">For best results, include:</p>
+            <ul className="list-inside list-disc space-y-0.5">
               <li>Front view of product</li>
               <li>Side or back views</li>
               <li>Close-up of labels and text</li>
@@ -134,29 +135,27 @@ export function ImageUploadStep({ onImagesSelected, onContinue }: ImageUploadSte
       {/* Preview Grid */}
       {selectedFiles.length > 0 && (
         <div>
-          <h4 className="text-sm font-semibold text-foreground mb-2">
+          <h4 className="text-foreground mb-2 text-sm font-semibold">
             Selected Images ({selectedFiles.length}/5)
           </h4>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
             {previewUrls.map((url, index) => (
-              <Card key={index} className="relative group bg-card border-border rounded-md overflow-hidden">
-                <CardContent className="p-0 aspect-square relative">
-                  <Image
-                    src={url}
-                    alt={`Preview ${index + 1}`}
-                    fill
-                    className="object-cover"
-                  />
+              <Card
+                key={index}
+                className="group bg-card border-border relative overflow-hidden rounded-md"
+              >
+                <CardContent className="relative aspect-square p-0">
+                  <Image src={url} alt={`Preview ${index + 1}`} fill className="object-cover" />
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       removeImage(index);
                     }}
-                    className="absolute top-1 right-1 h-6 w-6 rounded-full bg-red-500 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-1 right-1 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 opacity-0 transition-opacity group-hover:opacity-100"
                   >
                     <X className="h-4 w-4 text-white" />
                   </button>
-                  <div className="absolute bottom-1 left-1 px-1.5 py-0.5 bg-black/60 rounded text-xs text-white">
+                  <div className="absolute bottom-1 left-1 rounded bg-black/60 px-1.5 py-0.5 text-xs text-white">
                     {index + 1}
                   </div>
                 </CardContent>
@@ -167,11 +166,11 @@ export function ImageUploadStep({ onImagesSelected, onContinue }: ImageUploadSte
             {selectedFiles.length < 5 && (
               <Card
                 onClick={() => fileInputRef.current?.click()}
-                className="cursor-pointer hover:border-primary/50 transition-colors bg-card border-border border-dashed rounded-md"
+                className="hover:border-primary/50 bg-card border-border cursor-pointer rounded-md border-dashed transition-colors"
               >
-                <CardContent className="p-0 aspect-square flex flex-col items-center justify-center">
-                  <ImageIcon className="h-8 w-8 text-muted-foreground mb-2" />
-                  <span className="text-xs text-muted-foreground">Add More</span>
+                <CardContent className="flex aspect-square flex-col items-center justify-center p-0">
+                  <ImageIcon className="text-muted-foreground mb-2 h-8 w-8" />
+                  <span className="text-muted-foreground text-xs">Add More</span>
                 </CardContent>
               </Card>
             )}
@@ -184,7 +183,7 @@ export function ImageUploadStep({ onImagesSelected, onContinue }: ImageUploadSte
         <Button
           onClick={handleContinue}
           disabled={selectedFiles.length === 0}
-          className="bg-primary text-white hover:bg-primary/90 font-semibold"
+          className="bg-primary hover:bg-primary/90 font-semibold text-white"
         >
           Analyze Photos ({selectedFiles.length})
         </Button>

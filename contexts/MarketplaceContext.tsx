@@ -1,12 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import {
-  MarketplaceView,
-  FilterState,
-  SortOption,
-  ProductCategory,
-} from "@/lib/marketplace/types";
+import { MarketplaceView, FilterState, SortOption, ProductCategory } from "@/lib/marketplace/types";
 import { ServiceType } from "@/lib/types";
 import {
   getUserPreferences,
@@ -80,7 +75,7 @@ export function MarketplaceProvider({ children }: { children: ReactNode }) {
   const setUserZone = (zone: string) => {
     setUserZoneState(zone);
     saveUserZone(zone);
-    setShowZoneModal(false);  // Close modal when zone is set
+    setShowZoneModal(false); // Close modal when zone is set
   };
 
   // Persist view to localStorage
@@ -131,11 +126,7 @@ export function MarketplaceProvider({ children }: { children: ReactNode }) {
     return null;
   }
 
-  return (
-    <MarketplaceContext.Provider value={value}>
-      {children}
-    </MarketplaceContext.Provider>
-  );
+  return <MarketplaceContext.Provider value={value}>{children}</MarketplaceContext.Provider>;
 }
 
 export function useMarketplace() {

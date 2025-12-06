@@ -104,12 +104,12 @@ export function ProductsTable({ products, onUpdateProduct }: ProductsTableProps)
             <Input
               value={editedData.name || ""}
               onChange={(e) => setEditedData({ ...editedData, name: e.target.value })}
-              className="max-w-xs bg-background border-border"
+              className="bg-background border-border max-w-xs"
             />
           ) : (
             <div className="max-w-[200px]">
-              <p className="font-medium truncate">{row.original.name}</p>
-              <p className="text-xs text-muted-foreground truncate">
+              <p className="truncate font-medium">{row.original.name}</p>
+              <p className="text-muted-foreground truncate text-xs">
                 {row.original.shortDescription}
               </p>
             </div>
@@ -136,10 +136,8 @@ export function ProductsTable({ products, onUpdateProduct }: ProductsTableProps)
             <Input
               type="number"
               value={editedData.price || 0}
-              onChange={(e) =>
-                setEditedData({ ...editedData, price: parseFloat(e.target.value) })
-              }
-              className="w-24 bg-background border-border"
+              onChange={(e) => setEditedData({ ...editedData, price: parseFloat(e.target.value) })}
+              className="bg-background border-border w-24"
               min="0"
               step="0.01"
             />
@@ -169,10 +167,8 @@ export function ProductsTable({ products, onUpdateProduct }: ProductsTableProps)
             <Input
               type="number"
               value={editedData.stock || 0}
-              onChange={(e) =>
-                setEditedData({ ...editedData, stock: parseInt(e.target.value) })
-              }
-              className="w-20 bg-background border-border"
+              onChange={(e) => setEditedData({ ...editedData, stock: parseInt(e.target.value) })}
+              className="bg-background border-border w-20"
               min="0"
             />
           ) : (
@@ -195,9 +191,7 @@ export function ProductsTable({ products, onUpdateProduct }: ProductsTableProps)
         header: "Category",
         cell: ({ row }) => {
           const isEditing = editingId === row.original.id;
-          const currentCategory = isEditing
-            ? editedData.category
-            : row.original.category;
+          const currentCategory = isEditing ? editedData.category : row.original.category;
           const categoryLabel =
             CATEGORY_OPTIONS.find((c) => c.value === currentCategory)?.label || "";
 
@@ -208,7 +202,7 @@ export function ProductsTable({ products, onUpdateProduct }: ProductsTableProps)
                 setEditedData({ ...editedData, category: value as ProductCategory })
               }
             >
-              <SelectTrigger className="w-[180px] bg-background border-border text-foreground">
+              <SelectTrigger className="bg-background border-border text-foreground w-[180px]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -220,7 +214,7 @@ export function ProductsTable({ products, onUpdateProduct }: ProductsTableProps)
               </SelectContent>
             </Select>
           ) : (
-            <span className="text-sm text-muted-foreground">{categoryLabel}</span>
+            <span className="text-muted-foreground text-sm">{categoryLabel}</span>
           );
         },
       },
@@ -236,16 +230,11 @@ export function ProductsTable({ products, onUpdateProduct }: ProductsTableProps)
                 onClick={() => handleSave(row.original.id)}
                 className="bg-primary hover:bg-primary/90"
               >
-                <Save className="h-3 w-3 mr-1" />
+                <Save className="mr-1 h-3 w-3" />
                 Save
               </Button>
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={handleCancel}
-                className="hover:bg-card"
-              >
-                <X className="h-3 w-3 mr-1" />
+              <Button size="sm" variant="ghost" onClick={handleCancel} className="hover:bg-card">
+                <X className="mr-1 h-3 w-3" />
                 Cancel
               </Button>
             </div>
@@ -256,7 +245,7 @@ export function ProductsTable({ products, onUpdateProduct }: ProductsTableProps)
               onClick={() => handleEdit(row.original)}
               className="hover:bg-card"
             >
-              <Pencil className="h-3 w-3 mr-1" />
+              <Pencil className="mr-1 h-3 w-3" />
               Edit
             </Button>
           );
@@ -309,13 +298,13 @@ export function ProductsTable({ products, onUpdateProduct }: ProductsTableProps)
   return (
     <div className="space-y-4">
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row">
         {/* Category Filter */}
         <Select
           value={categoryFilter}
           onValueChange={(value) => setCategoryFilter(value as ProductCategory | "all")}
         >
-          <SelectTrigger className="w-[200px] bg-card border-border text-foreground">
+          <SelectTrigger className="bg-card border-border text-foreground w-[200px]">
             <SelectValue placeholder="All Categories" />
           </SelectTrigger>
           <SelectContent>
@@ -333,7 +322,7 @@ export function ProductsTable({ products, onUpdateProduct }: ProductsTableProps)
           value={stockFilter}
           onValueChange={(value) => setStockFilter(value as "all" | "low" | "out")}
         >
-          <SelectTrigger className="w-[180px] bg-card border-border text-foreground">
+          <SelectTrigger className="bg-card border-border text-foreground w-[180px]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -344,19 +333,19 @@ export function ProductsTable({ products, onUpdateProduct }: ProductsTableProps)
         </Select>
 
         {/* Search */}
-        <div className="relative flex-1 max-w-xs">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <div className="relative max-w-xs flex-1">
+          <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
           <Input
             placeholder="Search products..."
             value={globalFilter}
             onChange={(e) => setGlobalFilter(e.target.value)}
-            className="pl-9 bg-card border-border"
+            className="bg-card border-border pl-9"
           />
         </div>
       </div>
 
       {/* Table */}
-      <div className="rounded-md border border-border bg-card">
+      <div className="border-border bg-card rounded-md border">
         <Table>
           <TableHeader className="bg-background">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -388,7 +377,10 @@ export function ProductsTable({ products, onUpdateProduct }: ProductsTableProps)
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center text-muted-foreground">
+                <TableCell
+                  colSpan={columns.length}
+                  className="text-muted-foreground h-24 text-center"
+                >
                   No products found.
                 </TableCell>
               </TableRow>
@@ -399,8 +391,9 @@ export function ProductsTable({ products, onUpdateProduct }: ProductsTableProps)
 
       {/* Pagination */}
       <div className="flex items-center justify-between">
-        <div className="text-sm text-muted-foreground">
-          Showing {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} to{" "}
+        <div className="text-muted-foreground text-sm">
+          Showing {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1}{" "}
+          to{" "}
           {Math.min(
             (table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize,
             filteredProducts.length

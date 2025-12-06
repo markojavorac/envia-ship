@@ -32,8 +32,7 @@ export default function Home() {
     {
       icon: Shield,
       title: "Insured Shipping",
-      description:
-        "All packages are fully insured for peace of mind during transit.",
+      description: "All packages are fully insured for peace of mind during transit.",
       iconColor: "#1E3A5F",
       bgColor: "#E8EDF3",
       borderColor: "#1E3A5F",
@@ -43,8 +42,8 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-12 md:py-16 bg-secondary">
-        <div className="container mx-auto px-4 relative z-10">
+      <section className="bg-secondary relative overflow-hidden py-12 md:py-16">
+        <div className="relative z-10 container mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
             <div className="mb-6 flex justify-center">
               <Image
@@ -56,18 +55,26 @@ export default function Home() {
                 priority
               />
             </div>
-            <h1 className="mb-4 text-3xl font-bold leading-tight tracking-tight md:text-4xl lg:text-5xl font-heading text-white">
+            <h1 className="font-heading mb-4 text-3xl leading-tight font-bold tracking-tight text-white md:text-4xl lg:text-5xl">
               {theme.tagline}
             </h1>
             <p className="mb-6 text-base text-white md:text-lg">
-              Professional shipping services for all your delivery needs. Fast,
-              reliable, and affordable shipping solutions.
+              Professional shipping services for all your delivery needs. Fast, reliable, and
+              affordable shipping solutions.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-              <Button asChild size="lg" className="bg-primary text-white hover:bg-primary/90 shadow-lg font-bold">
+              <Button
+                asChild
+                size="lg"
+                className="bg-primary hover:bg-primary/90 font-bold text-white shadow-lg"
+              >
                 <Link href="/calculator">Get Quote</Link>
               </Button>
-              <Button asChild size="lg" className="bg-white text-primary hover:bg-gray-100 shadow-lg font-bold">
+              <Button
+                asChild
+                size="lg"
+                className="text-primary bg-white font-bold shadow-lg hover:bg-gray-100"
+              >
                 <Link href="#features">Learn More</Link>
               </Button>
             </div>
@@ -76,10 +83,10 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-12 bg-gray-50">
+      <section id="features" className="bg-gray-50 py-12">
         <div className="container mx-auto px-4">
           <div className="mb-8 text-center">
-            <h2 className="mb-3 text-2xl font-bold leading-tight md:text-3xl font-heading text-secondary">
+            <h2 className="font-heading text-secondary mb-3 text-2xl leading-tight font-bold md:text-3xl">
               Why Choose Us
             </h2>
             <p className="text-base text-gray-600">
@@ -90,22 +97,16 @@ export default function Home() {
             {features.map((feature, index) => (
               <Card
                 key={index}
-                className="border-2 border-primary/30 bg-white transition-all hover:shadow-lg hover:scale-105"
+                className="border-primary/30 border-2 bg-white transition-all hover:scale-105 hover:shadow-lg"
               >
                 <CardHeader className="pb-3">
-                  <div
-                    className="mb-3 flex h-14 w-14 items-center justify-center rounded-xl shadow-md bg-primary"
-                  >
+                  <div className="bg-primary mb-3 flex h-14 w-14 items-center justify-center rounded-xl shadow-md">
                     <feature.icon className="h-7 w-7 text-white" />
                   </div>
-                  <CardTitle className="text-lg text-primary font-bold">
-                    {feature.title}
-                  </CardTitle>
+                  <CardTitle className="text-primary text-lg font-bold">{feature.title}</CardTitle>
                 </CardHeader>
                 <CardContent className="pt-0">
-                  <p className="text-sm text-gray-600">
-                    {feature.description}
-                  </p>
+                  <p className="text-sm text-gray-600">{feature.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -114,16 +115,15 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 text-white relative overflow-hidden bg-primary">
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <h2 className="mb-3 text-2xl font-bold leading-tight md:text-3xl font-heading text-white drop-shadow-md">
+      <section className="bg-primary relative overflow-hidden py-12 text-white">
+        <div className="relative z-10 container mx-auto px-4 text-center">
+          <h2 className="font-heading mb-3 text-2xl leading-tight font-bold text-white drop-shadow-md md:text-3xl">
             Ready to Ship?
           </h2>
           <p className="mb-6 text-base text-white drop-shadow">
-            Get started with our shipping services today. Contact us for a free
-            quote.
+            Get started with our shipping services today. Contact us for a free quote.
           </p>
-          <Button asChild size="lg" className="bg-white hover:bg-gray-100 text-primary shadow-xl">
+          <Button asChild size="lg" className="text-primary bg-white shadow-xl hover:bg-gray-100">
             <Link href="/calculator">Get Started</Link>
           </Button>
         </div>

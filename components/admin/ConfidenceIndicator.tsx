@@ -54,13 +54,7 @@ export function ConfidenceIndicator({
 
       {/* Label */}
       {showLabel && (
-        <span
-          className={cn(
-            textSizeClasses[size],
-            "font-medium",
-            colorClasses[indicator.color]
-          )}
-        >
+        <span className={cn(textSizeClasses[size], "font-medium", colorClasses[indicator.color])}>
           {indicator.label}
         </span>
       )}

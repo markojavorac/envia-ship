@@ -47,34 +47,18 @@ export function DispatchKPIs({ entries }: DispatchKPIsProps) {
   });
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-      <StatsCard
-        label="Active Drivers"
-        value={metrics.totalActive}
-        icon={Truck}
-      />
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <StatsCard label="Active Drivers" value={metrics.totalActive} icon={Truck} />
 
-      <StatsCard
-        label="Loading Now"
-        value={metrics.loadingNow}
-        icon={Package}
-      />
+      <StatsCard label="Loading Now" value={metrics.loadingNow} icon={Package} />
 
-      <StatsCard
-        label="Ready to Depart"
-        value={metrics.readyToDepart}
-        icon={CheckCircle2}
-      />
+      <StatsCard label="Ready to Depart" value={metrics.readyToDepart} icon={CheckCircle2} />
 
       {/* Large Clock Card */}
       <Card className="bg-card border-border rounded-md">
-        <CardContent className="pt-8 pb-8 flex flex-col items-center justify-center">
-          <div className="text-6xl font-bold text-foreground tabular-nums">
-            {timeString}
-          </div>
-          <div className="text-base text-muted-foreground mt-3">
-            {dateString}
-          </div>
+        <CardContent className="flex flex-col items-center justify-center pt-8 pb-8">
+          <div className="text-foreground text-6xl font-bold tabular-nums">{timeString}</div>
+          <div className="text-muted-foreground mt-3 text-base">{dateString}</div>
         </CardContent>
       </Card>
     </div>

@@ -10,10 +10,10 @@
  * Represents the current state of a driver's dispatch assignment
  */
 export enum DispatchStatus {
-  WAITING = "waiting",      // Driver assigned, waiting for packages
-  LOADING = "loading",      // Actively loading packages
-  READY = "ready",          // Fully loaded, ready to depart
-  DEPARTED = "departed",    // Already left the hub
+  WAITING = "waiting", // Driver assigned, waiting for packages
+  LOADING = "loading", // Actively loading packages
+  READY = "ready", // Fully loaded, ready to depart
+  DEPARTED = "departed", // Already left the hub
 }
 
 /**

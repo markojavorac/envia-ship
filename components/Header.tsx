@@ -4,7 +4,18 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X, LayoutDashboard, Store, BarChart3, Package, ShoppingBag, Truck, type LucideIcon } from "lucide-react";
+import {
+  Menu,
+  X,
+  LayoutDashboard,
+  Store,
+  BarChart3,
+  Package,
+  ShoppingBag,
+  Truck,
+  MapIcon,
+  type LucideIcon,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function Header() {
@@ -27,6 +38,7 @@ export default function Header() {
     { href: "/admin/orders", label: "Orders", icon: Package },
     { href: "/admin/dispatch", label: "Dispatch", icon: Truck },
     { href: "/admin/products", label: "Products", icon: ShoppingBag },
+    { href: "/admin/driver-assist", label: "Driver Assist", icon: Truck },
   ];
 
   const navigationLinks = isAdminRoute ? adminNavigationLinks : userNavigationLinks;
@@ -34,11 +46,9 @@ export default function Header() {
   return (
     <header
       className={`sticky top-0 z-50 w-full shadow-md ${
-        isAdminRoute
-          ? 'bg-[hsl(217,33%,17%)] border-b border-[hsl(215,20%,35%)]'
-          : 'bg-secondary'
+        isAdminRoute ? "border-b border-[hsl(215,20%,35%)] bg-[hsl(217,33%,17%)]" : "bg-secondary"
       }`}
-      data-theme={isAdminRoute ? 'admin' : undefined}
+      data-theme={isAdminRoute ? "admin" : undefined}
     >
       <div className="container mx-auto flex h-14 items-center justify-between px-4">
         {/* Logo */}
@@ -54,18 +64,18 @@ export default function Header() {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 md:flex">
           {navigationLinks.map((link) => {
-            const Icon = ('icon' in link && link.icon) ? (link.icon as LucideIcon) : null;
+            const Icon = "icon" in link && link.icon ? (link.icon as LucideIcon) : null;
             const isActive = pathname === link.href;
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`flex items-center gap-2 transition-colors font-bold text-sm ${
+                className={`flex items-center gap-2 text-sm font-bold transition-colors ${
                   isAdminRoute
-                    ? `text-foreground hover:text-primary ${isActive ? 'text-primary' : ''}`
-                    : 'text-white hover:text-primary'
+                    ? `text-foreground hover:text-primary ${isActive ? "text-primary" : ""}`
+                    : "hover:text-primary text-white"
                 }`}
               >
                 {Icon && <Icon className="h-4 w-4" />}
@@ -76,7 +86,7 @@ export default function Header() {
         </nav>
 
         {/* Admin & Contact - Desktop */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden items-center gap-4 md:flex">
           {/* Toggle between Admin Dashboard and Back to Store */}
           {isAdminRoute ? (
             <Link
@@ -89,7 +99,7 @@ export default function Header() {
           ) : (
             <Link
               href="/admin"
-              className="text-white hover:text-primary transition-colors"
+              className="hover:text-primary text-white transition-colors"
               aria-label="Admin Dashboard"
             >
               <LayoutDashboard className="h-5 w-5" />
@@ -97,7 +107,7 @@ export default function Header() {
           )}
 
           {/* Call to Action Button */}
-          <Button asChild className="bg-primary text-white hover:bg-primary/90 font-semibold">
+          <Button asChild className="bg-primary hover:bg-primary/90 font-semibold text-white">
             <Link href={isAdminRoute ? "#" : "/contact"}>
               {isAdminRoute ? "IT Help" : "Contact"}
             </Link>
@@ -106,17 +116,13 @@ export default function Header() {
 
         {/* Mobile Menu Button */}
         <button
-          className={`md:hidden transition-colors ${
-            isAdminRoute ? 'text-foreground hover:text-primary' : 'text-white hover:text-primary'
+          className={`transition-colors md:hidden ${
+            isAdminRoute ? "text-foreground hover:text-primary" : "hover:text-primary text-white"
           }`}
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle menu"
         >
-          {mobileMenuOpen ? (
-            <X className="h-6 w-6" />
-          ) : (
-            <Menu className="h-6 w-6" />
-          )}
+          {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
       </div>
 
@@ -125,19 +131,21 @@ export default function Header() {
         <div
           className={`md:hidden ${
             isAdminRoute
-              ? 'bg-[hsl(217,33%,17%)] border-b border-[hsl(215,20%,35%)]'
-              : 'bg-secondary'
+              ? "border-b border-[hsl(215,20%,35%)] bg-[hsl(217,33%,17%)]"
+              : "bg-secondary"
           }`}
         >
-          <nav className="container mx-auto flex flex-col px-4 py-4 gap-2">
+          <nav className="container mx-auto flex flex-col gap-2 px-4 py-4">
             {navigationLinks.map((link) => {
-              const Icon = ('icon' in link && link.icon) ? (link.icon as LucideIcon) : null;
+              const Icon = "icon" in link && link.icon ? (link.icon as LucideIcon) : null;
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`flex items-center gap-2 transition-colors font-bold py-3 ${
-                    isAdminRoute ? 'text-foreground hover:text-primary' : 'text-white hover:text-primary'
+                  className={`flex items-center gap-2 py-3 font-bold transition-colors ${
+                    isAdminRoute
+                      ? "text-foreground hover:text-primary"
+                      : "hover:text-primary text-white"
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
@@ -151,7 +159,7 @@ export default function Header() {
             {isAdminRoute ? (
               <Link
                 href="/"
-                className="flex items-center gap-2 text-foreground hover:text-primary transition-colors font-bold py-3"
+                className="text-foreground hover:text-primary flex items-center gap-2 py-3 font-bold transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <Store className="h-4 w-4" />
@@ -160,7 +168,7 @@ export default function Header() {
             ) : (
               <Link
                 href="/admin"
-                className="flex items-center gap-2 text-white hover:text-primary transition-colors font-bold py-3"
+                className="hover:text-primary flex items-center gap-2 py-3 font-bold text-white transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <LayoutDashboard className="h-4 w-4" />
@@ -170,12 +178,9 @@ export default function Header() {
 
             <Button
               asChild
-              className="mt-4 bg-primary text-white hover:bg-primary/90 font-semibold w-full"
+              className="bg-primary hover:bg-primary/90 mt-4 w-full font-semibold text-white"
             >
-              <Link
-                href={isAdminRoute ? "#" : "/contact"}
-                onClick={() => setMobileMenuOpen(false)}
-              >
+              <Link href={isAdminRoute ? "#" : "/contact"} onClick={() => setMobileMenuOpen(false)}>
                 {isAdminRoute ? "IT Help" : "Contact"}
               </Link>
             </Button>

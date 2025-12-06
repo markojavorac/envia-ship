@@ -7,7 +7,180 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2025-12-06
+
+### Changed
+- **Driver Assist UI: Redesigned for Mobile-First Experience**
+  - **Full-Width Row Layout**: Tickets now display as full-width rows instead of grid cards
+    - Consistent layout across all screen sizes (mobile, tablet, desktop)
+    - Better use of horizontal space for address information
+    - Horizontal "Add Ticket" button matches row design
+  - **Consolidated Information Display**: Cleaner, more compact ticket view
+    - From/To addresses displayed side-by-side with arrow separator
+    - Ticket number and timestamp shown inline in header
+    - Removed inline ticket image preview
+    - Optional details (recipient, phone, notes) hidden in collapsible section
+  - **View Ticket Modal**: Dedicated modal for full ticket details
+    - Eye icon button opens modal overlay
+    - Shows all ticket information including full-size ticket photo
+    - Displays geocoded coordinates (when available)
+    - Better for reviewing ticket before navigation
+  - **Improved Navigation URLs**: Better Waze deep link handling
+    - Mobile: Uses `waze://` URL scheme with web fallback
+    - Desktop: Opens Google Maps directly
+    - Fixed Waze web URL format (`https://www.waze.com/ul`)
+    - Smarter app detection and redirect logic
+  - **Admin Navigation**: Added Dispatch as separate nav item
+    - Dispatch (airport-style terminal board) and Driver Assist now separate in top nav
+    - Radio icon for Dispatch, Truck icon for Driver Assist
+    - Clear distinction between hub operations and driver tools
+  - Files updated: `TicketCard.tsx`, `AddTicketCard.tsx`, `page.tsx`, `driver-assist-navigation.ts`, `AdminNav.tsx`
+  - Files added: `ViewTicketModal.tsx`
+
 ### Added
+- **Driver Assist System: AI-Powered Ticket Processing** - Mobile-first delivery ticket management for drivers
+  - **AI Analysis**: Automatic ticket parsing using Gemini 2.5 Flash Vision API
+    - Extracts ticket number, origin/destination addresses, recipient info, and package details
+    - Analyzes ENVÍA ticket PDFs and photos instantly upon upload
+    - Supports both real AI (Gemini) and mock mode for testing
+  - **Drag-and-Drop Upload**: Intuitive interface with visual feedback
+    - Drop zone with hover states and animations
+    - Supports JPG, PNG, and PDF files (up to 10MB)
+    - Auto-triggers AI analysis immediately after upload
+    - Loading overlay with spinner during analysis (~1-2 seconds)
+  - **Smart Navigation**: One-tap route opening with geocoding
+    - Waze deep links on mobile devices
+    - Google Maps fallback on desktop or when Waze unavailable
+    - Caches geocoded coordinates to avoid duplicate API calls
+    - Stores coordinates in ticket for instant navigation on future clicks
+  - **Ticket Management**: Complete CRUD with localStorage persistence
+    - Add unlimited tickets (50-ticket limit for storage efficiency)
+    - Mark tickets as "Done" (fades with checkmark, remains visible)
+    - Delete completed tickets
+    - Auto-cleanup of oldest completed tickets when limit reached
+  - **Mobile-First Design**: Responsive grid layout
+    - 1 column (mobile) → 2 columns (tablet) → 3 columns (desktop)
+    - Touch-friendly buttons (44px+ height)
+    - Full-width cards with clear visual hierarchy
+  - **Testing Infrastructure**: 13 mock ENVÍA tickets with realistic Guatemala City data
+    - Covers zones 1, 4, 7, 9, 10, 11, 12, 13, 14, 15, 16 (Mixco)
+    - Realistic shopping centers (Oakland Mall, Pradera, Fontabella, Paseo Cayalá, etc.)
+    - Various package types (electronics, appliances, accessories)
+    - Random ticket selection on each upload in mock mode
+  - Files added: `/app/admin/driver-assist/page.tsx`, `/app/api/admin/analyze-ticket/route.ts`, `/lib/services/ticket-analysis.ts`, `/lib/services/mock-ticket-data.ts`, `/lib/admin/driver-assist-types.ts`, `/lib/admin/driver-assist-storage.ts`, `/lib/admin/driver-assist-geocoding.ts`, `/lib/admin/driver-assist-navigation.ts`, `/components/admin/driver-assist/AddTicketCard.tsx`, `/components/admin/driver-assist/AddTicketDialog.tsx`, `/components/admin/driver-assist/TicketCard.tsx`, `/DRIVER_ASSIST_TESTING.md`
+  - Files updated: `/components/admin/AdminNav.tsx`
+
+### Changed
+- **Loading States: Replaced Skeleton System with Top Progress Bar**
+  - **BREAKING**: Removed broken skeleton loading implementation that showed blank white screens
+  - Replaced with `nextjs-toploader` for industry-standard top progress bar during route transitions
+  - Removed all 11 `loading.tsx` files (incompatible with client component navigation)
+  - Removed `DevDelayWrapper` component (caused blank screens, not loading skeletons)
+  - Removed skeleton components: `Skeleton`, `SkeletonCard`, and 9 variants
+  - Removed shimmer CSS animations from `globals.css`
+  - Removed ESLint rules: `require-loading-file` and `no-empty-loading-file`
+  - Added `NextTopLoader` to root layout with orange (#FF8C00) brand color
+  - **Result**: Immediate visual feedback on all route changes without white flashes
+  - **Why**: Next.js 15 App Router `loading.tsx` only works for server components with Suspense boundaries, not client-side navigation
+  - Files removed: all `app/**/loading.tsx`, `components/DevDelayWrapper.tsx`, `components/ui/skeleton.tsx`, `components/ui/skeleton-variants.tsx`, `eslint-rules/require-loading-file.js`, `eslint-rules/no-empty-loading-file.js`
+  - Files updated: `app/layout.tsx`, `eslint.config.mjs`, `app/globals.css`, all 9 page components (removed DevDelayWrapper), `CLAUDE.md`
+
+### Fixed
+- **Route Planner Geocoding**: Fixed address autocomplete returning no results
+  - Added comprehensive debug logging to track Nominatim API requests and responses
+  - Implemented query enhancement: automatically appends "Guatemala" to searches without location context
+  - Improved error messages to differentiate between "No results", "API error", and "Network error"
+  - Added helper text for better user guidance
+  - Files updated: `/app/api/admin/geocode/route.ts`, `AddressAutocomplete.tsx`
+
+- **Routes Admin Page**: Fixed hardcoded light theme colors not adapting to dark admin theme
+  - Replaced `bg-blue-50`, `bg-orange-50`, `bg-red-50` with CSS variables (`bg-primary/10`, `bg-destructive/10`)
+  - Updated page title to use `text-foreground` instead of `text-secondary` for dark theme compatibility
+  - **Fixed black unreadable label text**: Added `text-foreground` to all Label components ("Start Point", "Round Trip", "Delivery Address", etc.)
+  - Standardized info boxes to use `bg-primary/10 border-l-4 border-primary` pattern
+  - Fixed delete button hover states to use `bg-destructive/10`
+  - Files updated: `app/admin/routes/page.tsx`, `RouteBuilderForm.tsx`, `RouteStopsList.tsx`, `RouteStopCard.tsx`
+
+### Added
+- **Route Planner: CSV Export** - Download optimized routes as driver-friendly CSV files
+  - Export includes sequence, address, zone, coordinates, distance/time between stops
+  - Summary section with totals (distance, time, savings, improvement percentage)
+  - Filename format: `route-optimized-YYYY-MM-DD-HHmm.csv`
+  - UTF-8 BOM for Excel compatibility
+  - Files added: `/lib/admin/csv-export.ts`
+  - Files updated: `OptimizedRouteView.tsx`
+
+- **Route Planner: CSV Import** - Bulk upload addresses from CSV files
+  - Simple format: required `address` column, optional `notes` column
+  - Multi-step wizard: upload → preview → batch geocode → results
+  - Progress tracking with 1-second rate limit (Nominatim compliance)
+  - Shows successful vs failed geocoding with error details
+  - Max 25 stops validation
+  - Dependencies: `papaparse` for CSV parsing
+  - Files added: `/lib/admin/csv-parser.ts`, `/lib/admin/batch-geocode.ts`, `CSVImportButton.tsx`, `CSVImportDialog.tsx`
+  - Files updated: `/app/admin/routes/page.tsx`
+
+- **Route Planner: Road-Based Routing** - Accurate distance calculations using actual roads
+  - Integrated OSRM (Open Source Routing Machine) for turn-by-turn routing
+  - Uses OSRM public demo server (free, no API key required)
+  - Automatic fallback to Haversine formula if OSRM unavailable
+  - In-memory distance caching (1-hour expiry, LRU eviction)
+  - 2-second timeout with graceful degradation
+  - Async optimization with road distances (~2-5 seconds for 25 stops)
+  - New `RoutingMode` enum: `ROAD` (default) vs `STRAIGHT_LINE`
+  - Files added: `/lib/admin/osrm-client.ts`, `/lib/admin/distance-cache.ts`
+  - Files updated: `/lib/admin/route-types.ts`, `/lib/admin/route-utils.ts`, `/app/admin/routes/page.tsx`
+
+### Changed
+- **Route Planner Optimization**: Now async to support OSRM API calls
+  - `optimizeRouteNearestNeighbor()` is now async and returns `Promise<OptimizedRoute>`
+  - Performance: <100ms (Haversine) vs ~2-5 seconds (OSRM for 25 stops)
+  - All distance calculations now cached to reduce API load
+
+###
+- **Linting Infrastructure**: Comprehensive ESLint and Prettier setup for styling enforcement
+  - `eslint-plugin-tailwindcss` for Tailwind-specific linting (class ordering, contradicting classes)
+  - `prettier-plugin-tailwindcss` for automatic class ordering on save
+  - Custom ESLint rules:
+    - `no-admin-hardcoded-colors`: Prevents hardcoded colors in `/app/admin/` and `/components/admin/` (errors on `bg-white`, `bg-blue-50`, `text-gray-600`, etc.) + **enforces `text-foreground` on all Label components** to prevent black unreadable text
+    - `no-inline-styles`: Blocks inline `style={{}}` attributes throughout project
+  - New npm scripts: `lint:fix`, `format`, `format:check`, `check`
+  - Automatic pre-build checks via `prebuild` script (build fails if linting errors exist)
+  - Configuration files: `.prettierrc.json`, `.prettierignore`, updated `eslint.config.mjs`
+
+- **Admin UI Component Library**: Type-safe wrappers for consistent dark theme styling
+  - `<AdminCard>`: Enforced dark card styling with optional icon/title (`bg-card`, `border-border`, `hover:border-primary/50`)
+  - `<AdminInfoBox>`: Info/warning/error boxes with correct variant styling (supports `info`, `warning`, `error`, `success` variants)
+  - `<AdminPageTitle>`: Standardized page header with description and actions support
+  - All components auto-apply correct CSS variables for dark theme
+  - Location: `/components/admin/ui/` with barrel export at `index.ts`
+
+### Changed
+- **Build Process**: Now runs `npm run check` before build (format + lint verification via `prebuild` script)
+- **Documentation**: Updated `CLAUDE.md` with "Admin Dark Theme Patterns (CRITICAL)" section
+  - Added strict admin styling rules and guidelines
+  - Component wrapper usage examples
+  - Linting enforcement commands
+
+### Added (Previous Releases)
+- **Route Planner Tool** - Intelligent delivery route optimization for logistics planning
+  - Manual address entry with autocomplete (10-25 stops supported)
+  - OpenStreetMap Nominatim geocoding with Guatemala-specific filtering
+  - Nearest Neighbor optimization algorithm (O(n²) complexity, <500ms for 25 stops)
+  - Haversine distance calculations for straight-line GPS distances
+  - Before/After comparison showing savings (distance, time, percentage improvement)
+  - Start point and end point configuration (optional)
+  - Round trip toggle for return-to-origin routes
+  - Address autocomplete with 500ms debouncing and top 5 results dropdown
+  - Real-time distance and time estimates between stops
+  - Visual optimization results with numbered stop sequence
+  - Placeholder buttons for future features (Export CSV, View Map, Print)
+  - Template management system ready for localStorage persistence (Phase 2)
+  - Admin dark theme styling throughout all route components
+  - Route: `/admin/routes`
+  - New components: RouteBuilderForm, RouteStopsList, RouteStopCard, OptimizedRouteView, RouteComparisonCard, AddressAutocomplete
+  - API route: `/app/api/admin/geocode/route.ts` (Nominatim proxy)
+  - Types and utilities: `/lib/admin/route-types.ts`, `/lib/admin/route-utils.ts`
 - **Dispatch Terminal** - Airport-style departure board for logistics hub operations
   - Live dispatch board optimized for large TV displays (1920x1080)
   - Real-time status tracking with 15-20 second automatic updates
@@ -99,6 +272,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation guidelines in CLAUDE.md for when to update docs
 
 ### Fixed
+- **Route Planner styling** - Converted all components to admin dark theme
+  - Changed card backgrounds from `bg-white` to `bg-card` with `border-border`
+  - Updated all text colors to use semantic tokens (`text-foreground`, `text-muted-foreground`)
+  - Fixed button borders to use `border-border` instead of hard-coded gray values
+  - Updated comparison card inner elements to use `bg-muted` for consistency
+  - Fixed address autocomplete dropdowns to match dark theme
+  - Added Routes navigation link to Header component (admin section)
 - **Admin dark theme architecture** - Implemented proper Tailwind v4 color token overrides
   - Added `[data-theme="admin"]` CSS variable scope in globals.css
   - Override both base CSS variables (`--background`, `--foreground`, etc.) and Tailwind v4 color tokens (`--color-background`, `--color-foreground`, etc.)

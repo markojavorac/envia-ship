@@ -15,9 +15,7 @@ const MINIMUM_CHARGE = 25; // GTQ minimum charge
  * Calculate dimensional weight using industry standard formula
  * Dimensional weight = (Length × Width × Height) / 5000
  */
-export function calculateDimensionalWeight(
-  dimensions: PackageDimensions
-): number {
+export function calculateDimensionalWeight(dimensions: PackageDimensions): number {
   const { length, width, height } = dimensions;
   return (length * width * height) / DIMENSIONAL_WEIGHT_DIVISOR;
 }
@@ -46,11 +44,7 @@ export function calculateEstimatedDelivery(
   } else {
     // Calculate based on service type
     const daysToAdd =
-      serviceType === ServiceType.EXPRESS
-        ? 2
-        : serviceType === ServiceType.STANDARD
-        ? 4
-        : 7; // International
+      serviceType === ServiceType.EXPRESS ? 2 : serviceType === ServiceType.STANDARD ? 4 : 7; // International
 
     deliveryDate = new Date(today);
     deliveryDate.setDate(deliveryDate.getDate() + daysToAdd);
@@ -81,20 +75,13 @@ export function calculateShippingPrice(
   const serviceMultiplier = service?.multiplier || 1.0;
 
   // Calculate base price
-  const basePrice = Math.max(
-    chargeableWeight * BASE_RATE_PER_KG,
-    MINIMUM_CHARGE
-  );
+  const basePrice = Math.max(chargeableWeight * BASE_RATE_PER_KG, MINIMUM_CHARGE);
 
   // Apply service multiplier
   const totalPrice = basePrice * serviceMultiplier;
 
   // Calculate estimated delivery
-  const estimatedDelivery = calculateEstimatedDelivery(
-    serviceType,
-    deliveryTiming,
-    scheduledDate
-  );
+  const estimatedDelivery = calculateEstimatedDelivery(serviceType, deliveryTiming, scheduledDate);
 
   // Create breakdown
   const breakdown = [

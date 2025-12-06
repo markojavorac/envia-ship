@@ -27,7 +27,7 @@ export default function OrdersPage() {
   return (
     <div className="space-y-4">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatsCard
           label="Total Orders"
           value={metrics.totalOrders.toLocaleString()}
@@ -43,43 +43,27 @@ export default function OrdersPage() {
           value={metrics.pendingCount}
           icon={Clock}
           badge={
-            metrics.pendingCount > 10
-              ? { text: "Needs attention", variant: "warning" }
-              : undefined
+            metrics.pendingCount > 10 ? { text: "Needs attention", variant: "warning" } : undefined
           }
         />
 
-        <StatsCard
-          label="In Progress"
-          value={confirmedCount + shippedCount}
-          icon={Package}
-        />
+        <StatsCard label="In Progress" value={confirmedCount + shippedCount} icon={Package} />
 
-        <StatsCard
-          label="Delivered"
-          value={deliveredCount}
-          icon={CheckCircle2}
-        />
+        <StatsCard label="Delivered" value={deliveredCount} icon={CheckCircle2} />
       </div>
 
       {/* Orders Table */}
-      <div className="bg-card rounded-md border border-border p-4">
+      <div className="bg-card border-border rounded-md border p-4">
         <div className="mb-3">
-          <h2 className="text-xl font-bold text-foreground">All Orders</h2>
-          <p className="text-sm text-muted-foreground">
-            Manage and track your marketplace orders
-          </p>
+          <h2 className="text-foreground text-xl font-bold">All Orders</h2>
+          <p className="text-muted-foreground text-sm">Manage and track your marketplace orders</p>
         </div>
 
         <OrdersTable orders={orders} onViewOrder={handleViewOrder} />
       </div>
 
       {/* Order Detail Modal */}
-      <OrderDetailModal
-        order={selectedOrder}
-        open={isModalOpen}
-        onOpenChange={setIsModalOpen}
-      />
+      <OrderDetailModal order={selectedOrder} open={isModalOpen} onOpenChange={setIsModalOpen} />
     </div>
   );
 }

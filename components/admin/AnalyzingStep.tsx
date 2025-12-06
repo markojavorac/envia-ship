@@ -49,18 +49,18 @@ export function AnalyzingStep({ onComplete }: AnalyzingStepProps) {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <div className="h-16 w-16 rounded-md bg-primary flex items-center justify-center mx-auto mb-4 animate-pulse">
-          <Loader2 className="h-8 w-8 text-white animate-spin" />
+        <div className="bg-primary mx-auto mb-4 flex h-16 w-16 animate-pulse items-center justify-center rounded-md">
+          <Loader2 className="h-8 w-8 animate-spin text-white" />
         </div>
-        <h3 className="text-xl font-bold text-foreground mb-2">Analyzing your product photos</h3>
-        <p className="text-sm text-muted-foreground">
+        <h3 className="text-foreground mb-2 text-xl font-bold">Analyzing your product photos</h3>
+        <p className="text-muted-foreground text-sm">
           Our AI is extracting product information and generating descriptions
         </p>
       </div>
 
       {/* Progress Steps */}
       <Card className="bg-card border-border rounded-md">
-        <CardContent className="pt-4 pb-4 px-4">
+        <CardContent className="px-4 pt-4 pb-4">
           <div className="space-y-3">
             {ANALYSIS_STEPS.map((step, index) => {
               const isCompleted = completedSteps.has(step.id);
@@ -70,27 +70,27 @@ export function AnalyzingStep({ onComplete }: AnalyzingStepProps) {
                 <div
                   key={step.id}
                   className={cn(
-                    "flex items-center gap-3 p-2 rounded transition-all",
+                    "flex items-center gap-3 rounded p-2 transition-all",
                     isCurrent && "bg-primary/5"
                   )}
                 >
                   {/* Status Icon */}
                   <div
                     className={cn(
-                      "flex-shrink-0 h-6 w-6 rounded-full flex items-center justify-center transition-colors",
+                      "flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full transition-colors",
                       isCompleted
                         ? "bg-green-500"
                         : isCurrent
                           ? "bg-primary"
-                          : "bg-muted border border-border"
+                          : "bg-muted border-border border"
                     )}
                   >
                     {isCompleted ? (
                       <Check className="h-4 w-4 text-white" />
                     ) : isCurrent ? (
-                      <Loader2 className="h-4 w-4 text-white animate-spin" />
+                      <Loader2 className="h-4 w-4 animate-spin text-white" />
                     ) : (
-                      <span className="text-xs text-muted-foreground">{index + 1}</span>
+                      <span className="text-muted-foreground text-xs">{index + 1}</span>
                     )}
                   </div>
 
@@ -117,13 +117,13 @@ export function AnalyzingStep({ onComplete }: AnalyzingStepProps) {
 
       {/* Progress Bar */}
       <div className="space-y-2">
-        <div className="flex justify-between text-xs text-muted-foreground">
+        <div className="text-muted-foreground flex justify-between text-xs">
           <span>Progress</span>
           <span>{Math.round((completedSteps.size / ANALYSIS_STEPS.length) * 100)}%</span>
         </div>
-        <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
+        <div className="bg-muted h-2 w-full overflow-hidden rounded-full">
           <div
-            className="h-full bg-primary transition-all duration-500 ease-out"
+            className="bg-primary h-full transition-all duration-500 ease-out"
             style={{ width: `${(completedSteps.size / ANALYSIS_STEPS.length) * 100}%` }}
           />
         </div>

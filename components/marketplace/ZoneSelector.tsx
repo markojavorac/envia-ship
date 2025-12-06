@@ -22,8 +22,8 @@ export function ZoneSelector() {
 
   return (
     <Select value={userZone || ""} onValueChange={setUserZone}>
-      <SelectTrigger className="w-48 bg-white text-secondary border-2 border-gray-200 hover:border-primary/50 focus:border-primary focus:ring-primary/20 font-semibold">
-        <MapPin className="h-4 w-4 mr-2 text-primary" />
+      <SelectTrigger className="text-secondary hover:border-primary/50 focus:border-primary focus:ring-primary/20 w-48 border-2 border-gray-200 bg-white font-semibold">
+        <MapPin className="text-primary mr-2 h-4 w-4" />
         <SelectValue placeholder="Set Zone" />
       </SelectTrigger>
       <SelectContent className="z-[100]">

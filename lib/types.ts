@@ -86,8 +86,8 @@ export interface ShippingFormData {
   // Delivery timing
   deliveryTiming: DeliveryTiming;
   scheduledDate?: Date;
-  pickupTimeSlot?: TimeSlot;      // NEW
-  deliveryTimeSlot?: TimeSlot;    // NEW
+  pickupTimeSlot?: TimeSlot; // NEW
+  deliveryTimeSlot?: TimeSlot; // NEW
 }
 
 // Pricing calculation result
@@ -106,9 +106,9 @@ export interface PricingResult {
 
 // Time slot options
 export enum TimeSlot {
-  MORNING = "morning",      // 8am-12pm
-  AFTERNOON = "afternoon",  // 12pm-5pm
-  EVENING = "evening"       // 5pm-8pm
+  MORNING = "morning", // 8am-12pm
+  AFTERNOON = "afternoon", // 12pm-5pm
+  EVENING = "evening", // 5pm-8pm
 }
 
 export const TIME_SLOT_OPTIONS = [

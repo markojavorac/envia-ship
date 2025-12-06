@@ -118,8 +118,7 @@ export const imageUploadSchema = z.object({
           message: "Each image must be less than 10MB",
         })
         .refine(
-          (file) =>
-            ["image/jpeg", "image/png", "image/webp", "image/jpg"].includes(file.type),
+          (file) => ["image/jpeg", "image/png", "image/webp", "image/jpg"].includes(file.type),
           {
             message: "Only JPEG, PNG, and WebP images are allowed",
           }

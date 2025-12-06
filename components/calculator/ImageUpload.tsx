@@ -67,20 +67,18 @@ export default function ImageUpload({
     <div className="space-y-4">
       {/* Upload Zone */}
       <Card
-        className="border-2 border-dashed border-primary/30 cursor-pointer hover:border-primary/50 transition-colors"
+        className="border-primary/30 hover:border-primary/50 cursor-pointer border-2 border-dashed transition-colors"
         onClick={() => inputRef.current?.click()}
       >
         <CardContent className="p-8 text-center">
-          <div className="h-14 w-14 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-            <Upload className="h-7 w-7 text-primary" />
+          <div className="bg-primary/10 mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl">
+            <Upload className="text-primary h-7 w-7" />
           </div>
-          <p className="font-semibold mb-1">Click to upload package photos</p>
-          <p className="text-sm text-muted-foreground">
+          <p className="mb-1 font-semibold">Click to upload package photos</p>
+          <p className="text-muted-foreground text-sm">
             Or drag and drop (max {maxImages} images, {maxSizeMB}MB each)
           </p>
-          <p className="text-xs text-muted-foreground mt-2">
-            Supports: JPG, PNG, WEBP
-          </p>
+          <p className="text-muted-foreground mt-2 text-xs">Supports: JPG, PNG, WEBP</p>
         </CardContent>
       </Card>
 
@@ -96,14 +94,14 @@ export default function ImageUpload({
 
       {/* Previews */}
       {previews.length > 0 && (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
           {previews.map((preview, index) => (
-            <div key={index} className="relative group">
+            <div key={index} className="group relative">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={preview}
                 alt={`Preview ${index + 1}`}
-                className="w-full h-32 object-cover rounded-lg border-2 border-gray-200"
+                className="h-32 w-full rounded-lg border-2 border-gray-200 object-cover"
               />
               <Button
                 onClick={(e) => {
@@ -112,7 +110,7 @@ export default function ImageUpload({
                 }}
                 size="icon"
                 variant="destructive"
-                className="absolute top-2 right-2 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute top-2 right-2 h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
               >
                 <X className="h-4 w-4" />
               </Button>

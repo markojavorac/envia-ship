@@ -10,21 +10,55 @@ import { GUATEMALA_ZONES } from "@/lib/types";
 
 // Driver name pools (Guatemalan names)
 const DRIVER_FIRST_NAMES = [
-  "Carlos", "Miguel", "José", "Luis", "Diego", "Juan", "Pedro",
-  "Fernando", "Ricardo", "Alejandro", "Roberto", "Manuel", "Francisco",
-  "Jorge", "Raúl", "Sergio", "Mario", "Daniel", "Eduardo", "Gabriel"
+  "Carlos",
+  "Miguel",
+  "José",
+  "Luis",
+  "Diego",
+  "Juan",
+  "Pedro",
+  "Fernando",
+  "Ricardo",
+  "Alejandro",
+  "Roberto",
+  "Manuel",
+  "Francisco",
+  "Jorge",
+  "Raúl",
+  "Sergio",
+  "Mario",
+  "Daniel",
+  "Eduardo",
+  "Gabriel",
 ];
 
 const DRIVER_LAST_NAMES = [
-  "Mendoza", "García", "López", "Ramírez", "Torres", "Flores", "Gómez",
-  "Martínez", "Rodríguez", "Pérez", "González", "Sánchez", "Hernández",
-  "Cruz", "Morales", "Díaz", "Jiménez", "Ruiz", "Alvarez", "Castillo"
+  "Mendoza",
+  "García",
+  "López",
+  "Ramírez",
+  "Torres",
+  "Flores",
+  "Gómez",
+  "Martínez",
+  "Rodríguez",
+  "Pérez",
+  "González",
+  "Sánchez",
+  "Hernández",
+  "Cruz",
+  "Morales",
+  "Díaz",
+  "Jiménez",
+  "Ruiz",
+  "Alvarez",
+  "Castillo",
 ];
 
 // Vehicle type configuration
 const VEHICLE_TYPES = {
-  VAN: { prefix: "VAN", start: 301, count: 20 },      // VAN-301 to VAN-320
-  TRUCK: { prefix: "TRUCK", start: 101, count: 10 },  // TRUCK-101 to TRUCK-110
+  VAN: { prefix: "VAN", start: 301, count: 20 }, // VAN-301 to VAN-320
+  TRUCK: { prefix: "TRUCK", start: 101, count: 10 }, // TRUCK-101 to TRUCK-110
 } as const;
 
 /**
@@ -46,8 +80,8 @@ function getRandomInt(min: number, max: number): number {
  */
 function getRandomDate(minutesAgo: number, minutesFromNow: number = 0): Date {
   const now = Date.now();
-  const start = now - (minutesAgo * 60 * 1000);
-  const end = now + (minutesFromNow * 60 * 1000);
+  const start = now - minutesAgo * 60 * 1000;
+  const end = now + minutesFromNow * 60 * 1000;
   const randomTime = start + Math.random() * (end - start);
   return new Date(randomTime);
 }
@@ -69,10 +103,16 @@ function generateVehicleId(): string {
   const useVan = Math.random() < 0.7;
 
   if (useVan) {
-    const num = getRandomInt(VEHICLE_TYPES.VAN.start, VEHICLE_TYPES.VAN.start + VEHICLE_TYPES.VAN.count - 1);
+    const num = getRandomInt(
+      VEHICLE_TYPES.VAN.start,
+      VEHICLE_TYPES.VAN.start + VEHICLE_TYPES.VAN.count - 1
+    );
     return `${VEHICLE_TYPES.VAN.prefix}-${num}`;
   } else {
-    const num = getRandomInt(VEHICLE_TYPES.TRUCK.start, VEHICLE_TYPES.TRUCK.start + VEHICLE_TYPES.TRUCK.count - 1);
+    const num = getRandomInt(
+      VEHICLE_TYPES.TRUCK.start,
+      VEHICLE_TYPES.TRUCK.start + VEHICLE_TYPES.TRUCK.count - 1
+    );
     return `${VEHICLE_TYPES.TRUCK.prefix}-${num}`;
   }
 }
@@ -88,7 +128,7 @@ function getWeightedZone(): { value: string; label: string } {
 
   if (isPopularZone) {
     const zoneValue = getRandomElement(popularZones);
-    const zone = zones.find(z => z.value === zoneValue);
+    const zone = zones.find((z) => z.value === zoneValue);
     return zone || getRandomElement(zones);
   }
 
@@ -110,10 +150,10 @@ function generateShipmentId(): string {
 function getWeightedStatus(): DispatchStatus {
   const rand = Math.random();
 
-  if (rand < 0.50) return DispatchStatus.WAITING;   // 50%
-  if (rand < 0.625) return DispatchStatus.LOADING;  // 12.5%
-  if (rand < 0.875) return DispatchStatus.READY;    // 25%
-  return DispatchStatus.DEPARTED;                    // 12.5%
+  if (rand < 0.5) return DispatchStatus.WAITING; // 50%
+  if (rand < 0.625) return DispatchStatus.LOADING; // 12.5%
+  if (rand < 0.875) return DispatchStatus.READY; // 25%
+  return DispatchStatus.DEPARTED; // 12.5%
 }
 
 /**

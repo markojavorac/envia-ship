@@ -17,7 +17,7 @@ export function ShippingEstimateBadge({
   if (!estimate) {
     return (
       <Badge variant="secondary" className="text-xs">
-        <MapPin className="h-3 w-3 mr-1" />
+        <MapPin className="mr-1 h-3 w-3" />
         Set zone to see shipping
       </Badge>
     );
@@ -27,21 +27,17 @@ export function ShippingEstimateBadge({
 
   if (compact) {
     return (
-      <Badge
-        className={`text-xs ${isToday ? "bg-primary text-white" : "bg-secondary text-white"}`}
-      >
-        <Truck className="h-3 w-3 mr-1" />
+      <Badge className={`text-xs ${isToday ? "bg-primary text-white" : "bg-secondary text-white"}`}>
+        <Truck className="mr-1 h-3 w-3" />
         {formatPrice(estimate.cost)}
       </Badge>
     );
   }
 
   return (
-    <div className="flex items-center gap-2 flex-wrap">
-      <Badge
-        className={`${isToday ? "bg-primary text-white" : "bg-secondary text-white"}`}
-      >
-        <Truck className="h-3 w-3 mr-1" />
+    <div className="flex flex-wrap items-center gap-2">
+      <Badge className={`${isToday ? "bg-primary text-white" : "bg-secondary text-white"}`}>
+        <Truck className="mr-1 h-3 w-3" />
         {formatPrice(estimate.cost)} shipping
       </Badge>
       {showDetails && (

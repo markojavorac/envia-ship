@@ -1,9 +1,5 @@
 import { ProductCategory } from "@/lib/marketplace/types";
-import {
-  ProductAnalysis,
-  DescriptionTone,
-  PriceRange,
-} from "@/lib/types/product-analysis";
+import { ProductAnalysis, DescriptionTone, PriceRange } from "@/lib/types/product-analysis";
 
 /**
  * Mock product analysis data for testing
@@ -85,13 +81,7 @@ const MOCK_PRODUCTS = {
       "Citrus-flavored",
       "Easy to swallow",
     ],
-    extractedText: [
-      "Vitamin C",
-      "1000mg",
-      "60 Tablets",
-      "Expire: 12/2026",
-      "Dietary Supplement",
-    ],
+    extractedText: ["Vitamin C", "1000mg", "60 Tablets", "Expire: 12/2026", "Dietary Supplement"],
     packaging: "Plastic bottle",
     fragility: "sturdy" as const,
     suggestedTags: ["vitamins", "immune", "health", "supplements", "wellness"],
@@ -134,12 +124,7 @@ const MOCK_PRODUCTS = {
       "Touch controls",
       "Charging case included",
     ],
-    extractedText: [
-      "Wireless Earbuds",
-      "Bluetooth 5.0",
-      "24h Battery",
-      "Model: TS-200",
-    ],
+    extractedText: ["Wireless Earbuds", "Bluetooth 5.0", "24h Battery", "Model: TS-200"],
     packaging: "Retail box",
     fragility: "fragile" as const,
     suggestedTags: ["electronics", "audio", "wireless", "bluetooth", "earbuds"],

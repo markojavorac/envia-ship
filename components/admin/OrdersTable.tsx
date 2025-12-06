@@ -43,9 +43,7 @@ const statusColors: Record<OrderStatus, string> = {
 };
 
 export function OrdersTable({ orders, onViewOrder }: OrdersTableProps) {
-  const [sorting, setSorting] = useState<SortingState>([
-    { id: "createdAt", desc: true },
-  ]);
+  const [sorting, setSorting] = useState<SortingState>([{ id: "createdAt", desc: true }]);
   const [statusFilter, setStatusFilter] = useState<OrderStatus | "all">("all");
   const [globalFilter, setGlobalFilter] = useState("");
 
@@ -93,8 +91,8 @@ export function OrdersTable({ orders, onViewOrder }: OrdersTableProps) {
           const quantity = row.original.quantity;
           return (
             <div className="max-w-[200px]">
-              <p className="font-medium truncate">{product.name}</p>
-              <p className="text-xs text-muted-foreground">Qty: {quantity}</p>
+              <p className="truncate font-medium">{product.name}</p>
+              <p className="text-muted-foreground text-xs">Qty: {quantity}</p>
             </div>
           );
         },
@@ -142,7 +140,7 @@ export function OrdersTable({ orders, onViewOrder }: OrdersTableProps) {
         cell: ({ row }) => {
           const status = row.original.status;
           return (
-            <Badge className={cn("font-medium capitalize rounded-md", statusColors[status])}>
+            <Badge className={cn("rounded-md font-medium capitalize", statusColors[status])}>
               {status}
             </Badge>
           );
@@ -177,7 +175,7 @@ export function OrdersTable({ orders, onViewOrder }: OrdersTableProps) {
             onClick={() => onViewOrder(row.original)}
             className="hover:bg-card"
           >
-            <Eye className="h-4 w-4 mr-1" />
+            <Eye className="mr-1 h-4 w-4" />
             View
           </Button>
         ),
@@ -216,18 +214,34 @@ export function OrdersTable({ orders, onViewOrder }: OrdersTableProps) {
   // Status filter tabs
   const statusOptions: Array<{ value: OrderStatus | "all"; label: string; count: number }> = [
     { value: "all", label: "All", count: orders.length },
-    { value: "pending", label: "Pending", count: orders.filter((o) => o.status === "pending").length },
-    { value: "confirmed", label: "Confirmed", count: orders.filter((o) => o.status === "confirmed").length },
-    { value: "shipped", label: "Shipped", count: orders.filter((o) => o.status === "shipped").length },
-    { value: "delivered", label: "Delivered", count: orders.filter((o) => o.status === "delivered").length },
+    {
+      value: "pending",
+      label: "Pending",
+      count: orders.filter((o) => o.status === "pending").length,
+    },
+    {
+      value: "confirmed",
+      label: "Confirmed",
+      count: orders.filter((o) => o.status === "confirmed").length,
+    },
+    {
+      value: "shipped",
+      label: "Shipped",
+      count: orders.filter((o) => o.status === "shipped").length,
+    },
+    {
+      value: "delivered",
+      label: "Delivered",
+      count: orders.filter((o) => o.status === "delivered").length,
+    },
   ];
 
   return (
     <div className="space-y-4">
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row">
         {/* Status Tabs */}
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex flex-wrap gap-2">
           {statusOptions.map((option) => (
             <Button
               key={option.value}
@@ -235,34 +249,32 @@ export function OrdersTable({ orders, onViewOrder }: OrdersTableProps) {
               size="sm"
               onClick={() => setStatusFilter(option.value)}
               className={cn(
-                "rounded-md border-border",
+                "border-border rounded-md",
                 statusFilter === option.value
                   ? "bg-muted text-foreground border-border"
                   : "bg-background text-muted-foreground hover:bg-muted/50"
               )}
             >
               {option.label}
-              <span className="ml-2 text-xs font-normal text-muted-foreground">
-                {option.count}
-              </span>
+              <span className="text-muted-foreground ml-2 text-xs font-normal">{option.count}</span>
             </Button>
           ))}
         </div>
 
         {/* Search */}
-        <div className="relative flex-1 max-w-xs">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <div className="relative max-w-xs flex-1">
+          <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
           <Input
             placeholder="Search orders..."
             value={globalFilter}
             onChange={(e) => setGlobalFilter(e.target.value)}
-            className="pl-9 bg-card border-border"
+            className="bg-card border-border pl-9"
           />
         </div>
       </div>
 
       {/* Table */}
-      <div className="rounded-md border border-border bg-card">
+      <div className="border-border bg-card rounded-md border">
         <Table>
           <TableHeader className="bg-background">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -294,7 +306,10 @@ export function OrdersTable({ orders, onViewOrder }: OrdersTableProps) {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center text-muted-foreground">
+                <TableCell
+                  colSpan={columns.length}
+                  className="text-muted-foreground h-24 text-center"
+                >
                   No orders found.
                 </TableCell>
               </TableRow>
@@ -305,8 +320,9 @@ export function OrdersTable({ orders, onViewOrder }: OrdersTableProps) {
 
       {/* Pagination */}
       <div className="flex items-center justify-between">
-        <div className="text-sm text-muted-foreground">
-          Showing {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} to{" "}
+        <div className="text-muted-foreground text-sm">
+          Showing {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1}{" "}
+          to{" "}
           {Math.min(
             (table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize,
             filteredOrders.length

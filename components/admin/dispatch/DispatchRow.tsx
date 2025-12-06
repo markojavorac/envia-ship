@@ -43,40 +43,38 @@ export function DispatchRow({ entry }: DispatchRowProps) {
   return (
     <div
       className={cn(
-        "py-5 px-4 transition-colors border-b border-border/50 last:border-b-0",
-        "xl:grid xl:grid-cols-[180px_180px_1fr_200px] xl:gap-8 xl:items-center",
+        "border-border/50 border-b px-4 py-5 transition-colors last:border-b-0",
+        "xl:grid xl:grid-cols-[180px_180px_1fr_200px] xl:items-center xl:gap-8",
         "flex flex-col gap-3 xl:flex-none",
         isHighlighted && "bg-primary/5"
       )}
     >
       {/* Column 1: Driver ID */}
       <div>
-        <div className="xl:hidden text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
+        <div className="text-muted-foreground mb-1 text-xs font-bold tracking-wider uppercase xl:hidden">
           ID
         </div>
-        <span className="text-2xl font-bold text-foreground tabular-nums">
-          {entry.id}
-        </span>
+        <span className="text-foreground text-2xl font-bold tabular-nums">{entry.id}</span>
       </div>
 
       {/* Column 2: Shipment ID */}
       <div>
-        <div className="xl:hidden text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
+        <div className="text-muted-foreground mb-1 text-xs font-bold tracking-wider uppercase xl:hidden">
           Shipment
         </div>
-        <span className="text-xl font-semibold text-foreground tabular-nums">
+        <span className="text-foreground text-xl font-semibold tabular-nums">
           {entry.shipmentId}
         </span>
       </div>
 
       {/* Column 3: Destination Zone */}
       <div>
-        <div className="xl:hidden text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
+        <div className="text-muted-foreground mb-1 text-xs font-bold tracking-wider uppercase xl:hidden">
           Destination
         </div>
         <Badge
           variant="outline"
-          className="font-semibold text-base border-primary/40 bg-primary/10 text-primary"
+          className="border-primary/40 bg-primary/10 text-primary text-base font-semibold"
         >
           {entry.deliveryZoneLabel}
         </Badge>
@@ -84,7 +82,7 @@ export function DispatchRow({ entry }: DispatchRowProps) {
 
       {/* Column 4: Status */}
       <div>
-        <div className="xl:hidden text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
+        <div className="text-muted-foreground mb-1 text-xs font-bold tracking-wider uppercase xl:hidden">
           Status
         </div>
         <StatusBadge status={entry.status} priority={entry.priority} />

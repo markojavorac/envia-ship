@@ -90,7 +90,12 @@ body {
   color: var(--foreground);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
   font-weight: 700;
 }
@@ -110,26 +115,26 @@ input[type="number"] {
 /* Admin Dashboard Dark Theme */
 [data-theme="admin"] {
   /* Override base CSS variables */
-  --background: hsl(222 47% 11%);        /* slate-900 #0f172a */
-  --card: hsl(217 33% 17%);              /* slate-800 #1e293b */
-  --border: hsl(215 20% 30%);            /* More subtle border */
-  --primary: hsl(33 100% 50%);           /* Orange #FF8C00 */
-  --secondary: hsl(217 91% 60%);         /* Lightened blue for dark mode */
-  --foreground: hsl(210 40% 98%);        /* slate-50 #f8fafc */
-  --muted-foreground: hsl(215 16% 65%);  /* slate-300 #cbd5e1 */
-  --popover: hsl(217 33% 17%);           /* slate-800 */
+  --background: hsl(222 47% 11%); /* slate-900 #0f172a */
+  --card: hsl(217 33% 17%); /* slate-800 #1e293b */
+  --border: hsl(215 20% 30%); /* More subtle border */
+  --primary: hsl(33 100% 50%); /* Orange #FF8C00 */
+  --secondary: hsl(217 91% 60%); /* Lightened blue for dark mode */
+  --foreground: hsl(210 40% 98%); /* slate-50 #f8fafc */
+  --muted-foreground: hsl(215 16% 65%); /* slate-300 #cbd5e1 */
+  --popover: hsl(217 33% 17%); /* slate-800 */
   --popover-foreground: hsl(210 40% 98%);
-  --muted: hsl(215 20% 27%);             /* slate-700 */
-  --destructive: hsl(0 84% 60%);         /* red-500 */
+  --muted: hsl(215 20% 27%); /* slate-700 */
+  --destructive: hsl(0 84% 60%); /* red-500 */
   --destructive-foreground: hsl(210 40% 98%);
-  --input: hsl(215 20% 27%);             /* slate-700 */
-  --ring: hsl(33 100% 50%);              /* Orange */
-  --radius: 0.25rem;                     /* 4px - industrial sharp corners */
-  --chart-1: hsl(33 75% 62%);            /* Orange - enhanced contrast */
-  --chart-2: hsl(195 70% 60%);           /* Teal - distinct from orange */
-  --chart-3: hsl(275 45% 65%);           /* Purple - completes triad */
-  --chart-4: hsl(38 65% 55%);            /* amber - muted but visible */
-  --chart-5: hsl(271 55% 62%);           /* purple - muted but visible */
+  --input: hsl(215 20% 27%); /* slate-700 */
+  --ring: hsl(33 100% 50%); /* Orange */
+  --radius: 0.25rem; /* 4px - industrial sharp corners */
+  --chart-1: hsl(33 75% 62%); /* Orange - enhanced contrast */
+  --chart-2: hsl(195 70% 60%); /* Teal - distinct from orange */
+  --chart-3: hsl(275 45% 65%); /* Purple - completes triad */
+  --chart-4: hsl(38 65% 55%); /* amber - muted but visible */
+  --chart-5: hsl(271 55% 62%); /* purple - muted but visible */
 
   /* CRITICAL: Override Tailwind v4 color tokens directly */
   --color-background: hsl(222 47% 11%);
@@ -155,4 +160,89 @@ input[type="number"] {
   --color-chart-3: hsl(215 20% 70%);
   --color-chart-4: hsl(38 65% 55%);
   --color-chart-5: hsl(271 55% 62%);
+}
+
+/* CopilotKit Brand Customization - Envia Orange & Navy */
+[data-copilot-kit-root] {
+  --copilot-kit-primary-color: hsl(33 100% 50%) !important; /* Orange #FF8C00 */
+  --copilot-kit-secondary-color: hsl(214 52% 24%) !important; /* Navy #1E3A5F */
+  --copilot-kit-background-color: hsl(0 0% 100%) !important; /* White */
+  --copilot-kit-text-color: hsl(214 52% 24%) !important; /* Navy text */
+  --copilot-kit-muted-color: hsl(0 0% 60%) !important; /* Gray for secondary text */
+}
+
+/* Popup button styling */
+[data-copilot-kit-root] button[data-copilot-kit-popup-button] {
+  background-color: hsl(33 100% 50%) !important; /* Orange */
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(255, 140, 0, 0.3) !important;
+  transition: all 0.2s ease !important;
+}
+
+[data-copilot-kit-root] button[data-copilot-kit-popup-button]:hover {
+  background-color: hsl(33 100% 45%) !important; /* Darker orange on hover */
+  transform: scale(1.05) !important;
+  box-shadow: 0 6px 16px rgba(255, 140, 0, 0.4) !important;
+}
+
+/* Assistant message styling */
+[data-copilot-kit-root] [data-copilot-kit-message-role="assistant"] {
+  background-color: hsl(33 100% 97%) !important; /* Light orange tint */
+  border-left: 3px solid hsl(33 100% 50%) !important; /* Orange accent */
+}
+
+/* User message styling */
+[data-copilot-kit-root] [data-copilot-kit-message-role="user"] {
+  background-color: hsl(214 52% 96%) !important; /* Light navy tint */
+  border-left: 3px solid hsl(214 52% 24%) !important; /* Navy accent */
+}
+
+/* Input and send button */
+[data-copilot-kit-root] button[type="submit"] {
+  background-color: hsl(33 100% 50%) !important; /* Orange send button */
+  color: white !important;
+}
+
+[data-copilot-kit-root] button[type="submit"]:hover:not(:disabled) {
+  background-color: hsl(33 100% 45%) !important;
+}
+
+/* Header styling */
+[data-copilot-kit-root] [data-copilot-kit-chat-header] {
+  background-color: hsl(214 52% 24%) !important; /* Navy header */
+  color: white !important;
+  font-weight: 600 !important;
+}
+
+/* Ensure text in popup is readable */
+[data-copilot-kit-root] [data-copilot-kit-chat-container] {
+  font-family: var(--font-sans) !important;
+}
+
+/* Loading indicator */
+[data-copilot-kit-root] [data-copilot-kit-loading] {
+  color: hsl(33 100% 50%) !important; /* Orange loading */
+}
+
+/* Scrollbar styling */
+[data-copilot-kit-root] [data-copilot-kit-messages]::-webkit-scrollbar-thumb {
+  background-color: hsl(33 100% 50%) !important; /* Orange scrollbar */
+  border-radius: 4px !important;
+}
+
+[data-copilot-kit-root] [data-copilot-kit-messages]::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(33 100% 45%) !important;
+}
+
+/* Screen reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }

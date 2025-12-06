@@ -14,8 +14,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ConfidenceIndicator } from "./ConfidenceIndicator";
-import { productOnboardingSchema, type ProductOnboardingFormData } from "@/lib/validations/product-onboarding-schema";
-import { ProductAnalysis, DescriptionTone, needsConfidenceWarning } from "@/lib/types/product-analysis";
+import {
+  productOnboardingSchema,
+  type ProductOnboardingFormData,
+} from "@/lib/validations/product-onboarding-schema";
+import {
+  ProductAnalysis,
+  DescriptionTone,
+  needsConfidenceWarning,
+} from "@/lib/types/product-analysis";
 import { ProductCategory, CATEGORY_OPTIONS } from "@/lib/marketplace/types";
 import { GUATEMALA_ZONES } from "@/lib/types";
 import { AlertCircle, RefreshCw, Loader2, Package, DollarSign, Ruler, Tag } from "lucide-react";
@@ -38,7 +45,9 @@ export function ReviewEditStep({
   onRegenerateDescription,
 }: ReviewEditStepProps) {
   const [isRegenerating, setIsRegenerating] = useState(false);
-  const [selectedTone, setSelectedTone] = useState<DescriptionTone>(analysis.descriptionTone || "professional");
+  const [selectedTone, setSelectedTone] = useState<DescriptionTone>(
+    analysis.descriptionTone || "professional"
+  );
 
   const {
     register,
@@ -91,15 +100,18 @@ export function ReviewEditStep({
       {/* Image Gallery */}
       <Card className="bg-card border-border rounded-md">
         <CardHeader className="pb-3">
-          <CardTitle className="text-lg font-bold text-foreground">Product Images</CardTitle>
+          <CardTitle className="text-foreground text-lg font-bold">Product Images</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
+          <div className="grid grid-cols-3 gap-3 md:grid-cols-5">
             {imageUrls.map((url, index) => (
-              <div key={index} className="aspect-square relative rounded-md overflow-hidden border-2 border-border">
+              <div
+                key={index}
+                className="border-border relative aspect-square overflow-hidden rounded-md border-2"
+              >
                 <Image src={url} alt={`Product ${index + 1}`} fill className="object-cover" />
                 {index === 0 && (
-                  <div className="absolute top-1 left-1 px-2 py-0.5 bg-primary rounded-md text-xs text-white font-semibold">
+                  <div className="bg-primary absolute top-1 left-1 rounded-md px-2 py-0.5 text-xs font-semibold text-white">
                     Main
                   </div>
                 )}
@@ -113,34 +125,36 @@ export function ReviewEditStep({
       <Card className="bg-card border-border rounded-md">
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
-            <div className="h-10 w-10 rounded-md bg-primary flex items-center justify-center">
+            <div className="bg-primary flex h-10 w-10 items-center justify-center rounded-md">
               <Package className="h-5 w-5 text-white" />
             </div>
-            <CardTitle className="text-lg font-bold text-foreground">Product Information</CardTitle>
+            <CardTitle className="text-foreground text-lg font-bold">Product Information</CardTitle>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Product Name */}
           <div>
-            <Label htmlFor="name" className="font-semibold text-foreground">Product Name</Label>
+            <Label htmlFor="name" className="text-foreground font-semibold">
+              Product Name
+            </Label>
             <Input
               id="name"
               {...register("name")}
-              className="mt-1 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20"
+              className="bg-background border-border text-foreground focus:border-primary focus:ring-primary/20 mt-1"
             />
-            {errors.name && (
-              <p className="text-sm text-red-500 mt-1">{errors.name.message}</p>
-            )}
+            {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>}
           </div>
 
           {/* Category */}
           <div>
-            <Label htmlFor="category" className="font-semibold text-foreground">Category</Label>
+            <Label htmlFor="category" className="text-foreground font-semibold">
+              Category
+            </Label>
             <Select
               defaultValue={analysis.category as string}
               onValueChange={(value) => setValue("category", value as ProductCategory)}
             >
-              <SelectTrigger className="mt-1 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20">
+              <SelectTrigger className="bg-background border-border text-foreground focus:border-primary focus:ring-primary/20 mt-1">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -152,7 +166,7 @@ export function ReviewEditStep({
               </SelectContent>
             </Select>
             {errors.category && (
-              <p className="text-sm text-red-500 mt-1">{errors.category.message}</p>
+              <p className="mt-1 text-sm text-red-500">{errors.category.message}</p>
             )}
           </div>
         </CardContent>
@@ -162,7 +176,7 @@ export function ReviewEditStep({
       <Card className="bg-card border-border rounded-md">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-lg font-bold text-foreground">Description</CardTitle>
+            <CardTitle className="text-foreground text-lg font-bold">Description</CardTitle>
             <div className="flex gap-2">
               {(["casual", "professional", "technical"] as DescriptionTone[]).map((tone) => (
                 <Button
@@ -172,13 +186,10 @@ export function ReviewEditStep({
                   size="sm"
                   onClick={() => handleRegenerateDescription(tone)}
                   disabled={isRegenerating}
-                  className={cn(
-                    "text-xs",
-                    selectedTone === tone && "bg-primary/10 border-primary"
-                  )}
+                  className={cn("text-xs", selectedTone === tone && "bg-primary/10 border-primary")}
                 >
                   {isRegenerating && selectedTone === tone && (
-                    <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                    <Loader2 className="mr-1 h-3 w-3 animate-spin" />
                   )}
                   {tone.charAt(0).toUpperCase() + tone.slice(1)}
                 </Button>
@@ -189,31 +200,35 @@ export function ReviewEditStep({
         <CardContent className="space-y-4">
           {/* Full Description */}
           <div>
-            <Label htmlFor="description" className="font-semibold text-foreground">Full Description</Label>
+            <Label htmlFor="description" className="text-foreground font-semibold">
+              Full Description
+            </Label>
             <Textarea
               id="description"
               {...register("description")}
               rows={4}
-              className="mt-1 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20"
+              className="bg-background border-border text-foreground focus:border-primary focus:ring-primary/20 mt-1"
             />
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-muted-foreground mt-1 text-xs">
               {currentDescription?.length || 0} / 1000 characters
             </p>
             {errors.description && (
-              <p className="text-sm text-red-500 mt-1">{errors.description.message}</p>
+              <p className="mt-1 text-sm text-red-500">{errors.description.message}</p>
             )}
           </div>
 
           {/* Short Description */}
           <div>
-            <Label htmlFor="shortDescription" className="font-semibold text-foreground">Short Description</Label>
+            <Label htmlFor="shortDescription" className="text-foreground font-semibold">
+              Short Description
+            </Label>
             <Input
               id="shortDescription"
               {...register("shortDescription")}
-              className="mt-1 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20"
+              className="bg-background border-border text-foreground focus:border-primary focus:ring-primary/20 mt-1"
             />
             {errors.shortDescription && (
-              <p className="text-sm text-red-500 mt-1">{errors.shortDescription.message}</p>
+              <p className="mt-1 text-sm text-red-500">{errors.shortDescription.message}</p>
             )}
           </div>
         </CardContent>
@@ -223,43 +238,41 @@ export function ReviewEditStep({
       <Card className="bg-card border-border rounded-md">
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
-            <div className="h-10 w-10 rounded-md bg-primary flex items-center justify-center">
+            <div className="bg-primary flex h-10 w-10 items-center justify-center rounded-md">
               <DollarSign className="h-5 w-5 text-white" />
             </div>
-            <CardTitle className="text-lg font-bold text-foreground">Pricing</CardTitle>
+            <CardTitle className="text-foreground text-lg font-bold">Pricing</CardTitle>
           </div>
         </CardHeader>
         <CardContent className="space-y-3">
           {/* Price Suggestion */}
           {analysis.priceRange && (
-            <div className="p-3 bg-primary/5 border border-primary/20 rounded-md">
-              <p className="text-sm font-semibold text-foreground mb-1">AI Suggested Range</p>
-              <p className="text-2xl font-bold text-primary">
+            <div className="bg-primary/5 border-primary/20 rounded-md border p-3">
+              <p className="text-foreground mb-1 text-sm font-semibold">AI Suggested Range</p>
+              <p className="text-primary text-2xl font-bold">
                 Q{analysis.priceRange.min} - Q{analysis.priceRange.max}
               </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                {analysis.priceRange.reasoning}
-              </p>
+              <p className="text-muted-foreground mt-1 text-xs">{analysis.priceRange.reasoning}</p>
             </div>
           )}
 
           {/* Price Input */}
           <div>
-            <Label htmlFor="price" className="font-semibold text-foreground">Your Price (GTQ) *</Label>
+            <Label htmlFor="price" className="text-foreground font-semibold">
+              Your Price (GTQ) *
+            </Label>
             <Input
               id="price"
               type="number"
               step="0.01"
               {...register("price", { valueAsNumber: true })}
-              className="mt-1 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20"
+              className="bg-background border-border text-foreground focus:border-primary focus:ring-primary/20 mt-1"
               placeholder="Enter product price"
             />
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-muted-foreground mt-1 text-xs">
               {currentPrice > 0 && `Q${currentPrice.toFixed(2)}`}
             </p>
-            {errors.price && (
-              <p className="text-sm text-red-500 mt-1">{errors.price.message}</p>
-            )}
+            {errors.price && <p className="mt-1 text-sm text-red-500">{errors.price.message}</p>}
           </div>
         </CardContent>
       </Card>
@@ -268,26 +281,26 @@ export function ReviewEditStep({
       <Card className="bg-card border-border rounded-md">
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
-            <div className="h-10 w-10 rounded-md bg-primary flex items-center justify-center">
+            <div className="bg-primary flex h-10 w-10 items-center justify-center rounded-md">
               <Ruler className="h-5 w-5 text-white" />
             </div>
-            <CardTitle className="text-lg font-bold text-foreground">Dimensions & Weight</CardTitle>
+            <CardTitle className="text-foreground text-lg font-bold">Dimensions & Weight</CardTitle>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Dimensions */}
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <Label className="font-semibold text-foreground">Dimensions (cm)</Label>
+            <div className="mb-2 flex items-center justify-between">
+              <Label className="text-foreground font-semibold">Dimensions (cm)</Label>
               <ConfidenceIndicator confidence={analysis.dimensions.confidence} size="sm" />
             </div>
 
             {dimensionConfidenceWarning && (
-              <div className="flex items-start gap-2 p-2 bg-orange-500/5 border border-orange-500/20 rounded-md mb-3">
-                <AlertCircle className="h-4 w-4 text-orange-500 mt-0.5 flex-shrink-0" />
+              <div className="mb-3 flex items-start gap-2 rounded-md border border-orange-500/20 bg-orange-500/5 p-2">
+                <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-orange-500" />
                 <div>
                   <p className="text-xs font-semibold text-orange-500">Low Confidence Warning</p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-muted-foreground text-xs">
                     Please verify dimensions are accurate. {analysis.dimensions.reasoning}
                   </p>
                 </div>
@@ -296,42 +309,48 @@ export function ReviewEditStep({
 
             <div className="grid grid-cols-3 gap-3">
               <div>
-                <Label htmlFor="length" className="text-xs text-foreground">Length</Label>
+                <Label htmlFor="length" className="text-foreground text-xs">
+                  Length
+                </Label>
                 <Input
                   id="length"
                   type="number"
                   step="0.1"
                   {...register("dimensions.length", { valueAsNumber: true })}
-                  className="mt-1 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20"
+                  className="bg-background border-border text-foreground focus:border-primary focus:ring-primary/20 mt-1"
                 />
                 {errors.dimensions?.length && (
-                  <p className="text-xs text-red-500 mt-1">{errors.dimensions.length.message}</p>
+                  <p className="mt-1 text-xs text-red-500">{errors.dimensions.length.message}</p>
                 )}
               </div>
               <div>
-                <Label htmlFor="width" className="text-xs text-foreground">Width</Label>
+                <Label htmlFor="width" className="text-foreground text-xs">
+                  Width
+                </Label>
                 <Input
                   id="width"
                   type="number"
                   step="0.1"
                   {...register("dimensions.width", { valueAsNumber: true })}
-                  className="mt-1 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20"
+                  className="bg-background border-border text-foreground focus:border-primary focus:ring-primary/20 mt-1"
                 />
                 {errors.dimensions?.width && (
-                  <p className="text-xs text-red-500 mt-1">{errors.dimensions.width.message}</p>
+                  <p className="mt-1 text-xs text-red-500">{errors.dimensions.width.message}</p>
                 )}
               </div>
               <div>
-                <Label htmlFor="height" className="text-xs text-foreground">Height</Label>
+                <Label htmlFor="height" className="text-foreground text-xs">
+                  Height
+                </Label>
                 <Input
                   id="height"
                   type="number"
                   step="0.1"
                   {...register("dimensions.height", { valueAsNumber: true })}
-                  className="mt-1 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20"
+                  className="bg-background border-border text-foreground focus:border-primary focus:ring-primary/20 mt-1"
                 />
                 {errors.dimensions?.height && (
-                  <p className="text-xs text-red-500 mt-1">{errors.dimensions.height.message}</p>
+                  <p className="mt-1 text-xs text-red-500">{errors.dimensions.height.message}</p>
                 )}
               </div>
             </div>
@@ -339,17 +358,19 @@ export function ReviewEditStep({
 
           {/* Weight */}
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <Label htmlFor="weight" className="font-semibold text-foreground">Weight (kg)</Label>
+            <div className="mb-2 flex items-center justify-between">
+              <Label htmlFor="weight" className="text-foreground font-semibold">
+                Weight (kg)
+              </Label>
               <ConfidenceIndicator confidence={analysis.weight.confidence} size="sm" />
             </div>
 
             {weightConfidenceWarning && (
-              <div className="flex items-start gap-2 p-2 bg-orange-500/5 border border-orange-500/20 rounded-md mb-3">
-                <AlertCircle className="h-4 w-4 text-orange-500 mt-0.5 flex-shrink-0" />
+              <div className="mb-3 flex items-start gap-2 rounded-md border border-orange-500/20 bg-orange-500/5 p-2">
+                <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-orange-500" />
                 <div>
                   <p className="text-xs font-semibold text-orange-500">Low Confidence Warning</p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-muted-foreground text-xs">
                     Please verify weight is accurate. {analysis.weight.reasoning}
                   </p>
                 </div>
@@ -363,16 +384,14 @@ export function ReviewEditStep({
               {...register("weight", { valueAsNumber: true })}
               className="bg-background border-border text-foreground focus:border-primary focus:ring-primary/20"
             />
-            {errors.weight && (
-              <p className="text-sm text-red-500 mt-1">{errors.weight.message}</p>
-            )}
+            {errors.weight && <p className="mt-1 text-sm text-red-500">{errors.weight.message}</p>}
           </div>
 
           {/* AI Notes */}
           {analysis.notes && analysis.notes.length > 0 && (
-            <div className="p-3 bg-card border border-border rounded-md">
-              <p className="text-xs font-semibold text-foreground mb-1">AI Notes</p>
-              <ul className="text-xs text-foreground space-y-1">
+            <div className="bg-card border-border rounded-md border p-3">
+              <p className="text-foreground mb-1 text-xs font-semibold">AI Notes</p>
+              <ul className="text-foreground space-y-1 text-xs">
                 {analysis.notes.map((note, i) => (
                   <li key={i}>• {note}</li>
                 ))}
@@ -386,44 +405,46 @@ export function ReviewEditStep({
       <Card className="bg-card border-border rounded-md">
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
-            <div className="h-10 w-10 rounded-md bg-primary flex items-center justify-center">
+            <div className="bg-primary flex h-10 w-10 items-center justify-center rounded-md">
               <Tag className="h-5 w-5 text-white" />
             </div>
-            <CardTitle className="text-lg font-bold text-foreground">Tags & Location</CardTitle>
+            <CardTitle className="text-foreground text-lg font-bold">Tags & Location</CardTitle>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Tags */}
           <div>
-            <Label htmlFor="tags" className="font-semibold text-foreground">Tags (comma-separated)</Label>
+            <Label htmlFor="tags" className="text-foreground font-semibold">
+              Tags (comma-separated)
+            </Label>
             <Input
               id="tags"
               {...register("tags", {
                 setValueAs: (v) => {
                   if (Array.isArray(v)) return v;
                   if (typeof v === "string") {
-                    return v.split(",").map((t) => t.trim()).filter(Boolean);
+                    return v
+                      .split(",")
+                      .map((t) => t.trim())
+                      .filter(Boolean);
                   }
                   return [];
                 },
               })}
               defaultValue={analysis.suggestedTags.join(", ")}
-              className="mt-1 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20"
+              className="bg-background border-border text-foreground focus:border-primary focus:ring-primary/20 mt-1"
               placeholder="coffee, guatemalan, premium"
             />
-            {errors.tags && (
-              <p className="text-sm text-red-500 mt-1">{errors.tags.message}</p>
-            )}
+            {errors.tags && <p className="mt-1 text-sm text-red-500">{errors.tags.message}</p>}
           </div>
 
           {/* Origin Zone */}
           <div>
-            <Label htmlFor="originZone" className="font-semibold text-foreground">Origin Zone</Label>
-            <Select
-              defaultValue="zona-10"
-              onValueChange={(value) => setValue("originZone", value)}
-            >
-              <SelectTrigger className="mt-1 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20">
+            <Label htmlFor="originZone" className="text-foreground font-semibold">
+              Origin Zone
+            </Label>
+            <Select defaultValue="zona-10" onValueChange={(value) => setValue("originZone", value)}>
+              <SelectTrigger className="bg-background border-border text-foreground focus:border-primary focus:ring-primary/20 mt-1">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -435,23 +456,23 @@ export function ReviewEditStep({
               </SelectContent>
             </Select>
             {errors.originZone && (
-              <p className="text-sm text-red-500 mt-1">{errors.originZone.message}</p>
+              <p className="mt-1 text-sm text-red-500">{errors.originZone.message}</p>
             )}
           </div>
 
           {/* Stock */}
           <div>
-            <Label htmlFor="stock" className="font-semibold text-foreground">Stock Quantity</Label>
+            <Label htmlFor="stock" className="text-foreground font-semibold">
+              Stock Quantity
+            </Label>
             <Input
               id="stock"
               type="number"
               {...register("stock", { valueAsNumber: true })}
-              className="mt-1 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20"
+              className="bg-background border-border text-foreground focus:border-primary focus:ring-primary/20 mt-1"
               placeholder="0"
             />
-            {errors.stock && (
-              <p className="text-sm text-red-500 mt-1">{errors.stock.message}</p>
-            )}
+            {errors.stock && <p className="mt-1 text-sm text-red-500">{errors.stock.message}</p>}
           </div>
         </CardContent>
       </Card>
@@ -464,16 +485,16 @@ export function ReviewEditStep({
           onClick={onStartOver}
           className="border-2 border-gray-200 hover:bg-gray-50"
         >
-          <RefreshCw className="h-4 w-4 mr-2" />
+          <RefreshCw className="mr-2 h-4 w-4" />
           Start Over
         </Button>
 
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="bg-primary text-white hover:bg-primary/90 font-semibold"
+          className="bg-primary hover:bg-primary/90 font-semibold text-white"
         >
-          {isSubmitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+          {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Publish Product
         </Button>
       </div>

@@ -33,16 +33,17 @@ export function StatusBadge({ status, priority = "normal", className }: StatusBa
   const statusStyles: Record<DispatchStatus, string> = {
     [DispatchStatus.WAITING]: "bg-amber-500/15 text-amber-300 border-amber-500/40",
     [DispatchStatus.LOADING]: "bg-sky-500/15 text-sky-300 border-sky-500/40",
-    [DispatchStatus.READY]: "bg-emerald-500/15 text-emerald-300 border-emerald-500/40 animate-pulse",
+    [DispatchStatus.READY]:
+      "bg-emerald-500/15 text-emerald-300 border-emerald-500/40 animate-pulse",
     [DispatchStatus.DEPARTED]: "bg-slate-500/15 text-slate-300 border-slate-500/40",
   };
 
   return (
     <div
       className={cn(
-        "inline-flex items-center px-4 py-2 rounded-md border-2 font-bold text-base tracking-wide transition-all",
+        "inline-flex items-center rounded-md border-2 px-4 py-2 text-base font-bold tracking-wide transition-all",
         statusStyles[status],
-        isUrgent && "border-l-4 border-l-primary",
+        isUrgent && "border-l-primary border-l-4",
         className
       )}
     >

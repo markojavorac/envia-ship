@@ -8,22 +8,63 @@ type OrderStatus = "pending" | "confirmed" | "shipped" | "delivered";
 
 // Customer name generator
 const FIRST_NAMES = [
-  "María", "Juan", "Ana", "Carlos", "Sofía", "José", "Isabella", "Miguel",
-  "Valentina", "Luis", "Camila", "Diego", "Lucía", "Alejandro", "Martina",
-  "Fernando", "Victoria", "Ricardo", "Elena", "Gabriel"
+  "María",
+  "Juan",
+  "Ana",
+  "Carlos",
+  "Sofía",
+  "José",
+  "Isabella",
+  "Miguel",
+  "Valentina",
+  "Luis",
+  "Camila",
+  "Diego",
+  "Lucía",
+  "Alejandro",
+  "Martina",
+  "Fernando",
+  "Victoria",
+  "Ricardo",
+  "Elena",
+  "Gabriel",
 ];
 
 const LAST_NAMES = [
-  "García", "Rodríguez", "Martínez", "López", "González", "Pérez", "Sánchez",
-  "Ramírez", "Torres", "Flores", "Rivera", "Gómez", "Díaz", "Cruz", "Morales",
-  "Hernández", "Jiménez", "Mendoza", "Ruiz", "Alvarez"
+  "García",
+  "Rodríguez",
+  "Martínez",
+  "López",
+  "González",
+  "Pérez",
+  "Sánchez",
+  "Ramírez",
+  "Torres",
+  "Flores",
+  "Rivera",
+  "Gómez",
+  "Díaz",
+  "Cruz",
+  "Morales",
+  "Hernández",
+  "Jiménez",
+  "Mendoza",
+  "Ruiz",
+  "Alvarez",
 ];
 
 // Address templates
 const STREET_NAMES = [
-  "Avenida Las Américas", "Calle Real", "Boulevard Vista Hermosa",
-  "Avenida La Reforma", "Calle Montúfar", "Boulevard Los Próceres",
-  "Avenida Petapa", "Calle Martí", "Avenida Bolívar", "Calle del Comercio"
+  "Avenida Las Américas",
+  "Calle Real",
+  "Boulevard Vista Hermosa",
+  "Avenida La Reforma",
+  "Calle Montúfar",
+  "Boulevard Los Próceres",
+  "Avenida Petapa",
+  "Calle Martí",
+  "Avenida Bolívar",
+  "Calle del Comercio",
 ];
 
 /**
@@ -47,8 +88,8 @@ function getRandomInt(min: number, max: number): number {
  */
 function getRandomDate(daysAgo: number, daysRecent: number = 0): Date {
   const now = Date.now();
-  const start = now - (daysAgo * 24 * 60 * 60 * 1000);
-  const end = now - (daysRecent * 24 * 60 * 60 * 1000);
+  const start = now - daysAgo * 24 * 60 * 60 * 1000;
+  const end = now - daysRecent * 24 * 60 * 60 * 1000;
   const randomTime = start + Math.random() * (end - start);
   return new Date(randomTime);
 }
@@ -100,7 +141,7 @@ function generateAddress(): string {
  */
 function getWeightedStatus(): OrderStatus {
   const random = Math.random();
-  if (random < 0.10) return "pending";
+  if (random < 0.1) return "pending";
   if (random < 0.25) return "confirmed";
   if (random < 0.55) return "shipped";
   return "delivered";
@@ -113,7 +154,7 @@ function getWeightedQuantity(maxStock: number): number {
   const random = Math.random();
   let qty: number;
 
-  if (random < 0.80) {
+  if (random < 0.8) {
     qty = 1;
   } else if (random < 0.95) {
     qty = getRandomInt(2, 3);
@@ -132,9 +173,9 @@ function getWeightedZone(): string {
   const random = Math.random();
 
   // 60% chance of popular zones (Zona 1, 4, and 9)
-  if (random < 0.60) {
-    const popularZones = GUATEMALA_ZONES.filter(z =>
-      z.value === "zona-1" || z.value === "zona-4" || z.value === "zona-9"
+  if (random < 0.6) {
+    const popularZones = GUATEMALA_ZONES.filter(
+      (z) => z.value === "zona-1" || z.value === "zona-4" || z.value === "zona-9"
     );
     const zone = getRandomElement(popularZones);
     return zone.value;
@@ -151,7 +192,7 @@ function getWeightedZone(): string {
  */
 function getWeightedServiceType(): ServiceType {
   const random = Math.random();
-  if (random < 0.70) return ServiceType.STANDARD;
+  if (random < 0.7) return ServiceType.STANDARD;
   if (random < 0.95) return ServiceType.EXPRESS;
   return ServiceType.INTERNATIONAL;
 }
@@ -220,28 +261,27 @@ function generateSingleOrder(orderNumber: number): Order {
   const status = getWeightedStatus();
 
   // Generate creation date (60% in last 30 days, 40% in days 31-90)
-  const createdAt = Math.random() < 0.60
-    ? getRandomDate(30, 0)
-    : getRandomDate(90, 31);
+  const createdAt = Math.random() < 0.6 ? getRandomDate(30, 0) : getRandomDate(90, 31);
 
   // Calculate estimated delivery
   const estimatedDelivery = calculateEstimatedDelivery(createdAt, serviceType);
 
   // Generate order ID (similar to checkout modal pattern)
   const timestamp = createdAt.getTime();
-  const orderId = `ORD-${timestamp.toString().slice(-8)}${orderNumber.toString().padStart(3, '0')}`;
+  const orderId = `ORD-${timestamp.toString().slice(-8)}${orderNumber.toString().padStart(3, "0")}`;
 
   // Optional notes (20% chance)
-  const notes = Math.random() < 0.20
-    ? getRandomElement([
-        "Please call before delivery",
-        "Leave at reception desk",
-        "Ring doorbell twice",
-        "Deliver to back entrance",
-        "Call 30 minutes before arrival",
-        undefined
-      ])
-    : undefined;
+  const notes =
+    Math.random() < 0.2
+      ? getRandomElement([
+          "Please call before delivery",
+          "Leave at reception desk",
+          "Ring doorbell twice",
+          "Deliver to back entrance",
+          "Call 30 minutes before arrival",
+          undefined,
+        ])
+      : undefined;
 
   return {
     id: orderId,

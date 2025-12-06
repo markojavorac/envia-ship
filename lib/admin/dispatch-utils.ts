@@ -12,10 +12,10 @@ import { generateMockDispatch } from "./mock-dispatch";
  * Status priority order for sorting (higher priority appears first)
  */
 const STATUS_PRIORITY = {
-  [DispatchStatus.READY]: 1,      // Ready drivers at top (most urgent)
-  [DispatchStatus.LOADING]: 2,    // Loading drivers next
-  [DispatchStatus.WAITING]: 3,    // Waiting drivers after
-  [DispatchStatus.DEPARTED]: 4,   // Departed at bottom (for reference)
+  [DispatchStatus.READY]: 1, // Ready drivers at top (most urgent)
+  [DispatchStatus.LOADING]: 2, // Loading drivers next
+  [DispatchStatus.WAITING]: 3, // Waiting drivers after
+  [DispatchStatus.DEPARTED]: 4, // Departed at bottom (for reference)
 } as const;
 
 /**
@@ -53,7 +53,7 @@ export function updateDispatchEntries(entries: DispatchEntry[]): DispatchEntry[]
   const updatedEntries: DispatchEntry[] = [];
 
   // Count how many are currently LOADING (enforce only 1)
-  let loadingCount = entries.filter(e => e.status === DispatchStatus.LOADING).length;
+  let loadingCount = entries.filter((e) => e.status === DispatchStatus.LOADING).length;
 
   for (const entry of entries) {
     const timeSinceAssignment = now.getTime() - entry.assignedAt.getTime();
@@ -138,10 +138,10 @@ export function updateDispatchEntries(entries: DispatchEntry[]): DispatchEntry[]
  * Calculate KPI metrics from dispatch entries
  */
 export interface DispatchMetrics {
-  totalActive: number;      // WAITING + LOADING + READY
-  loadingNow: number;        // LOADING count
-  readyToDepart: number;     // READY count
-  departedToday: number;     // DEPARTED count
+  totalActive: number; // WAITING + LOADING + READY
+  loadingNow: number; // LOADING count
+  readyToDepart: number; // READY count
+  departedToday: number; // DEPARTED count
 }
 
 /**

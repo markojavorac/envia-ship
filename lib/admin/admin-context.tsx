@@ -33,7 +33,9 @@ interface AdminContextType {
   // Product operations
   updateProduct: (productId: string, updates: Partial<Product>) => void;
   getProductById: (productId: string) => Product | undefined;
-  addProduct: (product: Omit<Product, "id" | "rating" | "reviews" | "featured" | "createdAt">) => void;
+  addProduct: (
+    product: Omit<Product, "id" | "rating" | "reviews" | "featured" | "createdAt">
+  ) => void;
 
   // Analytics (memoized)
   metrics: DashboardMetrics;
@@ -59,43 +61,44 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
   // Order operations
   const updateOrderStatus = useCallback((orderId: string, newStatus: OrderStatus) => {
-    setOrders(prevOrders =>
-      prevOrders.map(order =>
-        order.id === orderId ? { ...order, status: newStatus } : order
-      )
+    setOrders((prevOrders) =>
+      prevOrders.map((order) => (order.id === orderId ? { ...order, status: newStatus } : order))
     );
   }, []);
 
   const getOrderById = useCallback(
-    (orderId: string) => orders.find(order => order.id === orderId),
+    (orderId: string) => orders.find((order) => order.id === orderId),
     [orders]
   );
 
   // Product operations
   const updateProduct = useCallback((productId: string, updates: Partial<Product>) => {
-    setProducts(prevProducts =>
-      prevProducts.map(product =>
+    setProducts((prevProducts) =>
+      prevProducts.map((product) =>
         product.id === productId ? { ...product, ...updates } : product
       )
     );
   }, []);
 
   const getProductById = useCallback(
-    (productId: string) => products.find(product => product.id === productId),
+    (productId: string) => products.find((product) => product.id === productId),
     [products]
   );
 
-  const addProduct = useCallback((productData: Omit<Product, "id" | "rating" | "reviews" | "featured" | "createdAt">) => {
-    const newProduct: Product = {
-      ...productData,
-      id: `prod-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      rating: 4.5,
-      reviews: 0,
-      featured: false,
-      createdAt: new Date(),
-    };
-    setProducts(prevProducts => [newProduct, ...prevProducts]);
-  }, []);
+  const addProduct = useCallback(
+    (productData: Omit<Product, "id" | "rating" | "reviews" | "featured" | "createdAt">) => {
+      const newProduct: Product = {
+        ...productData,
+        id: `prod-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        rating: 4.5,
+        reviews: 0,
+        featured: false,
+        createdAt: new Date(),
+      };
+      setProducts((prevProducts) => [newProduct, ...prevProducts]);
+    },
+    []
+  );
 
   // Memoized analytics computations (recompute only when orders change)
   const metrics = useMemo(() => calculateMetrics(orders), [orders]);

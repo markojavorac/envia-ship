@@ -5,17 +5,11 @@ export const metadata = {
   description: "Manage orders, products, and view analytics",
 };
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div data-theme="admin" className="min-h-screen bg-background">
+    <div data-theme="admin" className="bg-background min-h-screen">
       <AdminProvider>
-        <div className="container mx-auto px-4 py-8">
-          {children}
-        </div>
+        <div className="container mx-auto px-4 py-8">{children}</div>
       </AdminProvider>
     </div>
   );

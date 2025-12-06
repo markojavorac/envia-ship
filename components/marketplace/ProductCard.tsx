@@ -21,8 +21,8 @@ export function ProductCard({ product, variant }: ProductCardProps) {
   if (variant === MarketplaceView.AMAZON) {
     return (
       <Link href={`/marketplace/${product.id}`}>
-        <Card className="bg-white border-2 border-primary/30 hover:shadow-lg transition-shadow cursor-pointer h-full flex flex-col">
-          <div className="aspect-square relative bg-gray-100">
+        <Card className="border-primary/30 flex h-full cursor-pointer flex-col border-2 bg-white transition-shadow hover:shadow-lg">
+          <div className="relative aspect-square bg-gray-100">
             <Image
               src={product.thumbnail}
               alt={product.name}
@@ -31,49 +31,41 @@ export function ProductCard({ product, variant }: ProductCardProps) {
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
             />
             {product.featured && (
-              <Badge className="absolute top-2 left-2 bg-primary text-white">
-                Featured
-              </Badge>
+              <Badge className="bg-primary absolute top-2 left-2 text-white">Featured</Badge>
             )}
             {product.stock === 0 && (
-              <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+              <div className="absolute inset-0 flex items-center justify-center bg-black/50">
                 <Badge variant="destructive" className="text-sm">
                   Out of Stock
                 </Badge>
               </div>
             )}
           </div>
-          <CardContent className="p-3 flex flex-col flex-grow">
-            <h3 className="text-sm font-bold text-secondary line-clamp-2 mb-2">
-              {product.name}
-            </h3>
-            <div className="flex items-center gap-1 mb-2">
-              <Star className="h-3 w-3 text-primary fill-primary" />
+          <CardContent className="flex flex-grow flex-col p-3">
+            <h3 className="text-secondary mb-2 line-clamp-2 text-sm font-bold">{product.name}</h3>
+            <div className="mb-2 flex items-center gap-1">
+              <Star className="text-primary fill-primary h-3 w-3" />
               <span className="text-xs font-semibold text-gray-700">
                 {product.rating.toFixed(1)}
               </span>
-              <span className="text-xs text-gray-500">
-                ({product.reviews})
-              </span>
+              <span className="text-xs text-gray-500">({product.reviews})</span>
             </div>
-            <p className="text-lg font-bold text-primary mb-1">
-              {formatPrice(product.price)}
-            </p>
+            <p className="text-primary mb-1 text-lg font-bold">{formatPrice(product.price)}</p>
             {shippingEstimate ? (
-              <Badge variant="secondary" className="text-xs mb-2 w-fit">
-                <Truck className="h-3 w-3 mr-1" />
+              <Badge variant="secondary" className="mb-2 w-fit text-xs">
+                <Truck className="mr-1 h-3 w-3" />
                 {formatPrice(shippingEstimate.cost)} shipping
               </Badge>
             ) : (
-              <Badge variant="outline" className="text-xs mb-2 w-fit">
+              <Badge variant="outline" className="mb-2 w-fit text-xs">
                 Set zone for shipping
               </Badge>
             )}
-            <p className="text-xs text-gray-600 line-clamp-2 mb-3 flex-grow">
+            <p className="mb-3 line-clamp-2 flex-grow text-xs text-gray-600">
               {product.shortDescription}
             </p>
             <Button
-              className="w-full bg-primary text-white hover:bg-primary/90 font-semibold"
+              className="bg-primary hover:bg-primary/90 w-full font-semibold text-white"
               size="sm"
               disabled={product.stock === 0}
             >
@@ -89,31 +81,31 @@ export function ProductCard({ product, variant }: ProductCardProps) {
   if (variant === MarketplaceView.UBER_EATS) {
     return (
       <Link href={`/marketplace/${product.id}`}>
-        <Card className="bg-white border-2 border-primary/30 hover:scale-105 hover:shadow-xl transition-all cursor-pointer">
-          <div className="aspect-video relative bg-gray-100">
+        <Card className="border-primary/30 cursor-pointer border-2 bg-white transition-all hover:scale-105 hover:shadow-xl">
+          <div className="relative aspect-video bg-gray-100">
             <Image
               src={product.thumbnail}
               alt={product.name}
               fill
-              className="object-cover rounded-t-lg"
+              className="rounded-t-lg object-cover"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
             {shippingEstimate && (
-              <Badge className="absolute top-2 right-2 bg-primary text-white">
-                <Truck className="h-3 w-3 mr-1" />
+              <Badge className="bg-primary absolute top-2 right-2 text-white">
+                <Truck className="mr-1 h-3 w-3" />
                 {getDeliveryTimeDescription(shippingEstimate.estimatedDays)}
               </Badge>
             )}
             {product.stock === 0 && (
-              <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+              <div className="absolute inset-0 flex items-center justify-center bg-black/50">
                 <Badge variant="destructive">Out of Stock</Badge>
               </div>
             )}
           </div>
           <CardContent className="p-4">
-            <div className="flex justify-between items-start gap-3">
+            <div className="flex items-start justify-between gap-3">
               <div className="flex-grow">
-                <h3 className="font-bold text-base text-secondary line-clamp-1 mb-1">
+                <h3 className="text-secondary mb-1 line-clamp-1 text-base font-bold">
                   {product.name}
                 </h3>
                 <div className="flex items-center gap-2 text-xs text-gray-500">
@@ -126,15 +118,11 @@ export function ProductCard({ product, variant }: ProductCardProps) {
                   )}
                 </div>
               </div>
-              <div className="text-right flex-shrink-0">
-                <p className="text-xl font-bold text-primary">
-                  {formatPrice(product.price)}
-                </p>
-                <div className="flex items-center gap-1 mt-1">
-                  <Star className="h-3 w-3 text-primary fill-primary" />
-                  <span className="text-xs font-semibold">
-                    {product.rating.toFixed(1)}
-                  </span>
+              <div className="flex-shrink-0 text-right">
+                <p className="text-primary text-xl font-bold">{formatPrice(product.price)}</p>
+                <div className="mt-1 flex items-center gap-1">
+                  <Star className="text-primary fill-primary h-3 w-3" />
+                  <span className="text-xs font-semibold">{product.rating.toFixed(1)}</span>
                 </div>
               </div>
             </div>
@@ -148,23 +136,21 @@ export function ProductCard({ product, variant }: ProductCardProps) {
   if (variant === MarketplaceView.PINTEREST) {
     return (
       <Link href={`/marketplace/${product.id}`}>
-        <Card className="bg-white border-2 border-primary/30 overflow-hidden group cursor-pointer break-inside-avoid mb-4">
+        <Card className="border-primary/30 group mb-4 cursor-pointer break-inside-avoid overflow-hidden border-2 bg-white">
           <div className="relative">
             <Image
               src={product.thumbnail}
               alt={product.name}
               width={300}
               height={Math.floor(300 * (1 + Math.random() * 0.5))} // Variable height
-              className="w-full h-auto object-cover"
+              className="h-auto w-full object-cover"
             />
             {/* Hover overlay */}
-            <div className="absolute inset-0 bg-secondary/90 opacity-0 group-hover:opacity-100 transition-opacity p-4 flex flex-col justify-end">
-              <h3 className="text-white font-bold text-lg mb-1">{product.name}</h3>
-              <p className="text-white/80 text-sm line-clamp-2 mb-3">
-                {product.shortDescription}
-              </p>
-              <div className="flex justify-between items-center">
-                <span className="text-2xl font-bold text-primary">
+            <div className="bg-secondary/90 absolute inset-0 flex flex-col justify-end p-4 opacity-0 transition-opacity group-hover:opacity-100">
+              <h3 className="mb-1 text-lg font-bold text-white">{product.name}</h3>
+              <p className="mb-3 line-clamp-2 text-sm text-white/80">{product.shortDescription}</p>
+              <div className="flex items-center justify-between">
+                <span className="text-primary text-2xl font-bold">
                   {formatPrice(product.price)}
                 </span>
                 <Button size="sm" className="bg-primary">
@@ -173,18 +159,18 @@ export function ProductCard({ product, variant }: ProductCardProps) {
               </div>
             </div>
             {product.stock === 0 && (
-              <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
+              <div className="absolute inset-0 flex items-center justify-center bg-black/70">
                 <Badge variant="destructive">Out of Stock</Badge>
               </div>
             )}
           </div>
           {/* Always visible info */}
           <CardContent className="p-3">
-            <div className="flex justify-between items-center">
-              <span className="text-sm font-semibold text-secondary line-clamp-1 flex-grow">
+            <div className="flex items-center justify-between">
+              <span className="text-secondary line-clamp-1 flex-grow text-sm font-semibold">
                 {product.name}
               </span>
-              <span className="text-base font-bold text-primary ml-2 flex-shrink-0">
+              <span className="text-primary ml-2 flex-shrink-0 text-base font-bold">
                 {formatPrice(product.price)}
               </span>
             </div>
@@ -198,17 +184,17 @@ export function ProductCard({ product, variant }: ProductCardProps) {
   if (variant === MarketplaceView.MINIMALIST) {
     return (
       <Link href={`/marketplace/${product.id}`}>
-        <Card className="bg-white shadow-sm hover:shadow-xl transition-shadow border-0 cursor-pointer">
-          <div className="aspect-square relative bg-gray-50">
+        <Card className="cursor-pointer border-0 bg-white shadow-sm transition-shadow hover:shadow-xl">
+          <div className="relative aspect-square bg-gray-50">
             <Image
               src={product.thumbnail}
               alt={product.name}
               fill
-              className="object-cover rounded-lg"
+              className="rounded-lg object-cover"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
             {product.stock === 0 && (
-              <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+              <div className="absolute inset-0 flex items-center justify-center bg-black/50">
                 <Badge variant="destructive" className="text-sm">
                   Out of Stock
                 </Badge>
@@ -216,18 +202,12 @@ export function ProductCard({ product, variant }: ProductCardProps) {
             )}
           </div>
           <CardContent className="p-6 text-center">
-            <h3 className="text-xl font-bold text-secondary mb-3">
-              {product.name}
-            </h3>
-            <p className="text-3xl font-bold text-primary mb-4">
-              {formatPrice(product.price)}
-            </p>
-            <p className="text-sm text-gray-500 mb-4 line-clamp-1">
-              {product.shortDescription}
-            </p>
+            <h3 className="text-secondary mb-3 text-xl font-bold">{product.name}</h3>
+            <p className="text-primary mb-4 text-3xl font-bold">{formatPrice(product.price)}</p>
+            <p className="mb-4 line-clamp-1 text-sm text-gray-500">{product.shortDescription}</p>
             <Button
               variant="outline"
-              className="w-full border-2 border-primary text-primary hover:bg-primary hover:text-white font-bold"
+              className="border-primary text-primary hover:bg-primary w-full border-2 font-bold hover:text-white"
               disabled={product.stock === 0}
             >
               View Details
@@ -244,50 +224,46 @@ export function ProductCard({ product, variant }: ProductCardProps) {
 
     return (
       <Link href={`/marketplace/${product.id}`}>
-        <Card className="bg-white border-2 border-primary/30 hover:shadow-lg transition-shadow cursor-pointer">
-          <div className="aspect-square relative bg-gray-100">
+        <Card className="border-primary/30 cursor-pointer border-2 bg-white transition-shadow hover:shadow-lg">
+          <div className="relative aspect-square bg-gray-100">
             <Image
               src={product.thumbnail}
               alt={product.name}
               fill
-              className="object-cover rounded-t-lg"
+              className="rounded-t-lg object-cover"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
             {isLocalZone && (
-              <Badge className="absolute top-2 left-2 bg-primary text-white">
-                <MapPin className="h-3 w-3 mr-1" />
+              <Badge className="bg-primary absolute top-2 left-2 text-white">
+                <MapPin className="mr-1 h-3 w-3" />
                 Your Zone
               </Badge>
             )}
             {shippingEstimate && (
-              <Badge className="absolute top-2 right-2 bg-secondary text-white">
+              <Badge className="bg-secondary absolute top-2 right-2 text-white">
                 {getDeliveryTimeDescription(shippingEstimate.estimatedDays)}
               </Badge>
             )}
             {product.stock === 0 && (
-              <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+              <div className="absolute inset-0 flex items-center justify-center bg-black/50">
                 <Badge variant="destructive">Out of Stock</Badge>
               </div>
             )}
           </div>
           <CardContent className="p-4">
-            <div className="flex justify-between items-start mb-2">
+            <div className="mb-2 flex items-start justify-between">
               <div className="flex-grow">
-                <h3 className="font-bold text-base text-secondary line-clamp-1">
-                  {product.name}
-                </h3>
-                <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                <h3 className="text-secondary line-clamp-1 text-base font-bold">{product.name}</h3>
+                <p className="mt-1 flex items-center gap-1 text-xs text-gray-500">
                   <MapPin className="h-3 w-3" />
                   From {product.originZone.replace("-", " ")}
                 </p>
               </div>
-              <div className="text-right flex-shrink-0">
-                <p className="text-xl font-bold text-primary">
-                  {formatPrice(product.price)}
-                </p>
+              <div className="flex-shrink-0 text-right">
+                <p className="text-primary text-xl font-bold">{formatPrice(product.price)}</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 text-xs text-gray-600 mb-3">
+            <div className="mb-3 flex items-center gap-2 text-xs text-gray-600">
               <Store className="h-3 w-3" />
               <span>{product.seller.name}</span>
               {product.seller.verified && (
@@ -296,13 +272,15 @@ export function ProductCard({ product, variant }: ProductCardProps) {
                 </Badge>
               )}
             </div>
-            <div className="border-t border-gray-200 pt-3 mt-3 flex justify-between items-center">
+            <div className="mt-3 flex items-center justify-between border-t border-gray-200 pt-3">
               <span className="text-xs text-gray-600">
-                {shippingEstimate ? `+ ${formatPrice(shippingEstimate.cost)} shipping` : "Set zone for shipping"}
+                {shippingEstimate
+                  ? `+ ${formatPrice(shippingEstimate.cost)} shipping`
+                  : "Set zone for shipping"}
               </span>
               <Button
                 size="sm"
-                className="bg-primary text-white hover:bg-primary/90"
+                className="bg-primary hover:bg-primary/90 text-white"
                 disabled={product.stock === 0}
               >
                 Buy Now

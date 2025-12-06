@@ -34,12 +34,12 @@ export function ZoneModal() {
     <Dialog open={showZoneModal} onOpenChange={setShowZoneModal}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <div className="flex items-center justify-center mb-4">
-            <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
-              <MapPin className="h-8 w-8 text-primary" />
+          <div className="mb-4 flex items-center justify-center">
+            <div className="bg-primary/10 flex h-16 w-16 items-center justify-center rounded-full">
+              <MapPin className="text-primary h-8 w-8" />
             </div>
           </div>
-          <DialogTitle className="text-center text-2xl font-bold text-secondary">
+          <DialogTitle className="text-secondary text-center text-2xl font-bold">
             Welcome to Marketplace
           </DialogTitle>
           <DialogDescription className="text-center text-base">
@@ -49,11 +49,9 @@ export function ZoneModal() {
 
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-secondary">
-              Delivery Zone
-            </label>
+            <label className="text-secondary text-sm font-semibold">Delivery Zone</label>
             <Select value={selectedZone} onValueChange={setSelectedZone}>
-              <SelectTrigger className="w-full bg-white border-2 border-gray-200 focus:border-primary focus:ring-primary/20">
+              <SelectTrigger className="focus:border-primary focus:ring-primary/20 w-full border-2 border-gray-200 bg-white">
                 <SelectValue placeholder="Select your zone..." />
               </SelectTrigger>
               <SelectContent>
@@ -66,15 +64,14 @@ export function ZoneModal() {
             </Select>
           </div>
 
-          <div className="bg-primary/5 border-2 border-primary/20 rounded-lg p-4">
+          <div className="bg-primary/5 border-primary/20 rounded-lg border-2 p-4">
             <div className="flex gap-3">
-              <Package className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+              <Package className="text-primary mt-0.5 h-5 w-5 flex-shrink-0" />
               <div className="space-y-1">
-                <p className="text-sm font-semibold text-secondary">
-                  Why do we need this?
-                </p>
+                <p className="text-secondary text-sm font-semibold">Why do we need this?</p>
                 <p className="text-xs text-gray-600">
-                  Your zone helps us calculate accurate shipping costs and delivery times for each product. You can change it anytime.
+                  Your zone helps us calculate accurate shipping costs and delivery times for each
+                  product. You can change it anytime.
                 </p>
               </div>
             </div>
@@ -92,7 +89,7 @@ export function ZoneModal() {
           <Button
             onClick={handleConfirm}
             disabled={!selectedZone}
-            className="flex-1 bg-primary text-white hover:bg-primary/90 font-semibold disabled:bg-gray-300 disabled:cursor-not-allowed"
+            className="bg-primary hover:bg-primary/90 flex-1 font-semibold text-white disabled:cursor-not-allowed disabled:bg-gray-300"
           >
             Continue
           </Button>

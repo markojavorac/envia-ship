@@ -19,23 +19,11 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import {
-  ShippingFormValues,
-  shippingFormSchema,
-} from "@/lib/validations/shipping-schema";
-import {
-  GUATEMALA_ZONES,
-  SERVICE_OPTIONS,
-  DeliveryTiming,
-  PricingResult,
-} from "@/lib/types";
+import { ShippingFormValues, shippingFormSchema } from "@/lib/validations/shipping-schema";
+import { GUATEMALA_ZONES, SERVICE_OPTIONS, DeliveryTiming, PricingResult } from "@/lib/types";
 import { calculateShippingPrice } from "@/lib/shipping-calculator";
 import { cn } from "@/lib/utils";
 import PricingResultsCard from "./PricingResultsCard";
@@ -48,9 +36,7 @@ interface ShippingCalculatorFormProps {
 export default function ShippingCalculatorForm({
   initialValues,
 }: ShippingCalculatorFormProps = {}) {
-  const [pricingResult, setPricingResult] = useState<PricingResult | null>(
-    null
-  );
+  const [pricingResult, setPricingResult] = useState<PricingResult | null>(null);
   const [isCalculating, setIsCalculating] = useState(false);
 
   const {
@@ -106,10 +92,10 @@ export default function ShippingCalculatorForm({
   return (
     <div className="space-y-4">
       {/* Form Section */}
-      <Card className="border-2 shadow-lg bg-white border-secondary/25">
-        <CardHeader className="pb-3 border-b border-secondary/20">
-          <CardTitle className="flex items-center gap-2 text-lg text-secondary font-bold">
-            <div className="h-8 w-8 rounded-lg flex items-center justify-center bg-primary">
+      <Card className="border-secondary/25 border-2 bg-white shadow-lg">
+        <CardHeader className="border-secondary/20 border-b pb-3">
+          <CardTitle className="text-secondary flex items-center gap-2 text-lg font-bold">
+            <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-lg">
               <Package2 className="h-5 w-5 text-white" />
             </div>
             Package Details
@@ -118,9 +104,9 @@ export default function ShippingCalculatorForm({
         <CardContent className="p-4 pt-4">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Dimensions Section */}
-            <Card className="border-2 bg-white border-primary/30">
+            <Card className="border-primary/30 border-2 bg-white">
               <CardHeader className="pb-3">
-                <h3 className="text-sm font-semibold text-primary">Dimensions</h3>
+                <h3 className="text-primary text-sm font-semibold">Dimensions</h3>
               </CardHeader>
               <CardContent className="p-4 pt-0">
                 <div className="grid grid-cols-3 gap-3">
@@ -136,9 +122,7 @@ export default function ShippingCalculatorForm({
                       {...register("length", { valueAsNumber: true })}
                     />
                     {errors.length && (
-                      <p className="text-xs text-destructive mt-1">
-                        {errors.length.message}
-                      </p>
+                      <p className="text-destructive mt-1 text-xs">{errors.length.message}</p>
                     )}
                   </div>
                   <div>
@@ -153,9 +137,7 @@ export default function ShippingCalculatorForm({
                       {...register("width", { valueAsNumber: true })}
                     />
                     {errors.width && (
-                      <p className="text-xs text-destructive mt-1">
-                        {errors.width.message}
-                      </p>
+                      <p className="text-destructive mt-1 text-xs">{errors.width.message}</p>
                     )}
                   </div>
                   <div>
@@ -170,9 +152,7 @@ export default function ShippingCalculatorForm({
                       {...register("height", { valueAsNumber: true })}
                     />
                     {errors.height && (
-                      <p className="text-xs text-destructive mt-1">
-                        {errors.height.message}
-                      </p>
+                      <p className="text-destructive mt-1 text-xs">{errors.height.message}</p>
                     )}
                   </div>
                 </div>
@@ -189,27 +169,23 @@ export default function ShippingCalculatorForm({
                     {...register("weight", { valueAsNumber: true })}
                   />
                   {errors.weight && (
-                    <p className="text-xs text-destructive mt-1">
-                      {errors.weight.message}
-                    </p>
+                    <p className="text-destructive mt-1 text-xs">{errors.weight.message}</p>
                   )}
                 </div>
               </CardContent>
             </Card>
 
             {/* Locations Section */}
-            <Card className="border-2 bg-white border-primary/30">
+            <Card className="border-primary/30 border-2 bg-white">
               <CardHeader className="pb-3">
-                <h3 className="text-sm font-semibold text-primary">Locations</h3>
+                <h3 className="text-primary text-sm font-semibold">Locations</h3>
               </CardHeader>
-              <CardContent className="p-4 pt-0 space-y-3">
+              <CardContent className="space-y-3 p-4 pt-0">
                 <div className="space-y-2">
                   <Label htmlFor="pickupZone" className="text-xs font-semibold">
                     Pickup Location
                   </Label>
-                  <Select
-                    onValueChange={(value) => setValue("pickupZone", value)}
-                  >
+                  <Select onValueChange={(value) => setValue("pickupZone", value)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select zone" />
                     </SelectTrigger>
@@ -222,9 +198,7 @@ export default function ShippingCalculatorForm({
                     </SelectContent>
                   </Select>
                   {errors.pickupZone && (
-                    <p className="text-xs text-destructive">
-                      {errors.pickupZone.message}
-                    </p>
+                    <p className="text-destructive text-xs">{errors.pickupZone.message}</p>
                   )}
                   <Input
                     placeholder="Street address (optional)"
@@ -237,9 +211,7 @@ export default function ShippingCalculatorForm({
                   <Label htmlFor="dropoffZone" className="text-xs font-semibold">
                     Drop-off Location
                   </Label>
-                  <Select
-                    onValueChange={(value) => setValue("dropoffZone", value)}
-                  >
+                  <Select onValueChange={(value) => setValue("dropoffZone", value)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select zone" />
                     </SelectTrigger>
@@ -252,9 +224,7 @@ export default function ShippingCalculatorForm({
                     </SelectContent>
                   </Select>
                   {errors.dropoffZone && (
-                    <p className="text-xs text-destructive">
-                      {errors.dropoffZone.message}
-                    </p>
+                    <p className="text-destructive text-xs">{errors.dropoffZone.message}</p>
                   )}
                   <Input
                     placeholder="Street address (optional)"
@@ -266,9 +236,9 @@ export default function ShippingCalculatorForm({
             </Card>
 
             {/* Service Type */}
-            <Card className="border-2 bg-white border-primary/30">
+            <Card className="border-primary/30 border-2 bg-white">
               <CardHeader className="pb-3">
-                <Label className="text-sm font-semibold text-primary">Service Type</Label>
+                <Label className="text-primary text-sm font-semibold">Service Type</Label>
               </CardHeader>
               <CardContent className="p-4 pt-0">
                 <ToggleGroup
@@ -283,56 +253,39 @@ export default function ShippingCalculatorForm({
                     <ToggleGroupItem
                       key={service.value}
                       value={service.value}
-                      className="flex-col py-4 h-auto border-2 border-gray-200 bg-white data-[state=on]:bg-primary data-[state=on]:text-white data-[state=on]:border-primary hover:border-primary/50"
+                      className="data-[state=on]:bg-primary data-[state=on]:border-primary hover:border-primary/50 h-auto flex-col border-2 border-gray-200 bg-white py-4 data-[state=on]:text-white"
                     >
-                      <div className="text-sm font-semibold">
-                        {service.label}
-                      </div>
-                      <div className="text-xs opacity-90">
-                        {service.description.split(".")[0]}
-                      </div>
+                      <div className="text-sm font-semibold">{service.label}</div>
+                      <div className="text-xs opacity-90">{service.description.split(".")[0]}</div>
                     </ToggleGroupItem>
                   ))}
                 </ToggleGroup>
                 {errors.serviceType && (
-                  <p className="text-xs text-destructive mt-2">
-                    {errors.serviceType.message}
-                  </p>
+                  <p className="text-destructive mt-2 text-xs">{errors.serviceType.message}</p>
                 )}
               </CardContent>
             </Card>
 
             {/* Delivery Timing */}
-            <Card className="border-2 bg-white border-primary/30">
+            <Card className="border-primary/30 border-2 bg-white">
               <CardHeader className="pb-3">
-                <Label className="text-sm font-semibold text-primary">Delivery Timing</Label>
+                <Label className="text-primary text-sm font-semibold">Delivery Timing</Label>
               </CardHeader>
-              <CardContent className="p-4 pt-0 space-y-3">
+              <CardContent className="space-y-3 p-4 pt-0">
                 <RadioGroup
                   defaultValue={DeliveryTiming.ASAP}
-                  onValueChange={(value) =>
-                    setValue("deliveryTiming", value as DeliveryTiming)
-                  }
+                  onValueChange={(value) => setValue("deliveryTiming", value as DeliveryTiming)}
                   className="space-y-2"
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value={DeliveryTiming.ASAP} id="asap" />
-                    <Label
-                      htmlFor="asap"
-                      className="text-sm font-normal cursor-pointer"
-                    >
+                    <Label htmlFor="asap" className="cursor-pointer text-sm font-normal">
                       As soon as possible
                     </Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem
-                      value={DeliveryTiming.SCHEDULED}
-                      id="scheduled"
-                    />
-                    <Label
-                      htmlFor="scheduled"
-                      className="text-sm font-normal cursor-pointer"
-                    >
+                    <RadioGroupItem value={DeliveryTiming.SCHEDULED} id="scheduled" />
+                    <Label htmlFor="scheduled" className="cursor-pointer text-sm font-normal">
                       Schedule for later
                     </Label>
                   </div>
@@ -372,7 +325,7 @@ export default function ShippingCalculatorForm({
                       </PopoverContent>
                     </Popover>
                     {errors.scheduledDate && (
-                      <p className="text-xs text-destructive mt-1">
+                      <p className="text-destructive mt-1 text-xs">
                         {errors.scheduledDate.message}
                       </p>
                     )}
@@ -400,7 +353,7 @@ export default function ShippingCalculatorForm({
 
             <Button
               type="submit"
-              className="w-full shadow-lg bg-primary text-white hover:bg-primary/90"
+              className="bg-primary hover:bg-primary/90 w-full text-white shadow-lg"
               size="lg"
               disabled={isCalculating}
             >

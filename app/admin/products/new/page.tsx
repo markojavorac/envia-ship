@@ -11,7 +11,7 @@ export default function NewProductPage() {
     <div className="space-y-4">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-foreground mb-2">Add New Product</h1>
+        <h1 className="text-foreground mb-2 text-3xl font-bold">Add New Product</h1>
         <p className="text-muted-foreground">
           Upload product photos and let AI generate your listing automatically
         </p>

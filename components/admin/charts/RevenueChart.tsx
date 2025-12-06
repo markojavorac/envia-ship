@@ -26,9 +26,7 @@ export function RevenueChart({ data }: RevenueChartProps) {
     <Card className="bg-card border-border rounded-md">
       <CardHeader className="pb-2">
         <CardTitle className="text-foreground">Revenue Over Time</CardTitle>
-        <p className="text-sm text-muted-foreground">
-          Weekly revenue trends for the last 90 days
-        </p>
+        <p className="text-muted-foreground text-sm">Weekly revenue trends for the last 90 days</p>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
@@ -39,7 +37,12 @@ export function RevenueChart({ data }: RevenueChartProps) {
                 <stop offset="95%" stopColor="hsl(33 75% 45%)" stopOpacity={0.2} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" strokeOpacity={0.3} vertical={false} />
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke="hsl(var(--border))"
+              strokeOpacity={0.3}
+              vertical={false}
+            />
             <XAxis
               dataKey="date"
               tickLine={false}

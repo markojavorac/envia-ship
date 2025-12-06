@@ -54,10 +54,10 @@ export function FilterSidebar({ priceRange, className = "" }: FilterSidebarProps
     filterState.minRating > 0;
 
   return (
-    <Card className={`bg-white border-2 border-primary/30 ${className}`}>
+    <Card className={`border-primary/30 border-2 bg-white ${className}`}>
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-bold text-primary flex items-center gap-2">
+          <CardTitle className="text-primary flex items-center gap-2 text-lg font-bold">
             <Filter className="h-5 w-5" />
             Filters
           </CardTitle>
@@ -66,9 +66,9 @@ export function FilterSidebar({ priceRange, className = "" }: FilterSidebarProps
               variant="ghost"
               size="sm"
               onClick={resetFilters}
-              className="text-xs text-primary hover:text-primary/80"
+              className="text-primary hover:text-primary/80 text-xs"
             >
-              <X className="h-3 w-3 mr-1" />
+              <X className="mr-1 h-3 w-3" />
               Clear
             </Button>
           )}
@@ -77,14 +77,14 @@ export function FilterSidebar({ priceRange, className = "" }: FilterSidebarProps
       <CardContent className="space-y-6">
         {/* Category Filter */}
         <div>
-          <h3 className="text-sm font-semibold text-secondary mb-3">Category</h3>
+          <h3 className="text-secondary mb-3 text-sm font-semibold">Category</h3>
           <div className="space-y-2">
             <button
               onClick={() => handleCategoryChange("all")}
-              className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
+              className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-colors ${
                 filterState.category === "all"
-                  ? "bg-primary text-white font-semibold"
-                  : "hover:bg-gray-100 text-gray-700"
+                  ? "bg-primary font-semibold text-white"
+                  : "text-gray-700 hover:bg-gray-100"
               }`}
             >
               All Products
@@ -93,10 +93,10 @@ export function FilterSidebar({ priceRange, className = "" }: FilterSidebarProps
               <button
                 key={cat.value}
                 onClick={() => handleCategoryChange(cat.value)}
-                className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
+                className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-colors ${
                   filterState.category === cat.value
-                    ? "bg-primary text-white font-semibold"
-                    : "hover:bg-gray-100 text-gray-700"
+                    ? "bg-primary font-semibold text-white"
+                    : "text-gray-700 hover:bg-gray-100"
                 }`}
               >
                 {cat.label}
@@ -109,7 +109,7 @@ export function FilterSidebar({ priceRange, className = "" }: FilterSidebarProps
 
         {/* Price Range Filter */}
         <div>
-          <h3 className="text-sm font-semibold text-secondary mb-3">Price Range</h3>
+          <h3 className="text-secondary mb-3 text-sm font-semibold">Price Range</h3>
           <div className="space-y-4">
             <Slider
               min={priceRange.min}
@@ -120,12 +120,8 @@ export function FilterSidebar({ priceRange, className = "" }: FilterSidebarProps
               className="w-full"
             />
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-600">
-                {formatPrice(filterState.priceRange.min)}
-              </span>
-              <span className="text-gray-600">
-                {formatPrice(filterState.priceRange.max)}
-              </span>
+              <span className="text-gray-600">{formatPrice(filterState.priceRange.min)}</span>
+              <span className="text-gray-600">{formatPrice(filterState.priceRange.max)}</span>
             </div>
           </div>
         </div>
@@ -134,16 +130,16 @@ export function FilterSidebar({ priceRange, className = "" }: FilterSidebarProps
 
         {/* Rating Filter */}
         <div>
-          <h3 className="text-sm font-semibold text-secondary mb-3">Minimum Rating</h3>
+          <h3 className="text-secondary mb-3 text-sm font-semibold">Minimum Rating</h3>
           <div className="space-y-2">
             {[4, 3, 2, 1, 0].map((rating) => (
               <button
                 key={rating}
                 onClick={() => handleRatingChange(rating)}
-                className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
+                className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${
                   filterState.minRating === rating
-                    ? "bg-primary/10 border-2 border-primary"
-                    : "hover:bg-gray-100 border-2 border-transparent"
+                    ? "bg-primary/10 border-primary border-2"
+                    : "border-2 border-transparent hover:bg-gray-100"
                 }`}
               >
                 <div className="flex items-center gap-1">
@@ -151,9 +147,7 @@ export function FilterSidebar({ priceRange, className = "" }: FilterSidebarProps
                     <Star
                       key={i}
                       className={`h-4 w-4 ${
-                        i < rating
-                          ? "text-primary fill-primary"
-                          : "text-gray-300"
+                        i < rating ? "text-primary fill-primary" : "text-gray-300"
                       }`}
                     />
                   ))}
@@ -170,17 +164,14 @@ export function FilterSidebar({ priceRange, className = "" }: FilterSidebarProps
 
         {/* Stock Filter */}
         <div>
-          <h3 className="text-sm font-semibold text-secondary mb-3">Availability</h3>
+          <h3 className="text-secondary mb-3 text-sm font-semibold">Availability</h3>
           <div className="flex items-center gap-2">
             <Checkbox
               id="in-stock"
               checked={filterState.inStock}
               onCheckedChange={handleInStockToggle}
             />
-            <label
-              htmlFor="in-stock"
-              className="text-sm text-gray-700 cursor-pointer"
-            >
+            <label htmlFor="in-stock" className="cursor-pointer text-sm text-gray-700">
               In stock only
             </label>
           </div>
@@ -190,15 +181,15 @@ export function FilterSidebar({ priceRange, className = "" }: FilterSidebarProps
 
         {/* Zone Filter */}
         <div>
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-semibold text-secondary">Origin Zone</h3>
+          <div className="mb-3 flex items-center justify-between">
+            <h3 className="text-secondary text-sm font-semibold">Origin Zone</h3>
             {filterState.zones.length > 0 && (
               <Badge variant="secondary" className="text-xs">
                 {filterState.zones.length}
               </Badge>
             )}
           </div>
-          <div className="space-y-2 max-h-48 overflow-y-auto">
+          <div className="max-h-48 space-y-2 overflow-y-auto">
             {GUATEMALA_ZONES.slice(0, 10).map((zone) => (
               <div key={zone.value} className="flex items-center gap-2">
                 <Checkbox
@@ -208,7 +199,7 @@ export function FilterSidebar({ priceRange, className = "" }: FilterSidebarProps
                 />
                 <label
                   htmlFor={`zone-${zone.value}`}
-                  className="text-sm text-gray-700 cursor-pointer flex-grow"
+                  className="flex-grow cursor-pointer text-sm text-gray-700"
                 >
                   {zone.label}
                 </label>

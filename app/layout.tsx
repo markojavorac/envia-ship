@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Inter, DM_Sans, JetBrains_Mono } from "next/font/google";
+import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { MarketplaceProvider } from "@/contexts/MarketplaceContext";
 import Header from "@/components/Header";
 import ConditionalFooter from "@/components/ConditionalFooter";
+import { ProductDiscoveryPopup } from "@/components/copilot/ProductDiscoveryPopup";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -24,7 +26,8 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "Envia Ship - Your Trusted Shipping Partner",
-  description: "Professional shipping services for all your delivery needs. Fast, reliable, and affordable shipping solutions.",
+  description:
+    "Professional shipping services for all your delivery needs. Fast, reliable, and affordable shipping solutions.",
 };
 
 export default function RootLayout({
@@ -37,6 +40,17 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${dmSans.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
+        <NextTopLoader
+          color="#FF8C00"
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={3}
+          crawl={true}
+          showSpinner={false}
+          easing="ease"
+          speed={200}
+          shadow="0 0 10px #FF8C00,0 0 5px #FF8C00"
+        />
         <ThemeProvider>
           <MarketplaceProvider>
             <div className="flex min-h-screen flex-col">
@@ -44,6 +58,7 @@ export default function RootLayout({
               <main className="flex-1">{children}</main>
               <ConditionalFooter />
             </div>
+            <ProductDiscoveryPopup />
           </MarketplaceProvider>
         </ThemeProvider>
       </body>

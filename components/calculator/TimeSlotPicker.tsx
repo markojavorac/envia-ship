@@ -17,9 +17,9 @@ export default function TimeSlotPicker({ label, value, onChange, error }: TimeSl
   const icons = { sunrise: Sunrise, sun: Sun, moon: Moon };
 
   return (
-    <Card className="border-2 border-primary/30 bg-white">
+    <Card className="border-primary/30 border-2 bg-white">
       <CardHeader className="pb-3">
-        <Label className="text-sm font-semibold text-primary">{label}</Label>
+        <Label className="text-primary text-sm font-semibold">{label}</Label>
       </CardHeader>
       <CardContent className="p-4 pt-0">
         <RadioGroup value={value} onValueChange={onChange} className="grid grid-cols-3 gap-2">
@@ -28,25 +28,25 @@ export default function TimeSlotPicker({ label, value, onChange, error }: TimeSl
             return (
               <label
                 key={slot.value}
-                className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 cursor-pointer transition-all ${
+                className={`flex cursor-pointer flex-col items-center gap-2 rounded-lg border-2 p-3 transition-all ${
                   value === slot.value
-                    ? 'border-primary bg-primary/5 shadow-md'
-                    : 'border-gray-200 hover:border-primary/50'
+                    ? "border-primary bg-primary/5 shadow-md"
+                    : "hover:border-primary/50 border-gray-200"
                 }`}
               >
                 <RadioGroupItem value={slot.value} className="sr-only" />
-                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Icon className="h-5 w-5 text-primary" />
+                <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-lg">
+                  <Icon className="text-primary h-5 w-5" />
                 </div>
                 <div className="text-center">
                   <div className="text-sm font-semibold">{slot.label}</div>
-                  <div className="text-xs text-muted-foreground">{slot.time}</div>
+                  <div className="text-muted-foreground text-xs">{slot.time}</div>
                 </div>
               </label>
             );
           })}
         </RadioGroup>
-        {error && <p className="text-xs text-destructive mt-2">{error}</p>}
+        {error && <p className="text-destructive mt-2 text-xs">{error}</p>}
       </CardContent>
     </Card>
   );

@@ -18,15 +18,15 @@ interface StatsCardProps {
 
 export function StatsCard({ label, value, icon: Icon, trend, badge }: StatsCardProps) {
   return (
-    <Card className="bg-card border-border hover:border-primary/50 transition-colors rounded-md">
-      <CardContent className="pt-8 pb-8 px-4">
+    <Card className="bg-card border-border hover:border-primary/50 rounded-md transition-colors">
+      <CardContent className="px-4 pt-8 pb-8">
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <p className="text-base text-muted-foreground mb-2">{label}</p>
-            <h3 className="text-6xl font-bold text-foreground">{value}</h3>
+            <p className="text-muted-foreground mb-2 text-base">{label}</p>
+            <h3 className="text-foreground text-6xl font-bold">{value}</h3>
 
             {trend && (
-              <div className="flex items-center gap-1 mt-2">
+              <div className="mt-2 flex items-center gap-1">
                 {trend.isPositive ? (
                   <TrendingUp className="h-3 w-3 text-green-500" />
                 ) : (
@@ -41,7 +41,7 @@ export function StatsCard({ label, value, icon: Icon, trend, badge }: StatsCardP
                   {trend.isPositive ? "+" : ""}
                   {trend.value.toFixed(1)}%
                 </span>
-                <span className="text-xs text-muted-foreground">vs last month</span>
+                <span className="text-muted-foreground text-xs">vs last month</span>
               </div>
             )}
 
@@ -49,10 +49,13 @@ export function StatsCard({ label, value, icon: Icon, trend, badge }: StatsCardP
               <div className="mt-2">
                 <span
                   className={cn(
-                    "inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium",
-                    badge.variant === "warning" && "bg-orange-500/5 text-orange-400/80 border border-orange-500/20",
-                    badge.variant === "success" && "bg-green-500/5 text-green-400/80 border border-green-500/20",
-                    badge.variant === "default" && "bg-primary/5 text-primary/80 border border-primary/20"
+                    "inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium",
+                    badge.variant === "warning" &&
+                      "border border-orange-500/20 bg-orange-500/5 text-orange-400/80",
+                    badge.variant === "success" &&
+                      "border border-green-500/20 bg-green-500/5 text-green-400/80",
+                    badge.variant === "default" &&
+                      "bg-primary/5 text-primary/80 border-primary/20 border"
                   )}
                 >
                   {badge.text}
@@ -61,7 +64,7 @@ export function StatsCard({ label, value, icon: Icon, trend, badge }: StatsCardP
             )}
           </div>
 
-          <div className="h-12 w-12 rounded-md bg-primary flex items-center justify-center flex-shrink-0">
+          <div className="bg-primary flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-md">
             <Icon className="h-6 w-6 text-white" />
           </div>
         </div>

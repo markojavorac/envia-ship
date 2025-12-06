@@ -15,7 +15,7 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-4">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatsCard
           label="Total Orders"
           value={metrics.totalOrders.toLocaleString()}
@@ -41,9 +41,7 @@ export default function AdminDashboard() {
           value={metrics.pendingCount}
           icon={Clock}
           badge={
-            metrics.pendingCount > 10
-              ? { text: "Needs attention", variant: "warning" }
-              : undefined
+            metrics.pendingCount > 10 ? { text: "Needs attention", variant: "warning" } : undefined
           }
         />
 
@@ -55,7 +53,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {/* Revenue Chart - spans 2 columns on large screens */}
         <div className="lg:col-span-2">
           <RevenueChart data={revenueData} />

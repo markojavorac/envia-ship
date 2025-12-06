@@ -8,34 +8,34 @@ export interface DashboardMetrics {
   pendingCount: number;
   avgOrderValue: number;
   revenueGrowth: number; // Percentage change from previous period
-  ordersGrowth: number;  // Percentage change from previous period
+  ordersGrowth: number; // Percentage change from previous period
 }
 
 export interface RevenueDataPoint {
-  date: string;         // Formatted date (e.g., "Jan 15")
-  revenue: number;      // Total revenue for that week
-  orderCount: number;   // Number of orders for that week
-  weekStart: Date;      // Week start date for sorting
+  date: string; // Formatted date (e.g., "Jan 15")
+  revenue: number; // Total revenue for that week
+  orderCount: number; // Number of orders for that week
+  weekStart: Date; // Week start date for sorting
 }
 
 export interface CategoryDataPoint {
-  category: string;     // Category label
-  value: number;        // Order count
-  percentage: number;   // Percentage of total
-  fill: string;         // Color for chart
+  category: string; // Category label
+  value: number; // Order count
+  percentage: number; // Percentage of total
+  fill: string; // Color for chart
 }
 
 export interface ZoneDataPoint {
-  zone: string;         // Zone label (e.g., "Zona 1")
-  orderCount: number;   // Number of orders
-  revenue: number;      // Total revenue from zone
+  zone: string; // Zone label (e.g., "Zona 1")
+  orderCount: number; // Number of orders
+  revenue: number; // Total revenue from zone
 }
 
 export interface ProductSalesDataPoint {
-  productName: string;  // Product name (truncated if needed)
-  unitsSold: number;    // Total units sold
-  revenue: number;      // Total revenue from product
-  productId: string;    // Product ID for reference
+  productName: string; // Product name (truncated if needed)
+  unitsSold: number; // Total units sold
+  revenue: number; // Total revenue from product
+  productId: string; // Product ID for reference
 }
 
 /**
@@ -47,12 +47,10 @@ export function calculateMetrics(orders: Order[]): DashboardMetrics {
   const sixtyDaysAgo = subDays(now, 60);
 
   // Current period (last 30 days)
-  const currentPeriodOrders = orders.filter(
-    o => new Date(o.createdAt) >= thirtyDaysAgo
-  );
+  const currentPeriodOrders = orders.filter((o) => new Date(o.createdAt) >= thirtyDaysAgo);
 
   // Previous period (31-60 days ago)
-  const previousPeriodOrders = orders.filter(o => {
+  const previousPeriodOrders = orders.filter((o) => {
     const orderDate = new Date(o.createdAt);
     return orderDate >= sixtyDaysAgo && orderDate < thirtyDaysAgo;
   });
@@ -60,21 +58,21 @@ export function calculateMetrics(orders: Order[]): DashboardMetrics {
   // Calculate current metrics
   const totalOrders = orders.length;
   const totalRevenue = orders.reduce((sum, order) => sum + order.totalCost, 0);
-  const pendingCount = orders.filter(o => o.status === "pending").length;
+  const pendingCount = orders.filter((o) => o.status === "pending").length;
   const avgOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
 
   // Calculate growth percentages
   const currentRevenue = currentPeriodOrders.reduce((sum, o) => sum + o.totalCost, 0);
   const previousRevenue = previousPeriodOrders.reduce((sum, o) => sum + o.totalCost, 0);
-  const revenueGrowth = previousRevenue > 0
-    ? ((currentRevenue - previousRevenue) / previousRevenue) * 100
-    : 0;
+  const revenueGrowth =
+    previousRevenue > 0 ? ((currentRevenue - previousRevenue) / previousRevenue) * 100 : 0;
 
   const currentOrderCount = currentPeriodOrders.length;
   const previousOrderCount = previousPeriodOrders.length;
-  const ordersGrowth = previousOrderCount > 0
-    ? ((currentOrderCount - previousOrderCount) / previousOrderCount) * 100
-    : 0;
+  const ordersGrowth =
+    previousOrderCount > 0
+      ? ((currentOrderCount - previousOrderCount) / previousOrderCount) * 100
+      : 0;
 
   return {
     totalOrders,
@@ -94,14 +92,12 @@ export function aggregateRevenueByWeek(orders: Order[]): RevenueDataPoint[] {
   const ninetyDaysAgo = subDays(now, 90);
 
   // Filter orders from last 90 days
-  const recentOrders = orders.filter(
-    o => new Date(o.createdAt) >= ninetyDaysAgo
-  );
+  const recentOrders = orders.filter((o) => new Date(o.createdAt) >= ninetyDaysAgo);
 
   // Group by week
   const weekMap = new Map<string, { revenue: number; count: number; weekStart: Date }>();
 
-  recentOrders.forEach(order => {
+  recentOrders.forEach((order) => {
     const orderDate = new Date(order.createdAt);
     const weekStart = startOfWeek(orderDate, { weekStartsOn: 1 }); // Monday start
     const weekKey = weekStart.toISOString();
@@ -115,14 +111,12 @@ export function aggregateRevenueByWeek(orders: Order[]): RevenueDataPoint[] {
   });
 
   // Convert to array and format
-  const dataPoints: RevenueDataPoint[] = Array.from(weekMap.entries()).map(
-    ([_, data]) => ({
-      date: format(data.weekStart, "MMM d"),
-      revenue: Math.round(data.revenue * 100) / 100, // Round to 2 decimals
-      orderCount: data.count,
-      weekStart: data.weekStart,
-    })
-  );
+  const dataPoints: RevenueDataPoint[] = Array.from(weekMap.entries()).map(([_, data]) => ({
+    date: format(data.weekStart, "MMM d"),
+    revenue: Math.round(data.revenue * 100) / 100, // Round to 2 decimals
+    orderCount: data.count,
+    weekStart: data.weekStart,
+  }));
 
   // Sort by week start date
   return dataPoints.sort((a, b) => a.weekStart.getTime() - b.weekStart.getTime());
@@ -135,7 +129,7 @@ export function aggregateOrdersByCategory(orders: Order[]): CategoryDataPoint[] 
   const categoryMap = new Map<ProductCategory, number>();
 
   // Count orders by category
-  orders.forEach(order => {
+  orders.forEach((order) => {
     const category = order.product.category;
     categoryMap.set(category, (categoryMap.get(category) || 0) + 1);
   });
@@ -170,7 +164,7 @@ export function aggregateOrdersByZone(orders: Order[]): ZoneDataPoint[] {
   const zoneMap = new Map<string, { count: number; revenue: number }>();
 
   // Count orders and sum revenue by zone
-  orders.forEach(order => {
+  orders.forEach((order) => {
     const zone = order.deliveryZone;
     const existing = zoneMap.get(zone) || { count: 0, revenue: 0 };
     zoneMap.set(zone, {
@@ -180,13 +174,11 @@ export function aggregateOrdersByZone(orders: Order[]): ZoneDataPoint[] {
   });
 
   // Convert to array with formatted zone labels
-  const dataPoints: ZoneDataPoint[] = Array.from(zoneMap.entries()).map(
-    ([zone, data]) => ({
-      zone: zone.replace("zona-", "Zona "),
-      orderCount: data.count,
-      revenue: Math.round(data.revenue * 100) / 100,
-    })
-  );
+  const dataPoints: ZoneDataPoint[] = Array.from(zoneMap.entries()).map(([zone, data]) => ({
+    zone: zone.replace("zona-", "Zona "),
+    orderCount: data.count,
+    revenue: Math.round(data.revenue * 100) / 100,
+  }));
 
   // Sort by zone name
   return dataPoints.sort((a, b) => {
@@ -203,7 +195,7 @@ export function getTopProducts(orders: Order[], limit: number = 10): ProductSale
   const productMap = new Map<string, { name: string; units: number; revenue: number }>();
 
   // Aggregate by product
-  orders.forEach(order => {
+  orders.forEach((order) => {
     const productId = order.product.id;
     const existing = productMap.get(productId) || {
       name: order.product.name,
@@ -229,9 +221,7 @@ export function getTopProducts(orders: Order[], limit: number = 10): ProductSale
   );
 
   // Sort by units sold (descending) and take top N
-  return dataPoints
-    .sort((a, b) => b.unitsSold - a.unitsSold)
-    .slice(0, limit);
+  return dataPoints.sort((a, b) => b.unitsSold - a.unitsSold).slice(0, limit);
 }
 
 /**
@@ -245,7 +235,7 @@ export function getOrderStatusDistribution(orders: Order[]): Record<string, numb
     delivered: 0,
   };
 
-  orders.forEach(order => {
+  orders.forEach((order) => {
     statusMap[order.status]++;
   });
 

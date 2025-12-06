@@ -19,16 +19,12 @@ export function CategoryTabs() {
   };
 
   return (
-    <div className="sticky top-14 z-40 bg-white border-b border-gray-200 py-4">
-      <Tabs
-        value={filterState.category}
-        onValueChange={handleCategoryChange}
-        className="w-full"
-      >
-        <TabsList className="w-full h-auto justify-start bg-transparent gap-2 p-0">
+    <div className="sticky top-14 z-40 border-b border-gray-200 bg-white py-4">
+      <Tabs value={filterState.category} onValueChange={handleCategoryChange} className="w-full">
+        <TabsList className="h-auto w-full justify-start gap-2 bg-transparent p-0">
           <TabsTrigger
             value="all"
-            className="font-bold data-[state=active]:bg-primary data-[state=active]:text-white px-6 py-3 rounded-lg"
+            className="data-[state=active]:bg-primary rounded-lg px-6 py-3 font-bold data-[state=active]:text-white"
           >
             All Products
           </TabsTrigger>
@@ -38,7 +34,7 @@ export function CategoryTabs() {
               <TabsTrigger
                 key={category.value}
                 value={category.value}
-                className="font-bold data-[state=active]:bg-primary data-[state=active]:text-white px-6 py-3 rounded-lg flex items-center gap-2"
+                className="data-[state=active]:bg-primary flex items-center gap-2 rounded-lg px-6 py-3 font-bold data-[state=active]:text-white"
               >
                 <Icon className="h-4 w-4" />
                 {category.label}
