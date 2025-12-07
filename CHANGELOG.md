@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **Driver Assist: Redesigned Button Layout & Visual Hierarchy**
+  - **Consolidated info display**: Merged eye/view modal into expandable "Info" dropdown
+    - Info dropdown now shows all ticket details: recipient, phone, notes, coordinates, ticket photo
+    - Removed redundant modal, streamlined interaction
+  - **3-button layout**: Navigate, Done/Delete, Info buttons evenly spaced (33% width each)
+  - **Solid color buttons** (no outlines) for better clarity:
+    - Navigate: Orange (primary brand color)
+    - Done: Green (success/completion)
+    - Delete: Red (destructive action, when ticket completed)
+    - Info: Navy/Secondary (information)
+  - **Clear visual hierarchy for Up Next card**:
+    - Up Next: Gray background + **4px orange border** (clearly stands out)
+    - Queue cards: Gray background + normal border (same as before)
+    - Orange outline makes active ticket unmistakable
+  - **Improved header layout**: Ticket ID and timestamp inline with number badge
+    - Eliminates empty space, better balance
+    - More compact, information-dense design
+  - **Mobile-optimized**: Buttons stack vertically on small screens, remain evenly distributed
+  - Files updated: `TicketCard.tsx:1-500`
+
 ### Added
 - **Driver Assist: Smooth Task Completion Animations**
   - **Swipe-away animation**: Completed tickets slide right and fade out (0.5s)
