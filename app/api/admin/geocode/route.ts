@@ -49,9 +49,78 @@ function parseNominatimResult(result: any): GeocodingResult {
 }
 
 /**
+ * Generate fallback queries for Guatemala addresses
+ * Tries progressively simpler queries if initial search fails
+ */
+function generateFallbackQueries(originalQuery: string): string[] {
+  const queries: string[] = [originalQuery];
+
+  // Extract zone if present (e.g., "Zona 10")
+  const zoneMatch = originalQuery.match(/Zona\s+(\d+)/i);
+
+  if (zoneMatch) {
+    const zone = zoneMatch[0]; // "Zona 10"
+
+    // Try just the zone + city
+    queries.push(`${zone}, Guatemala City, Guatemala`);
+    queries.push(`${zone}, Ciudad de Guatemala, Guatemala`);
+  }
+
+  // Try removing specific addresses/numbers but keeping landmarks
+  const withoutNumbers = originalQuery.replace(/\d+-\d+/g, "").replace(/\bKm\.?\s*[\d.]+/gi, "");
+  if (withoutNumbers !== originalQuery && withoutNumbers.trim().length > 3) {
+    queries.push(withoutNumbers);
+  }
+
+  // Try extracting landmark/building name
+  const landmarkMatch = originalQuery.match(
+    /(Centro\s+Comercial\s+[\w\s]+|Mall\s+[\w\s]+|Oakland\s+Mall)/i
+  );
+  if (landmarkMatch) {
+    queries.push(`${landmarkMatch[0]}, Guatemala City, Guatemala`);
+  }
+
+  // Last resort: just Guatemala City center (for Zona addresses)
+  if (zoneMatch) {
+    queries.push("Guatemala City, Guatemala");
+  }
+
+  return [...new Set(queries)]; // Remove duplicates
+}
+
+/**
+ * Fetch geocoding results from Nominatim with rate limiting
+ */
+async function fetchNominatim(query: string): Promise<any[]> {
+  await rateLimitCheck();
+
+  const nominatimUrl = new URL("https://nominatim.openstreetmap.org/search");
+  nominatimUrl.searchParams.set("q", query);
+  nominatimUrl.searchParams.set("format", "json");
+  nominatimUrl.searchParams.set("countrycodes", "gt");
+  nominatimUrl.searchParams.set("limit", "5");
+  nominatimUrl.searchParams.set("addressdetails", "1");
+
+  console.log(`[Geocode] Trying: ${nominatimUrl.toString()}`);
+
+  const response = await fetch(nominatimUrl.toString(), {
+    headers: {
+      "User-Agent": "envia-ship-route-planner/1.0",
+      Accept: "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Nominatim API error: ${response.status} ${response.statusText}`);
+  }
+
+  return response.json();
+}
+
+/**
  * GET /api/admin/geocode
  *
- * Geocode an address using OpenStreetMap Nominatim
+ * Geocode an address using OpenStreetMap Nominatim with fallback strategies
  *
  * Query params:
  * - q: Address query string (required)
@@ -87,70 +156,50 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // Enhance query with Guatemala City context if not already present
-    // This prioritizes Guatemala City results over other cities
-    let enhancedQuery = query;
-    const hasGuatemalaContext =
-      /guatemala/i.test(query) || /guatemalteco/i.test(query) || /gt\b/i.test(query);
+    console.log(`[Geocode] Original query: "${query}"`);
 
-    if (!hasGuatemalaContext) {
-      enhancedQuery = `${query}, Guatemala City, Guatemala`;
-      console.log(`[Geocode] Enhanced query: "${query}" -> "${enhancedQuery}"`);
+    // Generate fallback queries
+    const fallbackQueries = generateFallbackQueries(query);
+    console.log(`[Geocode] Generated ${fallbackQueries.length} fallback queries:`, fallbackQueries);
+
+    let results: GeocodingResult[] = [];
+    let successfulQuery = "";
+
+    // Try each query until we get results
+    for (const fallbackQuery of fallbackQueries) {
+      try {
+        const data = await fetchNominatim(fallbackQuery);
+
+        if (Array.isArray(data) && data.length > 0) {
+          results = data.map(parseNominatimResult);
+          successfulQuery = fallbackQuery;
+          console.log(`[Geocode] ✓ Found ${results.length} results with: "${fallbackQuery}"`);
+          break;
+        } else {
+          console.log(`[Geocode] ✗ No results for: "${fallbackQuery}"`);
+        }
+      } catch (error) {
+        console.error(`[Geocode] Error with query "${fallbackQuery}":`, error);
+        // Continue to next fallback
+      }
     }
 
-    console.log(`[Geocode] Processing query: "${enhancedQuery}"`);
-
-    // Rate limiting
-    await rateLimitCheck();
-
-    // Build Nominatim API URL
-    const nominatimUrl = new URL("https://nominatim.openstreetmap.org/search");
-    nominatimUrl.searchParams.set("q", enhancedQuery);
-    nominatimUrl.searchParams.set("format", "json");
-    nominatimUrl.searchParams.set("countrycodes", "gt"); // Guatemala only
-    nominatimUrl.searchParams.set("limit", "5"); // Top 5 results
-    nominatimUrl.searchParams.set("addressdetails", "1");
-
-    console.log(`[Geocode] Nominatim URL: ${nominatimUrl.toString()}`);
-
-    // Call Nominatim
-    const response = await fetch(nominatimUrl.toString(), {
-      headers: {
-        "User-Agent": "envia-ship-route-planner/1.0", // Required by Nominatim
-        Accept: "application/json",
-      },
-    });
-
-    console.log(`[Geocode] Nominatim response status: ${response.status} ${response.statusText}`);
-
-    if (!response.ok) {
-      console.error(`[Geocode] Nominatim API error: ${response.status} ${response.statusText}`);
-      const errorText = await response.text();
-      console.error(`[Geocode] Error response body: ${errorText}`);
-      return NextResponse.json(
-        {
-          success: false,
-          error: `Geocoding service error: ${response.status} ${response.statusText}`,
-        },
-        { status: 503 }
-      );
-    }
-
-    const data = await response.json();
-    console.log(`[Geocode] Nominatim raw response:`, JSON.stringify(data));
-
-    // Parse results
-    const results: GeocodingResult[] = Array.isArray(data) ? data.map(parseNominatimResult) : [];
-
-    console.log(`[Geocode] Parsed ${results.length} results`);
     if (results.length === 0) {
-      console.warn(`[Geocode] No results found for query: "${enhancedQuery}"`);
+      console.warn(`[Geocode] All fallback queries failed for: "${query}"`);
+      return NextResponse.json({
+        success: false,
+        error:
+          "Could not find this address. Try simplifying (e.g., just 'Zona 10, Guatemala City')",
+        results: [],
+        count: 0,
+      });
     }
 
     return NextResponse.json({
       success: true,
       results,
       count: results.length,
+      query: successfulQuery, // Return which query worked
     });
   } catch (error) {
     console.error("Geocoding API error:", error);

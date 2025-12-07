@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Driver Assist Navigation: Fixed Waze Deep Links**
+  - **Corrected Waze URL format**: Changed from `https://www.waze.com/ul` to `https://waze.com/ul` (official format per Google Developers documentation)
+  - **Removed unreliable waze:// scheme**: Eliminated custom URL scheme that fails silently when Waze app isn't installed
+  - **Simplified navigation logic**: Universal deep link now automatically opens Waze app if installed, otherwise opens Waze web
+  - **Mobile behavior**: Single `window.location.href` call opens Waze seamlessly
+  - **Desktop behavior**: Opens Google Maps (Waze is primarily mobile-focused)
+  - Files updated: `driver-assist-navigation.ts:20-94`
+
+### Improved
+- **Driver Assist Geocoding: Smart Fallback Strategies for Guatemala Addresses**
+  - **Progressive query simplification**: Tries multiple query variations when initial geocoding fails
+    - Extracts landmarks (e.g., "Oakland Mall") and searches separately
+    - Falls back to zone-only searches (e.g., "Zona 10, Guatemala City")
+    - Tries Spanish variations ("Ciudad de Guatemala")
+    - Last resort: city center coordinates
+  - **Better error messages**: Shows helpful suggestions when geocoding fails
+    - Error: "Could not find this address. Try simplifying (e.g., just 'Zona 10, Guatemala City')"
+  - **Improved coverage**: Successfully geocodes more Guatemala addresses despite OpenStreetMap's limited zone-based data
+  - Files updated: `geocode/route.ts:55-200`, `driver-assist-geocoding.ts:50-56`
+
 ## [0.2.0] - 2025-12-06
 
 ### Changed

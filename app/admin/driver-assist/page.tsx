@@ -138,9 +138,7 @@ export default function DriverAssistPage() {
       {/* STICKY "UP NEXT" SECTION */}
       {pendingTickets.length > 0 && (
         <div className="bg-background sticky top-16 z-10 pb-3">
-          <h3 className="text-primary mb-1.5 text-xs font-bold uppercase tracking-wide">
-            Up Next
-          </h3>
+          <h3 className="text-primary mb-1.5 text-xs font-bold tracking-wide uppercase">Up Next</h3>
           <TicketCard
             ticket={pendingTickets[0]}
             ticketNumber={1}
@@ -161,24 +159,47 @@ export default function DriverAssistPage() {
             {pendingTickets.slice(1).map((ticket, index) => {
               const totalCards = pendingTickets.slice(1).length;
               const zIndex = totalCards - index;
+              const VISIBLE_HEIGHT = 28; // px of each card visible (more overlap)
+              const darknessLevel = Math.min(index * 0.15, 0.6); // Progressive darkening
+
               return (
                 <div
                   key={ticket.id}
                   className="relative"
+                  // eslint-disable-next-line custom/no-inline-styles
                   style={{
                     zIndex,
-                    marginTop: index === 0 ? '0' : '-12px',
+                    marginTop: index === 0 ? "0" : `-${VISIBLE_HEIGHT}px`,
                   }}
                 >
-                  <TicketCard
-                    ticket={ticket}
-                    ticketNumber={index + 2}
-                    variant="default"
-                    onNavigate={handleNavigate}
-                    onComplete={handleComplete}
-                    onDelete={handleDelete}
-                    onUpdateCoordinates={handleUpdateCoordinates}
-                  />
+                  <div
+                    className="relative rounded-lg transition-all duration-200"
+                    // eslint-disable-next-line custom/no-inline-styles
+                    style={{
+                      boxShadow:
+                        index === 0
+                          ? "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(255, 140, 0, 0.2)"
+                          : `0 ${15 - index * 3}px ${20 - index * 3}px -3px rgba(0, 0, 0, ${0.15 - index * 0.02})`,
+                    }}
+                  >
+                    <div
+                      // eslint-disable-next-line custom/no-admin-hardcoded-colors, custom/no-inline-styles
+                      className="pointer-events-none absolute inset-0 rounded-lg bg-black transition-opacity duration-200"
+                      style={{
+                        opacity: darknessLevel,
+                        zIndex: 10,
+                      }}
+                    />
+                    <TicketCard
+                      ticket={ticket}
+                      ticketNumber={index + 2}
+                      variant="default"
+                      onNavigate={handleNavigate}
+                      onComplete={handleComplete}
+                      onDelete={handleDelete}
+                      onUpdateCoordinates={handleUpdateCoordinates}
+                    />
+                  </div>
                 </div>
               );
             })}

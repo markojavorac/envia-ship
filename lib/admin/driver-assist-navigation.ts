@@ -10,20 +10,19 @@ import type { NavigationParams } from "./driver-assist-types";
 /**
  * Generate Waze deep link for navigation
  *
- * Mobile format: waze://?ll=destLat,destLng&navigate=yes
- * Web fallback: https://www.waze.com/ul?ll=destLat,destLng&navigate=yes
- * Waze will automatically route from the user's current location
+ * Official format: https://waze.com/ul?ll=destLat,destLng&navigate=yes
+ * This URL automatically opens the Waze app if installed on mobile,
+ * or falls back to the web version if not available.
+ * Waze will automatically route from the user's current location.
+ *
+ * Documentation: https://developers.google.com/waze/deeplinks
  */
-export function generateWazeUrl(params: NavigationParams, useMobileScheme = false): string {
+export function generateWazeUrl(params: NavigationParams): string {
   const { destination } = params;
 
-  if (useMobileScheme) {
-    // Use waze:// scheme for mobile apps
-    return `waze://?ll=${destination.lat},${destination.lng}&navigate=yes`;
-  } else {
-    // Use web URL that redirects to app or opens in browser
-    return `https://www.waze.com/ul?ll=${destination.lat},${destination.lng}&navigate=yes`;
-  }
+  // Use universal deep link (works for both app and web)
+  // Note: Must be https://waze.com (NOT www.waze.com)
+  return `https://waze.com/ul?ll=${destination.lat},${destination.lng}&navigate=yes`;
 }
 
 /**
@@ -66,27 +65,21 @@ export function isWazeAvailable(): boolean {
 /**
  * Open navigation in Waze (mobile) or Google Maps (desktop/fallback)
  *
+ * On mobile: Opens Waze app if installed, otherwise opens Waze web
+ * On desktop: Opens Google Maps
+ *
  * Returns the navigation app/service used: "waze" | "google-maps"
  */
 export function openNavigation(params: NavigationParams): "waze" | "google-maps" {
-  const googleMapsUrl = generateGoogleMapsUrl(params);
-
   if (isMobileDevice()) {
-    // On mobile, use waze:// scheme first, with web fallback
-    const wazeUrl = generateWazeUrl(params, true);
-
-    // Try to open Waze app
+    // On mobile, use Waze universal deep link
+    // This automatically opens the app if installed, or web if not
+    const wazeUrl = generateWazeUrl(params);
     window.location.href = wazeUrl;
-
-    // Fallback to web Waze after a short delay if app doesn't open
-    setTimeout(() => {
-      const wazeWebUrl = generateWazeUrl(params, false);
-      window.open(wazeWebUrl, "_blank");
-    }, 1000);
-
     return "waze";
   } else {
     // On desktop, use Google Maps (Waze is primarily mobile)
+    const googleMapsUrl = generateGoogleMapsUrl(params);
     window.open(googleMapsUrl, "_blank");
     return "google-maps";
   }
@@ -96,13 +89,8 @@ export function openNavigation(params: NavigationParams): "waze" | "google-maps"
  * Open Waze navigation explicitly
  */
 export function openWaze(params: NavigationParams): void {
-  if (isMobileDevice()) {
-    const wazeUrl = generateWazeUrl(params, true);
-    window.location.href = wazeUrl;
-  } else {
-    const wazeUrl = generateWazeUrl(params, false);
-    window.open(wazeUrl, "_blank");
-  }
+  const wazeUrl = generateWazeUrl(params);
+  window.location.href = wazeUrl;
 }
 
 /**

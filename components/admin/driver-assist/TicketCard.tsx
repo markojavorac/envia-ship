@@ -139,21 +139,26 @@ export function TicketCard({
                 <span
                   className={cn(
                     "shrink-0 font-bold",
-                    isUpNext ? "text-sm text-white" : "text-xs text-foreground"
+                    isUpNext ? "text-sm text-white" : "text-foreground text-xs"
                   )}
                 >
                   #{ticket.ticketNumber}
                 </span>
               )}
               {ticket.isCompleted && (
-                // eslint-disable-next-line custom/no-admin-hardcoded-colors
-                <Badge className={cn("shrink-0 bg-green-500 text-white", isUpNext && "text-sm")}>
+                <Badge
+                  // eslint-disable-next-line custom/no-admin-hardcoded-colors
+                  className={cn("shrink-0 bg-green-500 text-white", isUpNext && "text-sm")}
+                >
                   <CheckCircle className={cn(isUpNext ? "mr-1 h-4 w-4" : "mr-1 h-3 w-3")} />
                   Done
                 </Badge>
               )}
               <span
-                className={cn("truncate", isUpNext ? "text-sm text-white/80" : "text-xs text-muted-foreground")}
+                className={cn(
+                  "truncate",
+                  isUpNext ? "text-sm text-white/80" : "text-muted-foreground text-xs"
+                )}
               >
                 {ticket.isCompleted && ticket.completedAt
                   ? `Completed ${formatDistanceToNow(ticket.completedAt, { addSuffix: true })}`
@@ -165,17 +170,25 @@ export function TicketCard({
             <div className={cn(isUpNext ? "space-y-2" : "space-y-1")}>
               <div className="flex items-center gap-1.5">
                 <MapPin
-                  className={cn("shrink-0", isUpNext ? "h-4 w-4 text-white" : "h-3.5 w-3.5 text-primary")}
+                  className={cn(
+                    "shrink-0",
+                    isUpNext ? "h-4 w-4 text-white" : "text-primary h-3.5 w-3.5"
+                  )}
                 />
                 <span
                   className={cn(
                     "font-medium",
-                    isUpNext ? "text-sm text-white/90" : "text-xs text-muted-foreground"
+                    isUpNext ? "text-sm text-white/90" : "text-muted-foreground text-xs"
                   )}
                 >
                   From:
                 </span>
-                <span className={cn("truncate", isUpNext ? "text-sm text-white" : "text-xs text-foreground")}>
+                <span
+                  className={cn(
+                    "truncate",
+                    isUpNext ? "text-sm text-white" : "text-foreground text-xs"
+                  )}
+                >
                   {ticket.originAddress.length > 60
                     ? `${ticket.originAddress.slice(0, 60)}...`
                     : ticket.originAddress}
@@ -183,17 +196,25 @@ export function TicketCard({
               </div>
               <div className="flex items-center gap-1.5">
                 <MapPin
-                  className={cn("shrink-0", isUpNext ? "h-4 w-4 text-white" : "h-3.5 w-3.5 text-destructive")}
+                  className={cn(
+                    "shrink-0",
+                    isUpNext ? "h-4 w-4 text-white" : "text-destructive h-3.5 w-3.5"
+                  )}
                 />
                 <span
                   className={cn(
                     "font-medium",
-                    isUpNext ? "text-sm text-white/90" : "text-xs text-muted-foreground"
+                    isUpNext ? "text-sm text-white/90" : "text-muted-foreground text-xs"
                   )}
                 >
                   To:
                 </span>
-                <span className={cn("truncate", isUpNext ? "text-sm text-white" : "text-xs text-foreground")}>
+                <span
+                  className={cn(
+                    "truncate",
+                    isUpNext ? "text-sm text-white" : "text-foreground text-xs"
+                  )}
+                >
                   {ticket.destinationAddress.length > 60
                     ? `${ticket.destinationAddress.slice(0, 60)}...`
                     : ticket.destinationAddress}
@@ -258,7 +279,9 @@ export function TicketCard({
                 variant="ghost"
                 size={isUpNext ? "default" : "sm"}
                 className={cn(
-                  isUpNext ? "text-white hover:bg-white/20 hover:text-white" : "text-muted-foreground hover:text-foreground"
+                  isUpNext
+                    ? "text-white hover:bg-white/20 hover:text-white"
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 {isExpanded ? (
@@ -273,24 +296,56 @@ export function TicketCard({
 
         {/* Collapsible Details Section */}
         {isExpanded && (ticket.recipientName || ticket.recipientPhone || ticket.notes) && (
-          <div className={cn("border-t px-4 pt-3 pb-4", isUpNext ? "border-white/20" : "border-border")}>
+          <div
+            className={cn(
+              "border-t px-4 pt-3 pb-4",
+              isUpNext ? "border-white/20" : "border-border"
+            )}
+          >
             <div className="grid gap-2 md:grid-cols-3">
               {ticket.recipientName && (
                 <div>
-                  <p className={cn("text-xs font-semibold uppercase", isUpNext ? "text-white/80" : "text-muted-foreground")}>Recipient</p>
-                  <p className={cn("text-sm", isUpNext ? "text-white" : "text-foreground")}>{ticket.recipientName}</p>
+                  <p
+                    className={cn(
+                      "text-xs font-semibold uppercase",
+                      isUpNext ? "text-white/80" : "text-muted-foreground"
+                    )}
+                  >
+                    Recipient
+                  </p>
+                  <p className={cn("text-sm", isUpNext ? "text-white" : "text-foreground")}>
+                    {ticket.recipientName}
+                  </p>
                 </div>
               )}
               {ticket.recipientPhone && (
                 <div>
-                  <p className={cn("text-xs font-semibold uppercase", isUpNext ? "text-white/80" : "text-muted-foreground")}>Phone</p>
-                  <p className={cn("text-sm", isUpNext ? "text-white" : "text-foreground")}>{ticket.recipientPhone}</p>
+                  <p
+                    className={cn(
+                      "text-xs font-semibold uppercase",
+                      isUpNext ? "text-white/80" : "text-muted-foreground"
+                    )}
+                  >
+                    Phone
+                  </p>
+                  <p className={cn("text-sm", isUpNext ? "text-white" : "text-foreground")}>
+                    {ticket.recipientPhone}
+                  </p>
                 </div>
               )}
               {ticket.notes && (
                 <div className="md:col-span-3">
-                  <p className={cn("text-xs font-semibold uppercase", isUpNext ? "text-white/80" : "text-muted-foreground")}>Notes</p>
-                  <p className={cn("text-sm", isUpNext ? "text-white" : "text-foreground")}>{ticket.notes}</p>
+                  <p
+                    className={cn(
+                      "text-xs font-semibold uppercase",
+                      isUpNext ? "text-white/80" : "text-muted-foreground"
+                    )}
+                  >
+                    Notes
+                  </p>
+                  <p className={cn("text-sm", isUpNext ? "text-white" : "text-foreground")}>
+                    {ticket.notes}
+                  </p>
                 </div>
               )}
             </div>

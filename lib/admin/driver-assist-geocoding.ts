@@ -51,7 +51,7 @@ export async function geocodeAddress(
       return {
         success: false,
         coordinates: null,
-        error: "No results found for this address",
+        error: data.error || "No results found for this address",
       };
     }
 

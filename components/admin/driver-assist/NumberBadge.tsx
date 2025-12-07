@@ -19,7 +19,7 @@ export function NumberBadge({ number, size = "sm", variant = "default" }: Number
         size === "lg" && "h-10 w-10 text-base",
         variant === "default" && "bg-primary text-white",
         variant === "muted" && "bg-muted text-muted-foreground",
-        variant === "inverse" && "bg-white text-primary"
+        variant === "inverse" && "text-primary bg-white"
       )}
     >
       {number}
