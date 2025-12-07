@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Truck, Sparkles } from "lucide-react";
+import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { AdminPageTitle } from "@/components/admin/ui/AdminPageTitle";
 import { AddTicketCard } from "@/components/admin/driver-assist/AddTicketCard";
@@ -136,20 +137,31 @@ export default function DriverAssistPage() {
       />
 
       {/* STICKY "UP NEXT" SECTION */}
-      {pendingTickets.length > 0 && (
-        <div className="bg-background sticky top-16 z-10 pb-3">
-          <h3 className="text-primary mb-1.5 text-xs font-bold tracking-wide uppercase">Up Next</h3>
-          <TicketCard
-            ticket={pendingTickets[0]}
-            ticketNumber={1}
-            variant="up-next"
-            onNavigate={handleNavigate}
-            onComplete={handleComplete}
-            onDelete={handleDelete}
-            onUpdateCoordinates={handleUpdateCoordinates}
-          />
-        </div>
-      )}
+      <AnimatePresence mode="wait">
+        {pendingTickets.length > 0 && (
+          <motion.div
+            key={pendingTickets[0].id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="bg-background sticky top-16 z-10 pb-3"
+          >
+            <h3 className="text-primary mb-1.5 text-xs font-bold tracking-wide uppercase">
+              Up Next
+            </h3>
+            <TicketCard
+              ticket={pendingTickets[0]}
+              ticketNumber={1}
+              variant="up-next"
+              onNavigate={handleNavigate}
+              onComplete={handleComplete}
+              onDelete={handleDelete}
+              onUpdateCoordinates={handleUpdateCoordinates}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* REMAINING PENDING TICKETS */}
       {pendingTickets.length > 1 && (

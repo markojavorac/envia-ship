@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Driver Assist: Smooth Task Completion Animations**
+  - **Swipe-away animation**: Completed tickets slide right and fade out (0.5s)
+  - **Success flash**: Green overlay briefly flashes to confirm completion
+  - **Next ticket slide-up**: Following ticket smoothly animates into "Up Next" position
+  - **Visual feedback**: Clear indication that task is complete and next one is active
+  - **Prevents double-clicks**: Animation locks interactions during transition
+  - Powered by Framer Motion for 60fps smooth animations
+  - Pattern based on proven mobile UI interactions (task managers, delivery apps)
+  - Files updated: `TicketCard.tsx:1-140`, `page.tsx:5-164`
+  - Dependencies: Added `framer-motion` for animation library
+
 ### Fixed
 - **Driver Assist Navigation: Fixed Waze Deep Links**
   - **Corrected Waze URL format**: Changed from `https://www.waze.com/ul` to `https://waze.com/ul` (official format per Google Developers documentation)
