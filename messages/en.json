@@ -526,6 +526,18 @@
         "openInGoogleMaps": "Open in Google Maps",
         "markResolved": "Mark as Resolved",
         "assignToMe": "Assign to Me"
+      },
+      "confirmation": {
+        "title": "Add Ticket to Queue?",
+        "description": "The dispatcher has shared a delivery ticket with you. Review the details below and confirm to add it to your queue.",
+        "ticketNumber": "Ticket Number",
+        "origin": "Origin Address",
+        "destination": "Destination Address",
+        "recipient": "Recipient",
+        "phone": "Phone",
+        "notes": "Notes",
+        "addToQueue": "Add to Queue",
+        "cancel": "Cancel"
       }
     },
     "routes": {

@@ -526,6 +526,18 @@
         "openInGoogleMaps": "Abrir en Google Maps",
         "markResolved": "Marcar como Resuelto",
         "assignToMe": "Asignarme"
+      },
+      "confirmation": {
+        "title": "¿Agregar Ticket a la Cola?",
+        "description": "El despachador ha compartido un ticket de entrega contigo. Revisa los detalles a continuación y confirma para agregarlo a tu cola.",
+        "ticketNumber": "Número de Ticket",
+        "origin": "Dirección de Origen",
+        "destination": "Dirección de Destino",
+        "recipient": "Destinatario",
+        "phone": "Teléfono",
+        "notes": "Notas",
+        "addToQueue": "Agregar a la Cola",
+        "cancel": "Cancelar"
       }
     },
     "routes": {

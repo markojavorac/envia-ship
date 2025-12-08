@@ -9,6 +9,7 @@ import { AdminPageTitle } from "@/components/admin/ui/AdminPageTitle";
 import { AddTicketCard } from "@/components/admin/driver-assist/AddTicketCard";
 import { AddTicketDialog } from "@/components/admin/driver-assist/AddTicketDialog";
 import { TicketCard } from "@/components/admin/driver-assist/TicketCard";
+import { TicketConfirmationDialog } from "@/components/admin/driver-assist/TicketConfirmationDialog";
 import type { DeliveryTicket } from "@/lib/admin/driver-assist-types";
 import {
   loadTickets,
@@ -19,6 +20,7 @@ import {
   loadMockTickets,
 } from "@/lib/admin/driver-assist-storage";
 import { toast } from "sonner";
+import { decodeUrlToTicket } from "@/lib/admin/ticket-url-encoding";
 
 /**
  * Driver Assist Page
@@ -35,6 +37,8 @@ export default function DriverAssistPage() {
   const [tickets, setTickets] = useState<DeliveryTicket[]>([]);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [pendingTicket, setPendingTicket] = useState<DeliveryTicket | null>(null);
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
 
   // Load tickets from localStorage on mount
   useEffect(() => {
@@ -42,6 +46,74 @@ export default function DriverAssistPage() {
     setTickets(loaded);
     setIsLoading(false);
   }, []);
+
+  // URL parameter detection for shared tickets from dispatcher
+  useEffect(() => {
+    // Skip if on server-side or still loading
+    if (typeof window === "undefined" || isLoading) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const ticketParam = params.get("ticket");
+
+    if (!ticketParam) return;
+
+    try {
+      const decoded = decodeUrlToTicket(ticketParam);
+
+      if (!decoded) {
+        toast.error("Invalid ticket URL");
+        window.history.replaceState({}, "", "/admin/driver-assist");
+        return;
+      }
+
+      // Check for duplicates by ticket number or exact address match
+      const isDuplicate = tickets.some(
+        (t) =>
+          (t.ticketNumber && decoded.ticketNumber && t.ticketNumber === decoded.ticketNumber) ||
+          (t.originAddress === decoded.originAddress &&
+            t.destinationAddress === decoded.destinationAddress)
+      );
+
+      if (isDuplicate) {
+        toast.warning("This ticket is already in your queue");
+        window.history.replaceState({}, "", "/admin/driver-assist");
+        return;
+      }
+
+      // Show confirmation dialog
+      setPendingTicket(decoded);
+      setIsConfirmationOpen(true);
+
+      // Clear URL parameter
+      window.history.replaceState({}, "", "/admin/driver-assist");
+    } catch (error) {
+      console.error("Failed to load ticket from URL:", error);
+      toast.error("Failed to load ticket from URL");
+      window.history.replaceState({}, "", "/admin/driver-assist");
+    }
+  }, [tickets, isLoading]); // Run when tickets or loading state changes
+
+  // Handle confirmation dialog actions
+  const handleConfirmTicket = () => {
+    if (!pendingTicket) return;
+
+    const updated = addTicket(pendingTicket);
+    setTickets(updated);
+
+    toast.success(
+      pendingTicket.ticketNumber
+        ? `Ticket ${pendingTicket.ticketNumber} added to queue`
+        : "Ticket added from dispatcher"
+    );
+
+    setPendingTicket(null);
+    setIsConfirmationOpen(false);
+  };
+
+  const handleCancelTicket = () => {
+    setPendingTicket(null);
+    setIsConfirmationOpen(false);
+  };
 
   const handleSaveTicket = (ticketData: {
     ticketNumber?: string;
@@ -259,6 +331,14 @@ export default function DriverAssistPage() {
         open={isAddDialogOpen}
         onOpenChange={setIsAddDialogOpen}
         onSave={handleSaveTicket}
+      />
+
+      {/* Ticket Confirmation Dialog (from dispatcher URL) */}
+      <TicketConfirmationDialog
+        open={isConfirmationOpen}
+        ticket={pendingTicket}
+        onConfirm={handleConfirmTicket}
+        onCancel={handleCancelTicket}
       />
     </div>
   );
