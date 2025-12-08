@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -14,31 +15,35 @@ import {
   ShoppingBag,
   Truck,
   MapIcon,
+  Home,
+  Calculator,
   type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const t = useTranslations("navigation");
 
   // Detect if we're in admin section
   const isAdminRoute = pathname?.startsWith("/admin");
 
   // User-facing navigation links
   const userNavigationLinks = [
-    { href: "/", label: "Home" },
-    { href: "/calculator", label: "Calculator" },
-    { href: "/marketplace", label: "Marketplace" },
+    { href: "/", label: t("home"), icon: Home },
+    { href: "/calculator", label: t("calculator"), icon: Calculator },
+    { href: "/marketplace", label: t("marketplace"), icon: Store },
   ];
 
   // Admin navigation links
   const adminNavigationLinks = [
-    { href: "/admin", label: "Dashboard", icon: BarChart3 },
-    { href: "/admin/orders", label: "Orders", icon: Package },
-    { href: "/admin/dispatch", label: "Dispatch", icon: Truck },
-    { href: "/admin/products", label: "Products", icon: ShoppingBag },
-    { href: "/admin/driver-assist", label: "Driver Assist", icon: Truck },
+    { href: "/admin", label: t("adminDashboard"), icon: BarChart3 },
+    { href: "/admin/orders", label: t("orders"), icon: Package },
+    { href: "/admin/dispatch", label: t("dispatch"), icon: Truck },
+    { href: "/admin/products", label: t("products"), icon: ShoppingBag },
+    { href: "/admin/driver-assist", label: t("driverAssist"), icon: Truck },
   ];
 
   const navigationLinks = isAdminRoute ? adminNavigationLinks : userNavigationLinks;
@@ -87,12 +92,15 @@ export default function Header() {
 
         {/* Admin & Contact - Desktop */}
         <div className="hidden items-center gap-4 md:flex">
+          {/* Language Switcher */}
+          <LanguageSwitcher />
+
           {/* Toggle between Admin Dashboard and Back to Store */}
           {isAdminRoute ? (
             <Link
               href="/"
               className="text-foreground hover:text-primary transition-colors"
-              aria-label="Back to Store"
+              aria-label={t("backToStore")}
             >
               <Store className="h-5 w-5" />
             </Link>
@@ -100,7 +108,7 @@ export default function Header() {
             <Link
               href="/admin"
               className="hover:text-primary text-white transition-colors"
-              aria-label="Admin Dashboard"
+              aria-label={t("adminDashboard")}
             >
               <LayoutDashboard className="h-5 w-5" />
             </Link>
@@ -109,7 +117,7 @@ export default function Header() {
           {/* Call to Action Button */}
           <Button asChild className="bg-primary hover:bg-primary/90 font-semibold text-white">
             <Link href={isAdminRoute ? "#" : "/contact"}>
-              {isAdminRoute ? "IT Help" : "Contact"}
+              {isAdminRoute ? t("itHelp") : t("contact")}
             </Link>
           </Button>
         </div>
@@ -155,6 +163,11 @@ export default function Header() {
               );
             })}
 
+            {/* Language Switcher (Mobile) */}
+            <div className="py-3">
+              <LanguageSwitcher />
+            </div>
+
             {/* Toggle Admin/Store Link (Mobile) */}
             {isAdminRoute ? (
               <Link
@@ -163,7 +176,7 @@ export default function Header() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <Store className="h-4 w-4" />
-                Back to Store
+                {t("backToStore")}
               </Link>
             ) : (
               <Link
@@ -172,7 +185,7 @@ export default function Header() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <LayoutDashboard className="h-4 w-4" />
-                Admin
+                {t("adminDashboard")}
               </Link>
             )}
 
@@ -181,7 +194,7 @@ export default function Header() {
               className="bg-primary hover:bg-primary/90 mt-4 w-full font-semibold text-white"
             >
               <Link href={isAdminRoute ? "#" : "/contact"} onClick={() => setMobileMenuOpen(false)}>
-                {isAdminRoute ? "IT Help" : "Contact"}
+                {isAdminRoute ? t("itHelp") : t("contact")}
               </Link>
             </Button>
           </nav>

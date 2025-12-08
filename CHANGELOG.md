@@ -7,6 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Internationalization (i18n): Full Spanish/English Support**
+  - **next-intl integration**: Implemented industry-standard i18n library for Next.js 15 App Router
+  - **Language switcher**: Globe icon with 3-letter language code (ENG/ESP) in navigation
+  - **Cookie-based locale detection**: Pure cookie-based approach (no URL changes, no middleware)
+  - **Default locale**: English in all environments (easily configurable)
+  - **Cookie persistence**: User language preference saved across sessions
+  - **Comprehensive translations**: Core pages and components fully translated
+    - **Public pages**: Home page (hero, features, CTA), Contact page (all labels)
+    - **Header navigation**: All links with icons (Home, Calculator, Marketplace)
+    - **Footer**: Quick Links, Contact Us
+    - **Admin dashboard**: Stats cards (Total Orders, Total Revenue, Pending Orders, Avg Order Value)
+    - **Driver Assist page**: Full translation (UP NEXT, Queue, From/To, Navigate/Done/Info/Delete buttons, timestamps)
+  - **Translation infrastructure**:
+    - Complete translation files: `messages/en.json` and `messages/es.json`
+    - 500+ translation keys covering UI elements, zones, services, validation messages
+    - TypeScript support with autocomplete for translation keys via `global.d.ts`
+    - Structured by feature namespaces (home, contact, navigation, footer, common, etc.)
+  - **Future-ready**: Translation structure prepared for calculator, marketplace, and all admin sections
+  - Files added:
+    - `src/i18n/request.ts` - Server-side cookie-based locale detection
+    - `messages/en.json`, `messages/es.json` - Comprehensive translation files
+    - `components/LanguageSwitcher.tsx` - Dropdown language toggle component
+    - `global.d.ts` - TypeScript type definitions for translations
+  - Files updated:
+    - `next.config.ts` - next-intl plugin integration
+    - `app/layout.tsx` - NextIntlClientProvider wrapper
+    - `components/Header.tsx` - Translated navigation + icons + language switcher (white text)
+    - `components/Footer.tsx` - Translated footer content
+    - `components/LanguageSwitcher.tsx` - Improved dropdown styling with visible navy text
+    - `app/page.tsx` - Translated home page with useTranslations hook
+    - `app/contact/page.tsx` - Translated contact page
+    - `app/admin/page.tsx` - Translated dashboard stats
+    - `app/admin/driver-assist/page.tsx` - Translated page title and labels
+    - `components/admin/driver-assist/TicketCard.tsx` - Translated all UI elements
+  - Dependencies: `next-intl@3.x` for internationalization
+
 ### Changed
 - **Driver Assist: Redesigned Button Layout & Visual Hierarchy**
   - **Consolidated info display**: Merged eye/view modal into expandable "Info" dropdown

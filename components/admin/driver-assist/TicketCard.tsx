@@ -4,6 +4,7 @@ import { useState } from "react";
 import { CheckCircle, Navigation, Loader2, Trash2, MapPin, Info } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -41,6 +42,7 @@ export function TicketCard({
   onDelete,
   onUpdateCoordinates,
 }: TicketCardProps) {
+  const t = useTranslations("admin.driverAssist");
   const [isGeocoding, setIsGeocoding] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isCompleting, setIsCompleting] = useState(false);
@@ -146,7 +148,7 @@ export function TicketCard({
           className={cn(
             "bg-card transition-all",
             // eslint-disable-next-line custom/no-admin-hardcoded-colors
-            isUpNext && "border-[#FF8C00] border-4 shadow-lg",
+            isUpNext && "border-4 border-[#FF8C00] shadow-lg",
             !isUpNext && "border-border border-2 shadow-md hover:shadow-lg",
             ticket.isCompleted && !isUpNext && "opacity-50",
             isCompleting && "pointer-events-none"
@@ -188,8 +190,8 @@ export function TicketCard({
                     )}
                   >
                     {ticket.isCompleted && ticket.completedAt
-                      ? `Completed ${formatDistanceToNow(ticket.completedAt, { addSuffix: true })}`
-                      : `Created ${formatDistanceToNow(ticket.createdAt, { addSuffix: true })}`}
+                      ? `${t("done")} ${formatDistanceToNow(ticket.completedAt, { addSuffix: true })}`
+                      : `${t("created")} ${formatDistanceToNow(ticket.createdAt, { addSuffix: true })}`}
                   </span>
                   {ticket.isCompleted && (
                     <Badge
@@ -200,7 +202,7 @@ export function TicketCard({
                       )}
                     >
                       <CheckCircle className={cn(isUpNext ? "mr-1 h-4 w-4" : "mr-1 h-3 w-3")} />
-                      Done
+                      {t("done")}
                     </Badge>
                   )}
                 </div>
@@ -217,7 +219,7 @@ export function TicketCard({
                         isUpNext ? "text-sm" : "text-xs"
                       )}
                     >
-                      From:
+                      {t("from")}
                     </span>
                     <span
                       className={cn("text-foreground truncate", isUpNext ? "text-sm" : "text-xs")}
@@ -240,7 +242,7 @@ export function TicketCard({
                         isUpNext ? "text-sm" : "text-xs"
                       )}
                     >
-                      To:
+                      {t("to")}
                     </span>
                     <span
                       className={cn("text-foreground truncate", isUpNext ? "text-sm" : "text-xs")}
@@ -273,7 +275,7 @@ export function TicketCard({
                 ) : (
                   <Navigation className={cn("mr-2", isUpNext ? "h-5 w-5" : "h-4 w-4")} />
                 )}
-                {isGeocoding ? "Loading" : "Navigate"}
+                {isGeocoding ? "..." : t("navigate")}
               </Button>
 
               {/* Done/Delete Button - Green */}
@@ -288,7 +290,7 @@ export function TicketCard({
                   )}
                 >
                   <CheckCircle className={cn("mr-2", isUpNext ? "h-5 w-5" : "h-4 w-4")} />
-                  Done
+                  {t("done")}
                 </Button>
               ) : (
                 onDelete && (
@@ -302,7 +304,7 @@ export function TicketCard({
                     )}
                   >
                     <Trash2 className={cn("mr-2", isUpNext ? "h-5 w-5" : "h-4 w-4")} />
-                    Delete
+                    {t("delete")}
                   </Button>
                 )
               )}
@@ -317,7 +319,7 @@ export function TicketCard({
                 )}
               >
                 <Info className={cn("mr-2", isUpNext ? "h-5 w-5" : "h-4 w-4")} />
-                Info
+                {t("info")}
               </Button>
             </div>
           </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useAdmin } from "@/lib/admin/admin-context";
 import { StatsCard } from "@/components/admin/StatsCard";
 import { RevenueChart } from "@/components/admin/charts/RevenueChart";
@@ -10,6 +11,7 @@ import { Package, DollarSign, Clock, TrendingUp } from "lucide-react";
 import { formatPrice } from "@/lib/marketplace/shipping-integration";
 
 export default function AdminDashboard() {
+  const t = useTranslations("admin.dashboard.stats");
   const { metrics, revenueData, categoryData, zoneData, topProducts } = useAdmin();
 
   return (
@@ -17,7 +19,7 @@ export default function AdminDashboard() {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatsCard
-          label="Total Orders"
+          label={t("totalOrders")}
           value={metrics.totalOrders.toLocaleString()}
           icon={Package}
           trend={{
@@ -27,7 +29,7 @@ export default function AdminDashboard() {
         />
 
         <StatsCard
-          label="Total Revenue"
+          label={t("totalRevenue")}
           value={formatPrice(metrics.totalRevenue)}
           icon={DollarSign}
           trend={{
@@ -37,16 +39,18 @@ export default function AdminDashboard() {
         />
 
         <StatsCard
-          label="Pending Orders"
+          label={t("pendingOrders")}
           value={metrics.pendingCount}
           icon={Clock}
           badge={
-            metrics.pendingCount > 10 ? { text: "Needs attention", variant: "warning" } : undefined
+            metrics.pendingCount > 10
+              ? { text: "Necesita atención", variant: "warning" }
+              : undefined
           }
         />
 
         <StatsCard
-          label="Avg Order Value"
+          label={t("avgOrderValue")}
           value={formatPrice(metrics.avgOrderValue)}
           icon={TrendingUp}
         />

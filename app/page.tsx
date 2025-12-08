@@ -3,36 +3,37 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Truck, Clock, Shield } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTheme } from "@/contexts/ThemeContext";
 
 export default function Home() {
   const { theme } = useTheme();
+  const t = useTranslations("home");
+  const tCommon = useTranslations("common.buttons");
 
   const features = [
     {
       icon: Truck,
-      title: "Fast Delivery",
-      description:
-        "Express shipping options available for urgent deliveries. Track your package in real-time.",
+      title: t("features.fastDelivery.title"),
+      description: t("features.fastDelivery.description"),
       iconColor: "#FF8C00",
       bgColor: "#FFF5E6",
       borderColor: "#FF8C00",
     },
     {
       icon: Clock,
-      title: "On-Time Guarantee",
-      description:
-        "We pride ourselves on punctual deliveries. Your package arrives when we say it will.",
+      title: t("features.onTimeGuarantee.title"),
+      description: t("features.onTimeGuarantee.description"),
       iconColor: "#FF8C00",
       bgColor: "#FFF5E6",
       borderColor: "#FF8C00",
     },
     {
       icon: Shield,
-      title: "Insured Shipping",
-      description: "All packages are fully insured for peace of mind during transit.",
+      title: t("features.secureHandling.title"),
+      description: t("features.secureHandling.description"),
       iconColor: "#1E3A5F",
       bgColor: "#E8EDF3",
       borderColor: "#1E3A5F",
@@ -56,26 +57,23 @@ export default function Home() {
               />
             </div>
             <h1 className="font-heading mb-4 text-3xl leading-tight font-bold tracking-tight text-white md:text-4xl lg:text-5xl">
-              {theme.tagline}
+              {t("hero.title")}
             </h1>
-            <p className="mb-6 text-base text-white md:text-lg">
-              Professional shipping services for all your delivery needs. Fast, reliable, and
-              affordable shipping solutions.
-            </p>
+            <p className="mb-6 text-base text-white md:text-lg">{t("hero.subtitle")}</p>
             <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
               <Button
                 asChild
                 size="lg"
                 className="bg-primary hover:bg-primary/90 font-bold text-white shadow-lg"
               >
-                <Link href="/calculator">Get Quote</Link>
+                <Link href="/calculator">{tCommon("getQuote")}</Link>
               </Button>
               <Button
                 asChild
                 size="lg"
                 className="text-primary bg-white font-bold shadow-lg hover:bg-gray-100"
               >
-                <Link href="#features">Learn More</Link>
+                <Link href="#features">{tCommon("learnMore")}</Link>
               </Button>
             </div>
           </div>
@@ -87,11 +85,8 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="mb-8 text-center">
             <h2 className="font-heading text-secondary mb-3 text-2xl leading-tight font-bold md:text-3xl">
-              Why Choose Us
+              {t("features.heading")}
             </h2>
-            <p className="text-base text-gray-600">
-              We provide the best shipping experience with these key features
-            </p>
           </div>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {features.map((feature, index) => (
@@ -118,13 +113,11 @@ export default function Home() {
       <section className="bg-primary relative overflow-hidden py-12 text-white">
         <div className="relative z-10 container mx-auto px-4 text-center">
           <h2 className="font-heading mb-3 text-2xl leading-tight font-bold text-white drop-shadow-md md:text-3xl">
-            Ready to Ship?
+            {t("cta.heading")}
           </h2>
-          <p className="mb-6 text-base text-white drop-shadow">
-            Get started with our shipping services today. Contact us for a free quote.
-          </p>
+          <p className="mb-6 text-base text-white drop-shadow">{t("cta.description")}</p>
           <Button asChild size="lg" className="text-primary bg-white shadow-xl hover:bg-gray-100">
-            <Link href="/calculator">Get Started</Link>
+            <Link href="/calculator">{tCommon("getStarted")}</Link>
           </Button>
         </div>
       </section>

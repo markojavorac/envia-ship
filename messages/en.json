@@ -1,0 +1,562 @@
+{
+  "common": {
+    "buttons": {
+      "submit": "Submit",
+      "cancel": "Cancel",
+      "save": "Save",
+      "delete": "Delete",
+      "edit": "Edit",
+      "close": "Close",
+      "back": "Back",
+      "next": "Next",
+      "confirm": "Confirm",
+      "view": "View",
+      "viewDetails": "View Details",
+      "getQuote": "Get Quote",
+      "getStarted": "Get Started",
+      "learnMore": "Learn More",
+      "calculate": "Calculate",
+      "reset": "Reset",
+      "filter": "Filter",
+      "search": "Search",
+      "apply": "Apply",
+      "clearAll": "Clear All",
+      "export": "Export",
+      "import": "Import",
+      "download": "Download",
+      "upload": "Upload",
+      "add": "Add",
+      "remove": "Remove",
+      "update": "Update",
+      "refresh": "Refresh"
+    },
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Information",
+    "noData": "No data available",
+    "noResults": "No results found",
+    "readMore": "Read more",
+    "showLess": "Show less",
+    "yes": "Yes",
+    "no": "No",
+    "all": "All",
+    "none": "None",
+    "other": "Other",
+    "optional": "Optional",
+    "required": "Required",
+    "total": "Total",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "tax": "Tax",
+    "grandTotal": "Grand Total"
+  },
+  "navigation": {
+    "home": "Home",
+    "calculator": "Calculator",
+    "marketplace": "Marketplace",
+    "contact": "Contact",
+    "adminDashboard": "Dashboard",
+    "orders": "Orders",
+    "dispatch": "Dispatch",
+    "products": "Products",
+    "driverAssist": "Driver Assist",
+    "routes": "Routes",
+    "backToStore": "Back to Store",
+    "itHelp": "IT Help"
+  },
+  "footer": {
+    "quickLinks": "Quick Links",
+    "contactUs": "Contact Us",
+    "phone": "Phone",
+    "email": "Email",
+    "address": "Address",
+    "allRightsReserved": "All rights reserved"
+  },
+  "zones": {
+    "zona-1": "Zona 1 - Historic Center",
+    "zona-4": "Zona 4",
+    "zona-9": "Zona 9",
+    "zona-10": "Zona 10 - Business District",
+    "zona-11": "Zona 11",
+    "zona-12": "Zona 12",
+    "zona-13": "Zona 13",
+    "zona-14": "Zona 14",
+    "zona-15": "Zona 15",
+    "zona-16": "Zona 16",
+    "selectZone": "Select Zone",
+    "pickupZone": "Pickup Zone",
+    "dropoffZone": "Dropoff Zone",
+    "deliveryZone": "Delivery Zone"
+  },
+  "services": {
+    "express": {
+      "label": "Express (1-2 days)",
+      "description": "Fastest delivery for urgent packages"
+    },
+    "standard": {
+      "label": "Standard (3-5 days)",
+      "description": "Reliable delivery at standard rates"
+    },
+    "international": {
+      "label": "International (5-10 days)",
+      "description": "Cross-border shipping services"
+    },
+    "selectService": "Select Service Type"
+  },
+  "timeSlots": {
+    "morning": "Morning (8AM - 12PM)",
+    "afternoon": "Afternoon (12PM - 5PM)",
+    "evening": "Evening (5PM - 8PM)",
+    "selectTime": "Select Time Slot"
+  },
+  "validation": {
+    "required": "{field} is required",
+    "minLength": "{field} must be at least {min} cm",
+    "maxLength": "{field} cannot exceed {max} cm",
+    "minValue": "{field} must be at least {min}",
+    "maxValue": "{field} cannot exceed {max}",
+    "minWeight": "Weight must be at least {min} kg",
+    "maxWeight": "Weight cannot exceed {max} kg",
+    "invalidDate": "Scheduled date must be today or in the future",
+    "invalidEmail": "Please enter a valid email address",
+    "invalidPhone": "Please enter a valid phone number",
+    "fields": {
+      "length": "Length",
+      "width": "Width",
+      "height": "Height",
+      "weight": "Weight",
+      "pickupZone": "Pickup Zone",
+      "dropoffZone": "Dropoff Zone",
+      "serviceType": "Service Type",
+      "deliveryTiming": "Delivery Timing",
+      "scheduledDate": "Scheduled Date",
+      "timeSlot": "Time Slot"
+    }
+  },
+  "metadata": {
+    "home": {
+      "title": "Envia Ship - Your Trusted Shipping Partner",
+      "description": "Professional shipping services for all your delivery needs. Fast, reliable, and affordable shipping solutions."
+    },
+    "calculator": {
+      "title": "Shipping Calculator | ENVÍA de Guatemala",
+      "description": "Calculate shipping costs instantly for Guatemala City. Get accurate quotes for express, standard, and international delivery."
+    },
+    "marketplace": {
+      "title": "Marketplace | ENVÍA de Guatemala",
+      "description": "Shop products with fast delivery across Guatemala City zones."
+    },
+    "contact": {
+      "title": "Contact Us | ENVÍA de Guatemala",
+      "description": "Get in touch with our team for shipping inquiries and support."
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "Fast, Reliable Shipping for Guatemala",
+      "subtitle": "Your trusted shipping partner",
+      "cta": "Get Started",
+      "secondaryCta": "Learn More"
+    },
+    "features": {
+      "heading": "Why Choose Us",
+      "fastDelivery": {
+        "title": "Fast Delivery",
+        "description": "Express shipping options available for urgent deliveries across all Guatemala City zones"
+      },
+      "onTimeGuarantee": {
+        "title": "On-Time Guarantee",
+        "description": "We pride ourselves on punctual deliveries. Track your package every step of the way"
+      },
+      "secureHandling": {
+        "title": "Secure Handling",
+        "description": "Your packages are handled with care and protected throughout the delivery process"
+      }
+    },
+    "cta": {
+      "heading": "Ready to Ship?",
+      "description": "Get instant quotes and schedule your delivery today",
+      "button": "Get Quote"
+    }
+  },
+  "calculator": {
+    "title": "Shipping Calculator",
+    "subtitle": "Get instant shipping quotes for Guatemala City",
+    "tabs": {
+      "form": "Calculator",
+      "ai": "AI Package Analyzer"
+    },
+    "quickGuide": {
+      "heading": "Quick Guide",
+      "packageDetails": {
+        "title": "Package Details",
+        "description": "Enter dimensions and weight"
+      },
+      "locations": {
+        "title": "Locations",
+        "description": "Select pickup and dropoff zones"
+      },
+      "serviceType": {
+        "title": "Service Type",
+        "description": "Choose your delivery speed"
+      }
+    },
+    "form": {
+      "packageDimensions": "Package Dimensions",
+      "length": "Length (cm)",
+      "width": "Width (cm)",
+      "height": "Height (cm)",
+      "weight": "Weight (kg)",
+      "locations": "Locations",
+      "pickupZone": "Pickup Zone",
+      "dropoffZone": "Dropoff Zone",
+      "serviceType": "Service Type",
+      "deliveryTiming": "Delivery Timing",
+      "asap": "ASAP",
+      "scheduled": "Scheduled",
+      "scheduledDate": "Scheduled Date",
+      "timeSlot": "Time Slot",
+      "infoBox": {
+        "expressInfo": "Express delivery includes priority handling and guaranteed delivery within 1-2 business days.",
+        "baseRateInfo": "Base rate: Q25.00 + Q2.50 per kg + Q1.00 per zone crossed"
+      }
+    },
+    "ai": {
+      "title": "AI Package Analyzer",
+      "description": "Upload a photo of your package and let AI analyze it",
+      "uploadPrompt": "Drop image here or click to upload",
+      "analyzing": "Analyzing package...",
+      "results": "Analysis Results"
+    },
+    "results": {
+      "title": "Shipping Quote",
+      "estimatedPrice": "Estimated Price",
+      "estimatedDelivery": "Estimated Delivery",
+      "breakdown": "Price Breakdown",
+      "baseRate": "Base Rate",
+      "weightCharge": "Weight Charge",
+      "distanceCharge": "Distance Charge",
+      "serviceCharge": "Service Charge",
+      "days": "days"
+    }
+  },
+  "marketplace": {
+    "title": "Marketplace",
+    "searchPlaceholder": "Search products...",
+    "filters": {
+      "title": "Filters",
+      "category": "Category",
+      "priceRange": "Price Range",
+      "zone": "Delivery Zone",
+      "inStock": "In Stock Only",
+      "sortBy": "Sort By",
+      "priceAsc": "Price: Low to High",
+      "priceDesc": "Price: High to Low",
+      "nameAsc": "Name: A-Z",
+      "nameDesc": "Name: Z-A"
+    },
+    "categories": {
+      "all": "All Categories",
+      "food": "Food & Beverages",
+      "medical": "Medical Supplies",
+      "retail": "Retail"
+    },
+    "product": {
+      "price": "Price",
+      "inStock": "In Stock",
+      "outOfStock": "Out of Stock",
+      "lowStock": "Low Stock",
+      "addToCart": "Add to Cart",
+      "buyNow": "Buy Now",
+      "quantity": "Quantity",
+      "description": "Description",
+      "specifications": "Specifications",
+      "weight": "Weight",
+      "dimensions": "Dimensions",
+      "category": "Category",
+      "availability": "Availability",
+      "deliveryInfo": "Delivery Information",
+      "availableInZone": "Available in Your Zone",
+      "fastDelivery": "FAST DELIVERY"
+    },
+    "viewOptions": {
+      "title": "View Style",
+      "amazon": "Amazon",
+      "uberEats": "Uber Eats",
+      "pinterest": "Pinterest",
+      "minimalist": "Minimalist",
+      "proximity": "Proximity"
+    },
+    "noProducts": "No products found",
+    "loadMore": "Load More"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Get in touch with our team",
+    "businessHours": "Business Hours",
+    "mondayFriday": "Monday - Friday",
+    "hours": "8:00 AM - 6:00 PM",
+    "address": "Guatemala City, Guatemala",
+    "getInTouch": "Get in Touch",
+    "sendMessage": "Send Message"
+  },
+  "admin": {
+    "common": {
+      "actions": "Actions",
+      "status": "Status",
+      "date": "Date",
+      "time": "Time",
+      "id": "ID",
+      "name": "Name",
+      "description": "Description",
+      "price": "Price",
+      "quantity": "Quantity",
+      "total": "Total",
+      "details": "Details",
+      "settings": "Settings",
+      "notifications": "Notifications",
+      "profile": "Profile",
+      "logout": "Logout",
+      "dashboard": "Dashboard",
+      "analytics": "Analytics",
+      "reports": "Reports",
+      "viewAll": "View All",
+      "exportData": "Export Data"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "description": "View analytics and performance metrics",
+      "stats": {
+        "totalOrders": "Total Orders",
+        "totalRevenue": "Total Revenue",
+        "pendingOrders": "Pending Orders",
+        "avgOrderValue": "Avg Order Value",
+        "completedOrders": "Completed Orders",
+        "canceledOrders": "Canceled Orders",
+        "growth": "growth",
+        "decline": "decline"
+      },
+      "charts": {
+        "revenueOverTime": "Revenue Over Time",
+        "ordersByStatus": "Orders by Status",
+        "topProducts": "Top Products",
+        "deliveryPerformance": "Delivery Performance"
+      }
+    },
+    "orders": {
+      "title": "Orders",
+      "description": "Manage and track your marketplace orders",
+      "stats": {
+        "totalOrders": "Total Orders",
+        "pendingOrders": "Pending Orders",
+        "inProgress": "In Progress",
+        "delivered": "Delivered"
+      },
+      "table": {
+        "orderId": "Order ID",
+        "customer": "Customer",
+        "products": "Products",
+        "amount": "Amount",
+        "status": "Status",
+        "date": "Date",
+        "actions": "Actions"
+      },
+      "status": {
+        "pending": "Pending",
+        "processing": "Processing",
+        "inTransit": "In Transit",
+        "delivered": "Delivered",
+        "canceled": "Canceled",
+        "refunded": "Refunded"
+      },
+      "details": {
+        "title": "Order Details",
+        "orderInformation": "Order Information",
+        "customerInformation": "Customer Information",
+        "deliveryInformation": "Delivery Information",
+        "productList": "Product List",
+        "paymentInformation": "Payment Information",
+        "orderTimeline": "Order Timeline"
+      }
+    },
+    "products": {
+      "title": "Products",
+      "description": "Manage your marketplace products and inventory",
+      "addProduct": "Add Product",
+      "stats": {
+        "totalProducts": "Total Products",
+        "lowStock": "Low Stock",
+        "outOfStock": "Out of Stock",
+        "avgProductPrice": "Avg Product Price"
+      },
+      "table": {
+        "product": "Product",
+        "category": "Category",
+        "price": "Price",
+        "stock": "Stock",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "draft": "Draft",
+        "archived": "Archived"
+      },
+      "badges": {
+        "needsRestock": "Needs restock",
+        "urgent": "Urgent",
+        "allStocked": "All stocked"
+      },
+      "wizard": {
+        "title": "Add New Product",
+        "step1": {
+          "title": "Basic Information",
+          "name": "Product Name",
+          "description": "Description",
+          "category": "Category",
+          "selectCategory": "Select category"
+        },
+        "step2": {
+          "title": "Pricing & Inventory",
+          "price": "Price",
+          "stock": "Stock Quantity",
+          "sku": "SKU"
+        },
+        "step3": {
+          "title": "Shipping Details",
+          "weight": "Weight (kg)",
+          "length": "Length (cm)",
+          "width": "Width (cm)",
+          "height": "Height (cm)",
+          "zones": "Available Zones"
+        },
+        "step4": {
+          "title": "Review & Publish",
+          "review": "Review Product Information",
+          "publish": "Publish Product",
+          "saveDraft": "Save as Draft"
+        }
+      }
+    },
+    "dispatch": {
+      "title": "Dispatch Board",
+      "description": "Manage deliveries and driver assignments",
+      "kpis": {
+        "activeDeliveries": "Active Deliveries",
+        "availableDrivers": "Available Drivers",
+        "avgDeliveryTime": "Avg Delivery Time",
+        "onTimeRate": "On-Time Rate",
+        "minutes": "min"
+      },
+      "filters": {
+        "allStatuses": "All Statuses",
+        "allZones": "All Zones",
+        "allDrivers": "All Drivers"
+      },
+      "driverStatus": {
+        "available": "Available",
+        "busy": "Busy",
+        "offline": "Offline"
+      },
+      "deliveryStatus": {
+        "pending": "Pending",
+        "assigned": "Assigned",
+        "inProgress": "In Progress",
+        "completed": "Completed",
+        "delayed": "Delayed"
+      },
+      "assignDriver": "Assign Driver",
+      "unassign": "Unassign",
+      "viewRoute": "View Route",
+      "contactDriver": "Contact Driver",
+      "activeDeliveries": "Active Deliveries",
+      "completedToday": "Completed Today"
+    },
+    "driverAssist": {
+      "title": "Driver Assist",
+      "description": "Help drivers with navigation and delivery support",
+      "loadMockData": "Load Mock Data",
+      "upNext": "UP NEXT",
+      "queue": "Queue",
+      "from": "From:",
+      "to": "To:",
+      "navigate": "Navigate",
+      "done": "Done",
+      "info": "Info",
+      "delete": "Delete",
+      "created": "Created",
+      "daysAgo": {
+        "one": "{{count}} day ago",
+        "other": "{{count}} days ago"
+      },
+      "stats": {
+        "activeTickets": "Active Tickets",
+        "resolvedToday": "Resolved Today",
+        "avgResponseTime": "Avg Response Time",
+        "driversSupportedToday": "Drivers Supported Today",
+        "minutes": "min"
+      },
+      "filters": {
+        "allStatuses": "All Statuses",
+        "allPriorities": "All Priorities"
+      },
+      "status": {
+        "pending": "Pending",
+        "inProgress": "In Progress",
+        "resolved": "Resolved",
+        "canceled": "Canceled"
+      },
+      "priority": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High",
+        "urgent": "Urgent"
+      },
+      "ticketDetails": {
+        "driverName": "Driver Name",
+        "issue": "Issue",
+        "location": "Location",
+        "orderId": "Order ID",
+        "timeReported": "Time Reported",
+        "navigation": "Navigation",
+        "openInWaze": "Open in Waze",
+        "openInGoogleMaps": "Open in Google Maps",
+        "markResolved": "Mark as Resolved",
+        "assignToMe": "Assign to Me"
+      }
+    },
+    "routes": {
+      "title": "Route Optimization",
+      "description": "Optimize delivery routes and manage logistics",
+      "stats": {
+        "activeRoutes": "Active Routes",
+        "totalDistance": "Total Distance",
+        "estimatedTime": "Estimated Time",
+        "fuelCost": "Fuel Cost",
+        "km": "km",
+        "hours": "hrs"
+      },
+      "optimizeRoutes": "Optimize Routes",
+      "generateReport": "Generate Report",
+      "routeDetails": {
+        "stops": "Stops",
+        "distance": "Distance",
+        "estimatedDuration": "Estimated Duration",
+        "driver": "Driver",
+        "vehicle": "Vehicle",
+        "status": "Status"
+      },
+      "stopDetails": {
+        "stopNumber": "Stop #{number}",
+        "address": "Address",
+        "customer": "Customer",
+        "orderItems": "Order Items",
+        "notes": "Notes",
+        "markComplete": "Mark Complete"
+      }
+    }
+  }
+}

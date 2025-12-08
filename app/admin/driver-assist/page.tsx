@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Truck, Sparkles } from "lucide-react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { AdminPageTitle } from "@/components/admin/ui/AdminPageTitle";
 import { AddTicketCard } from "@/components/admin/driver-assist/AddTicketCard";
@@ -30,6 +31,7 @@ import { toast } from "sonner";
  * - Persisting tickets across sessions via localStorage
  */
 export default function DriverAssistPage() {
+  const t = useTranslations("admin.driverAssist");
   const [tickets, setTickets] = useState<DeliveryTicket[]>([]);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -122,7 +124,7 @@ export default function DriverAssistPage() {
   return (
     <div className="space-y-2">
       <AdminPageTitle
-        title="Driver Assist"
+        title={t("title")}
         actions={
           <Button
             onClick={handleLoadMockData}
@@ -131,7 +133,7 @@ export default function DriverAssistPage() {
             className="border-border text-foreground hover:bg-muted"
           >
             <Sparkles className="mr-2 h-4 w-4" />
-            Load Mock Data
+            {t("loadMockData")}
           </Button>
         }
       />
@@ -148,7 +150,7 @@ export default function DriverAssistPage() {
             className="bg-background sticky top-16 z-10 pb-3"
           >
             <h3 className="text-primary mb-1.5 text-xs font-bold tracking-wide uppercase">
-              Up Next
+              {t("upNext")}
             </h3>
             <TicketCard
               ticket={pendingTickets[0]}
@@ -166,7 +168,7 @@ export default function DriverAssistPage() {
       {/* REMAINING PENDING TICKETS */}
       {pendingTickets.length > 1 && (
         <div className="space-y-2">
-          <h3 className="text-muted-foreground text-sm font-semibold">Queue</h3>
+          <h3 className="text-muted-foreground text-sm font-semibold">{t("queue")}</h3>
           <div className="relative">
             {pendingTickets.slice(1).map((ticket, index) => {
               const totalCards = pendingTickets.slice(1).length;

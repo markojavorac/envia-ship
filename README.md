@@ -59,6 +59,53 @@ Modern shipping calculator and marketplace platform for ENVÍA de Guatemala.
 - **Components**: Base `Skeleton` + 9 variants (Card, Table, Chart, Text, Avatar, Button, Image, Badge, Input)
 - **How to See**: Navigate between pages in development - you'll see 1 second of skeleton animation before content loads
 
+## Internationalization (i18n)
+
+Envia Ship supports both **Spanish** and **English** with full internationalization powered by **next-intl**.
+
+### Features
+- **Language Switcher**: Globe icon with 3-letter language code (ENG/ESP) in top-right navigation
+- **Cookie-Based Locale**: Pure cookie-based approach (no URL changes, no middleware required)
+- **Cookie Persistence**: Language preference saved across sessions via `NEXT_LOCALE` cookie
+- **Default Locale**: English (`en`) - easily configurable in `src/i18n/request.ts`
+- **TypeScript Support**: Full autocomplete for translation keys via `global.d.ts`
+- **Comprehensive Coverage**: All core pages, components, zones, services, and validation messages translated
+- **500+ Translation Keys**: Organized by feature namespaces for easy maintenance
+
+### Using Translations in Components
+
+**Client Components:**
+```typescript
+"use client";
+import { useTranslations } from 'next-intl';
+
+export default function MyComponent() {
+  const t = useTranslations('namespace');
+  return <h1>{t('title')}</h1>;
+}
+```
+
+**Server Components:**
+```typescript
+import { getTranslations } from 'next-intl/server';
+
+export default async function MyPage() {
+  const t = await getTranslations('namespace');
+  return <h1>{t('title')}</h1>;
+}
+```
+
+### Translation Files
+- **Location**: `/messages/en.json`, `/messages/es.json`
+- **Structure**: Organized by feature (common, navigation, home, calculator, marketplace, contact, admin, etc.)
+- **Editing**: Add new translations to both files with matching keys
+
+### For Developers
+To add new translations:
+1. Add the English key to `/messages/en.json`
+2. Add the Spanish translation to `/messages/es.json`
+3. Use `t('your.key')` in components (autocomplete will help!)
+
 ## Tech Stack
 
 - **Framework**: Next.js 15.5.7 with App Router and Turbopack
@@ -67,6 +114,7 @@ Modern shipping calculator and marketplace platform for ENVÍA de Guatemala.
 - **Styling**: Tailwind CSS v4
 - **UI Components**: shadcn/ui (New York style)
 - **Forms**: React Hook Form + Zod validation
+- **Internationalization**: next-intl (Spanish/English)
 - **Icons**: Lucide React
 - **Testing**: Playwright (automated screenshots)
 

@@ -2,8 +2,12 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function ContactPage() {
+  const t = useTranslations("contact");
+  const tFooter = useTranslations("footer");
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -11,11 +15,9 @@ export default function ContactPage() {
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h1 className="mb-4 text-2xl font-bold text-white md:text-3xl lg:text-5xl">
-              Contact Us
+              {t("title")}
             </h1>
-            <p className="mx-auto max-w-2xl text-lg text-white/80">
-              Get in touch with our team for shipping quotes and inquiries
-            </p>
+            <p className="mx-auto max-w-2xl text-lg text-white/80">{t("subtitle")}</p>
           </div>
         </div>
       </section>
@@ -33,7 +35,7 @@ export default function ContactPage() {
                       <Mail className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-secondary mb-1 text-lg font-bold">Email</h3>
+                      <h3 className="text-secondary mb-1 text-lg font-bold">{tFooter("email")}</h3>
                       <a
                         href="mailto:info@enviaguatemala.com"
                         className="text-primary hover:text-primary/80 font-semibold"
@@ -49,7 +51,7 @@ export default function ContactPage() {
                       <Phone className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-secondary mb-1 text-lg font-bold">Phone</h3>
+                      <h3 className="text-secondary mb-1 text-lg font-bold">{tFooter("phone")}</h3>
                       <a
                         href="tel:+50212345678"
                         className="text-primary hover:text-primary/80 font-semibold"
@@ -65,12 +67,10 @@ export default function ContactPage() {
                       <MapPin className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-secondary mb-1 text-lg font-bold">Address</h3>
-                      <p className="text-gray-700">
-                        Guatemala City
-                        <br />
-                        Guatemala
-                      </p>
+                      <h3 className="text-secondary mb-1 text-lg font-bold">
+                        {tFooter("address")}
+                      </h3>
+                      <p className="text-gray-700">{t("address")}</p>
                     </div>
                   </div>
 
@@ -80,13 +80,11 @@ export default function ContactPage() {
                       <Clock className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-secondary mb-1 text-lg font-bold">Business Hours</h3>
+                      <h3 className="text-secondary mb-1 text-lg font-bold">
+                        {t("businessHours")}
+                      </h3>
                       <p className="text-gray-700">
-                        Monday - Friday: 8:00 AM - 6:00 PM
-                        <br />
-                        Saturday: 9:00 AM - 1:00 PM
-                        <br />
-                        Sunday: Closed
+                        {t("mondayFriday")}: {t("hours")}
                       </p>
                     </div>
                   </div>

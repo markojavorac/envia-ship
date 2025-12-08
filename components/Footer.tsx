@@ -3,10 +3,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Phone, Mail, MapPin } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useTheme } from "@/contexts/ThemeContext";
 
 export default function Footer() {
   const { theme } = useTheme();
+  const t = useTranslations("footer");
+  const tNav = useTranslations("navigation");
   const currentYear = new Date().getFullYear();
 
   return (
@@ -24,20 +27,20 @@ export default function Footer() {
             />
             <p className="text-sm text-white/80">{theme.tagline}</p>
             <p className="text-xs text-white/60">
-              © {currentYear} {theme.companyName}. All rights reserved.
+              © {currentYear} {theme.companyName}. {t("allRightsReserved")}.
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="mb-3 text-sm font-bold text-white">Quick Links</h3>
+            <h3 className="mb-3 text-sm font-bold text-white">{t("quickLinks")}</h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   href="/"
                   className="hover:text-primary text-sm text-white/80 transition-colors"
                 >
-                  Home
+                  {tNav("home")}
                 </Link>
               </li>
               <li>
@@ -45,7 +48,7 @@ export default function Footer() {
                   href="/calculator"
                   className="hover:text-primary text-sm text-white/80 transition-colors"
                 >
-                  Calculator
+                  {tNav("calculator")}
                 </Link>
               </li>
             </ul>
@@ -53,7 +56,7 @@ export default function Footer() {
 
           {/* Contact Info */}
           <div>
-            <h3 className="mb-3 text-sm font-bold text-white">Contact Us</h3>
+            <h3 className="mb-3 text-sm font-bold text-white">{t("contactUs")}</h3>
             <ul className="space-y-2">
               <li className="flex items-center gap-2 text-sm text-white/80">
                 <Phone className="h-4 w-4" />
