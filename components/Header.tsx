@@ -37,13 +37,10 @@ export default function Header() {
     { href: "/marketplace", label: t("marketplace"), icon: Store },
   ];
 
-  // Admin navigation links
+  // Admin navigation links (demo mode - only dispatch and driver assist)
   const adminNavigationLinks = [
-    { href: "/admin", label: t("adminDashboard"), icon: BarChart3 },
-    { href: "/admin/orders", label: t("orders"), icon: Package },
-    { href: "/admin/dispatch", label: t("dispatch"), icon: Truck },
-    { href: "/admin/products", label: t("products"), icon: ShoppingBag },
-    { href: "/admin/driver-assist", label: t("driverAssist"), icon: Truck },
+    { href: "/admin/dispatch", label: "Dispatcher", icon: Truck },
+    { href: "/admin/driver-assist", label: "Driver Assist", icon: MapIcon },
   ];
 
   const navigationLinks = isAdminRoute ? adminNavigationLinks : userNavigationLinks;

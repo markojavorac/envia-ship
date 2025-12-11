@@ -54,32 +54,34 @@ export function TicketConfirmationDialog({
             <CheckCircle className="text-primary h-5 w-5" />
             {t("title")}
           </DialogTitle>
-          <DialogDescription className="text-muted-foreground">{t("description")}</DialogDescription>
+          <DialogDescription className="text-muted-foreground">
+            {t("description")}
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
           {/* Ticket Image Preview (if available) */}
           {ticket.ticketImageUrl && (
-            <div className="rounded-md border border-border overflow-hidden">
+            <div className="border-border overflow-hidden rounded-md border">
               <Image
                 src={ticket.ticketImageUrl}
                 alt="Ticket Preview"
                 width={600}
                 height={400}
-                className="w-full object-cover max-h-64"
+                className="max-h-64 w-full object-cover"
               />
             </div>
           )}
 
           {/* Ticket Details */}
-          <div className="bg-card rounded-md border border-border p-4 space-y-3">
+          <div className="bg-card border-border space-y-3 rounded-md border p-4">
             {/* Ticket Number */}
             {ticket.ticketNumber && (
               <div>
-                <Label className="text-xs font-semibold text-muted-foreground uppercase">
+                <Label className="text-muted-foreground text-xs font-semibold uppercase">
                   {t("ticketNumber")}
                 </Label>
-                <p className="text-sm font-mono text-primary bg-primary/10 px-2 py-1 rounded inline-block mt-1">
+                <p className="text-primary bg-primary/10 mt-1 inline-block rounded px-2 py-1 font-mono text-sm">
                   {ticket.ticketNumber}
                 </p>
               </div>
@@ -87,39 +89,39 @@ export function TicketConfirmationDialog({
 
             {/* Origin Address */}
             <div>
-              <Label className="text-xs font-semibold text-muted-foreground uppercase text-foreground">
+              <Label className="text-muted-foreground text-foreground text-xs font-semibold uppercase">
                 {t("origin")}
               </Label>
-              <p className="text-sm text-foreground font-medium mt-1">{ticket.originAddress}</p>
+              <p className="text-foreground mt-1 text-sm font-medium">{ticket.originAddress}</p>
             </div>
 
             {/* Destination Address */}
             <div>
-              <Label className="text-xs font-semibold text-muted-foreground uppercase text-foreground">
+              <Label className="text-muted-foreground text-foreground text-xs font-semibold uppercase">
                 {t("destination")}
               </Label>
-              <p className="text-sm text-foreground font-medium mt-1">
+              <p className="text-foreground mt-1 text-sm font-medium">
                 {ticket.destinationAddress}
               </p>
             </div>
 
             {/* Recipient Info */}
             {(ticket.recipientName || ticket.recipientPhone) && (
-              <div className="border-t border-border pt-3 space-y-2">
+              <div className="border-border space-y-2 border-t pt-3">
                 {ticket.recipientName && (
                   <div className="flex items-center justify-between">
-                    <Label className="text-xs font-semibold text-muted-foreground uppercase text-foreground">
+                    <Label className="text-muted-foreground text-foreground text-xs font-semibold uppercase">
                       {t("recipient")}
                     </Label>
-                    <p className="text-sm text-foreground">{ticket.recipientName}</p>
+                    <p className="text-foreground text-sm">{ticket.recipientName}</p>
                   </div>
                 )}
                 {ticket.recipientPhone && (
                   <div className="flex items-center justify-between">
-                    <Label className="text-xs font-semibold text-muted-foreground uppercase text-foreground">
+                    <Label className="text-muted-foreground text-foreground text-xs font-semibold uppercase">
                       {t("phone")}
                     </Label>
-                    <p className="text-sm font-mono text-foreground">{ticket.recipientPhone}</p>
+                    <p className="text-foreground font-mono text-sm">{ticket.recipientPhone}</p>
                   </div>
                 )}
               </div>
@@ -127,11 +129,11 @@ export function TicketConfirmationDialog({
 
             {/* Notes */}
             {ticket.notes && (
-              <div className="border-t border-border pt-3">
-                <Label className="text-xs font-semibold text-muted-foreground uppercase text-foreground">
+              <div className="border-border border-t pt-3">
+                <Label className="text-muted-foreground text-foreground text-xs font-semibold uppercase">
                   {t("notes")}
                 </Label>
-                <p className="text-sm text-muted-foreground mt-1">{ticket.notes}</p>
+                <p className="text-muted-foreground mt-1 text-sm">{ticket.notes}</p>
               </div>
             )}
           </div>
@@ -147,7 +149,7 @@ export function TicketConfirmationDialog({
           </Button>
           <Button
             onClick={onConfirm}
-            className="bg-primary hover:bg-primary/90 text-white font-semibold"
+            className="bg-primary hover:bg-primary/90 font-semibold text-white"
           >
             <CheckCircle className="mr-2 h-4 w-4" />
             {t("addToQueue")}

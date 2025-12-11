@@ -21,6 +21,7 @@ import {
 } from "@/lib/admin/driver-assist-storage";
 import { toast } from "sonner";
 import { decodeUrlToTicket } from "@/lib/admin/ticket-url-encoding";
+import { decodeUrlToRoute } from "@/lib/admin/multi-ticket-url-encoding";
 
 /**
  * Driver Assist Page
@@ -47,49 +48,99 @@ export default function DriverAssistPage() {
     setIsLoading(false);
   }, []);
 
-  // URL parameter detection for shared tickets from dispatcher
+  // URL parameter detection for shared tickets/routes from dispatcher
   useEffect(() => {
     // Skip if on server-side or still loading
     if (typeof window === "undefined" || isLoading) return;
 
     const params = new URLSearchParams(window.location.search);
-    const ticketParam = params.get("ticket");
+    const ticketParam = params.get("ticket"); // Single ticket
+    const routeParam = params.get("route"); // Multiple tickets (route)
 
-    if (!ticketParam) return;
+    // Handle route URL (multiple tickets)
+    if (routeParam) {
+      try {
+        const decodedTickets = decodeUrlToRoute(routeParam);
 
-    try {
-      const decoded = decodeUrlToTicket(ticketParam);
+        if (!decodedTickets || decodedTickets.length === 0) {
+          toast.error("Invalid route URL");
+          window.history.replaceState({}, "", "/admin/driver-assist");
+          return;
+        }
 
-      if (!decoded) {
-        toast.error("Invalid ticket URL");
+        // Add all tickets from route (preserving optimized sequence)
+        let addedCount = 0;
+        decodedTickets.forEach((ticket) => {
+          // Check for duplicates
+          const isDuplicate = tickets.some(
+            (t) =>
+              (t.ticketNumber && ticket.ticketNumber && t.ticketNumber === ticket.ticketNumber) ||
+              (t.originAddress === ticket.originAddress &&
+                t.destinationAddress === ticket.destinationAddress)
+          );
+
+          if (!isDuplicate) {
+            const updated = addTicket(ticket);
+            setTickets(updated);
+            addedCount++;
+          }
+        });
+
+        if (addedCount > 0) {
+          toast.success(
+            `Added ${addedCount} ${addedCount === 1 ? "ticket" : "tickets"} from optimized route`
+          );
+        } else {
+          toast.warning("All tickets from this route are already in your queue");
+        }
+
+        // Clear URL parameter
+        window.history.replaceState({}, "", "/admin/driver-assist");
+        return;
+      } catch (error) {
+        console.error("Failed to load route from URL:", error);
+        toast.error("Failed to load route from URL");
         window.history.replaceState({}, "", "/admin/driver-assist");
         return;
       }
+    }
 
-      // Check for duplicates by ticket number or exact address match
-      const isDuplicate = tickets.some(
-        (t) =>
-          (t.ticketNumber && decoded.ticketNumber && t.ticketNumber === decoded.ticketNumber) ||
-          (t.originAddress === decoded.originAddress &&
-            t.destinationAddress === decoded.destinationAddress)
-      );
+    // Handle single ticket URL (backward compatibility)
+    if (ticketParam) {
+      try {
+        const decoded = decodeUrlToTicket(ticketParam);
 
-      if (isDuplicate) {
-        toast.warning("This ticket is already in your queue");
+        if (!decoded) {
+          toast.error("Invalid ticket URL");
+          window.history.replaceState({}, "", "/admin/driver-assist");
+          return;
+        }
+
+        // Check for duplicates by ticket number or exact address match
+        const isDuplicate = tickets.some(
+          (t) =>
+            (t.ticketNumber && decoded.ticketNumber && t.ticketNumber === decoded.ticketNumber) ||
+            (t.originAddress === decoded.originAddress &&
+              t.destinationAddress === decoded.destinationAddress)
+        );
+
+        if (isDuplicate) {
+          toast.warning("This ticket is already in your queue");
+          window.history.replaceState({}, "", "/admin/driver-assist");
+          return;
+        }
+
+        // Show confirmation dialog
+        setPendingTicket(decoded);
+        setIsConfirmationOpen(true);
+
+        // Clear URL parameter
         window.history.replaceState({}, "", "/admin/driver-assist");
-        return;
+      } catch (error) {
+        console.error("Failed to load ticket from URL:", error);
+        toast.error("Failed to load ticket from URL");
+        window.history.replaceState({}, "", "/admin/driver-assist");
       }
-
-      // Show confirmation dialog
-      setPendingTicket(decoded);
-      setIsConfirmationOpen(true);
-
-      // Clear URL parameter
-      window.history.replaceState({}, "", "/admin/driver-assist");
-    } catch (error) {
-      console.error("Failed to load ticket from URL:", error);
-      toast.error("Failed to load ticket from URL");
-      window.history.replaceState({}, "", "/admin/driver-assist");
     }
   }, [tickets, isLoading]); // Run when tickets or loading state changes
 
