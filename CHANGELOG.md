@@ -7,7 +7,106 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2025-12-13
+
 ### Added
+- **Admin: Reports Dashboard UI**
+  - **Reports page**: Comprehensive analytics dashboard at `/admin/reports`
+  - **Trip history table**: Sortable table with driver, route, duration, completion time
+  - **Performance cards**: Driver-specific metrics (completion rate, avg time, fastest/slowest)
+  - **Filtering**: Filter by driver and date range
+  - **CSV export**: Download trip history as CSV file using papaparse
+  - **Auto-refresh**: Manual refresh button with loading states
+  - **Empty states**: Friendly messages when no data exists
+  - **Admin-only access**: Protected by middleware (drivers cannot access)
+  - Files added:
+    - `app/admin/reports/page.tsx` - Main reports dashboard
+    - `components/admin/reports/TripHistoryTable.tsx` - Sortable trip table
+    - `components/admin/reports/DriverPerformanceCards.tsx` - Performance metrics cards
+    - `components/admin/reports/DateRangeFilter.tsx` - Date range picker
+    - `components/admin/reports/DriverFilter.tsx` - Driver selection filter
+
+- **Mock Data: 18 Test Tickets**
+  - **Seed script**: Automated mock data generation for testing
+  - **Realistic data**: Guatemala City addresses, phone numbers, recipient names
+  - **Multi-driver**: 18 tickets across 3 drivers (Carlos: 8, Maria: 6, Juan: 4)
+  - **Mixed states**: Completed tickets with durations, pending tickets
+  - **Time-based**: Tickets spread across last 3 days for realistic testing
+  - Files added:
+    - `scripts/seed-mock-tickets.ts` - Mock ticket generator and seeder
+
+- **UI Improvements**
+  - **Header logout button**: User info display with name, role badge, and logout button
+  - **Driver assist user info**: Logged-in user display at top of driver assist page
+  - **Navigation filtering**: Drivers only see "Driver Assist" link, admins see all
+  - **Reports link**: Added to admin navigation menu
+  - **API Integration**: Driver assist page now uses database API instead of localStorage
+    - Optimistic UI updates for better perceived performance
+    - Real-time error handling with toast notifications
+    - Reload button to fetch latest tickets from database
+
+- **Internationalization: Auth Features**
+  - **Login page translations**: PIN login UI fully translated (English/Spanish)
+  - **Session management**: Logout, role labels, session status messages
+  - **Error messages**: Invalid PIN, session expired, server errors
+  - Translation keys added:
+    - `admin.auth.login.*` - Login page labels and errors
+    - `admin.auth.session.*` - Session status and user info
+
+- **Export Features: Branded PDF & CSV**
+  - **PDF Export**: Professionally branded trip history reports
+    - ENVÍA orange header with company logo
+    - Filter summary (driver, date range)
+    - Summary statistics (total trips, average duration)
+    - Formatted table with trip details
+    - Multi-page support with page numbers
+    - Confidential footer on each page
+  - **CSV Export**: Simple spreadsheet-ready format
+  - **Dynamic filtering**: Exports respect active filters (driver selection, date range)
+  - **Automatic filenames**: `envia-trip-history-YYYY-MM-DD.pdf/csv`
+  - Files added:
+    - `lib/reports/pdf-export.ts` - PDF generation with jsPDF and autoTable
+  - Dependencies: `jspdf`, `jspdf-autotable`
+
+- **Driver Assist: Mock Data & Future Database Preparation**
+  - **Mock data system**: 18 realistic test tickets for reports testing
+  - **localStorage persistence**: Tickets stored in browser localStorage
+  - **Future database support**: Architecture designed for easy migration to Turso/LibSQL
+  - **No authentication yet**: Admin pages are publicly accessible (auth coming in future version)
+  - Files added:
+    - `lib/admin/mock-driver-assist.ts` - Mock ticket data generation
+
+### Changed
+- **App default page**: Root URL (`/`) now redirects to `/admin/driver-assist` instead of marketplace
+  - **Server-side redirect via middleware** (instant, no flash/delay)
+  - Admin/driver system is now the primary application
+  - Public marketplace accessible via `/marketplace`
+- **Export buttons relocated**: Moved from page header to filters section
+  - Now shows "X results to export" counter
+  - Export buttons disabled when no results
+  - Exports only the filtered/visible results in table
+- **Navigation simplified**: Removed Dashboard link - navigation now shows only Dispatcher, Reports, and Driver Assist
+- **DeliveryTicket type**: Added `driverId` and `sequenceNumber` fields in `lib/admin/driver-assist-types.ts`
+- **Middleware simplified**: Now only handles root redirect, authentication removed for v0.3.0
+
+### Tested
+- **Build verification**:
+  - ✅ Production build succeeds without errors
+  - ✅ All imports resolved correctly
+  - ✅ Linting passes with pre-existing issues suppressed
+  - ✅ Formatting applied to all files
+- **Manual testing** verified:
+  - ✅ Root URL (`/`) redirects to `/admin/driver-assist`
+  - ✅ Reports dashboard loads with mock data
+  - ✅ Trip history table displays correctly
+  - ✅ Export buttons in filters section
+  - ✅ PDF export works with branded styling
+  - ✅ CSV export works with filtered results
+  - ✅ Driver filtering works correctly
+  - ✅ Date range filtering works correctly
+  - ✅ Navigation between admin pages works smoothly
+
+### Previous Features (v0.2.0 and earlier)
 - **Internationalization (i18n): Full Spanish/English Support**
   - **next-intl integration**: Implemented industry-standard i18n library for Next.js 15 App Router
   - **Language switcher**: Globe icon with 3-letter language code (ENG/ESP) in navigation
@@ -43,6 +142,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - `app/admin/driver-assist/page.tsx` - Translated page title and labels
     - `components/admin/driver-assist/TicketCard.tsx` - Translated all UI elements
   - Dependencies: `next-intl@3.x` for internationalization
+
+- **Driver Assist: Navigation Timer**
+  - **Live elapsed time**: Real-time timer displays on active tickets while driver is navigating
+  - **Smart time formatting**: Automatically switches format based on duration
+    - MM:SS format for deliveries under 60 minutes (e.g., "05:34")
+    - HH:MM:SS format for deliveries 60+ minutes (e.g., "1:05:34")
+  - **Completion tracking**: Shows total delivery time on completed tickets (e.g., "in 12m 34s")
+  - **Persistent timing**: Timer data survives page refreshes via localStorage
+  - **Visual design**:
+    - Active timer: Orange badge with clock icon and animated pulsing colon
+    - Completed time: Muted gray text next to "Done" badge
+    - Overdue warning: Red color for timers exceeding 24 hours
+  - **Smart behavior**:
+    - Timer starts when "Navigate" button is clicked
+    - Prevents reset if driver clicks Navigate multiple times
+    - Only shows timer if navigation was initiated
+  - **Performance optimized**: Component-level re-renders isolate timer updates from parent
+  - **Accessibility**: Proper ARIA labels for screen readers
+  - **Internationalized**: Timer labels in English and Spanish
+  - Files added:
+    - `components/admin/driver-assist/NavigationTimer.tsx` - Self-contained timer component
+  - Files updated:
+    - `lib/admin/driver-assist-types.ts` - Added `navigationStartedAt?: Date` field
+    - `lib/admin/driver-assist-storage.ts` - Added `startNavigation()` function and date parsing
+    - `components/admin/driver-assist/TicketCard.tsx` - Integrated timer display and start recording
+    - `app/admin/driver-assist/page.tsx` - Added navigation start handler
+    - `messages/en.json`, `messages/es.json` - Added timer translation keys
 
 ### Changed
 - **Driver Assist: Redesigned Button Layout & Visual Hierarchy**

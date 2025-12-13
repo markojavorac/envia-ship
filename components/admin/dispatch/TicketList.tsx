@@ -6,6 +6,7 @@
  */
 
 import { X, MapPin, Package } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { AdminCard } from "@/components/admin/ui/AdminCard";
 import type { DeliveryTicket } from "@/lib/admin/driver-assist-types";
@@ -17,8 +18,10 @@ interface TicketListProps {
 }
 
 export function TicketList({ tickets, onDeleteTicket }: TicketListProps) {
+  const t = useTranslations("admin.dispatch");
+
   return (
-    <AdminCard title="Delivery Tickets" icon={Package}>
+    <AdminCard title={t("deliveryTickets")} icon={Package}>
       <div className="space-y-2">
         {tickets.map((ticket, index) => (
           <div
@@ -69,8 +72,9 @@ export function TicketList({ tickets, onDeleteTicket }: TicketListProps) {
       {/* Summary */}
       <div className="border-border mt-4 border-t pt-4">
         <p className="text-muted-foreground text-sm">
-          Total: <span className="text-foreground font-semibold">{tickets.length}</span>{" "}
-          {tickets.length === 1 ? "ticket" : "tickets"}
+          {t("totalTickets")}:{" "}
+          <span className="text-foreground font-semibold">{tickets.length}</span>{" "}
+          {t("ticketsCount", { count: tickets.length })}
         </p>
       </div>
     </AdminCard>

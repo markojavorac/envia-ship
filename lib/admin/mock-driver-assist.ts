@@ -18,6 +18,8 @@ export function generateMockTickets(): DeliveryTicket[] {
       recipientName: "María González",
       recipientPhone: "+502 5555-1234",
       notes: "Fragile - Handle with care. Call before delivery.",
+      originCoordinates: { lat: 14.5995, lng: -90.5155 }, // Zona 10
+      destinationCoordinates: { lat: 14.6407, lng: -90.5569 }, // Zona 11, Mixco
       isCompleted: false,
       createdAt: new Date(now.getTime() - 2 * 60 * 60 * 1000), // 2 hours ago
     },
@@ -29,6 +31,8 @@ export function generateMockTickets(): DeliveryTicket[] {
       recipientName: "Carlos Ramírez",
       recipientPhone: "+502 5555-5678",
       notes: "Large package - Electronics",
+      originCoordinates: { lat: 14.6067, lng: -90.4897 }, // Oakland Mall, Zona 10
+      destinationCoordinates: { lat: 14.5593, lng: -90.4917 }, // Santa Catarina Pinula
       isCompleted: false,
       createdAt: new Date(now.getTime() - 1.5 * 60 * 60 * 1000), // 1.5 hours ago
     },
@@ -40,6 +44,8 @@ export function generateMockTickets(): DeliveryTicket[] {
       recipientName: "Ana Morales",
       recipientPhone: "+502 5555-9012",
       notes: "Deliver between 2-4 PM",
+      originCoordinates: { lat: 14.6115, lng: -90.5274 }, // Zona 13
+      destinationCoordinates: { lat: 14.5897, lng: -90.4951 }, // Zona 15
       isCompleted: false,
       createdAt: new Date(now.getTime() - 1 * 60 * 60 * 1000), // 1 hour ago
     },
@@ -51,6 +57,8 @@ export function generateMockTickets(): DeliveryTicket[] {
       recipientName: "José López",
       recipientPhone: "+502 5555-3456",
       notes: "Business delivery - Ask for reception desk",
+      originCoordinates: { lat: 14.6089, lng: -90.5141 }, // Zona 9
+      destinationCoordinates: { lat: 14.6331, lng: -90.5645 }, // Zona 8, Mixco
       isCompleted: false,
       createdAt: new Date(now.getTime() - 30 * 60 * 1000), // 30 minutes ago
     },
@@ -61,6 +69,8 @@ export function generateMockTickets(): DeliveryTicket[] {
       destinationAddress: "Avenida Petapa 45-12, Zona 12, Guatemala City, Guatemala",
       recipientName: "Patricia Hernández",
       recipientPhone: "+502 5555-7890",
+      originCoordinates: { lat: 14.6417, lng: -90.5133 }, // Zona 1
+      destinationCoordinates: { lat: 14.5794, lng: -90.5452 }, // Zona 12
       isCompleted: false,
       createdAt: new Date(now.getTime() - 10 * 60 * 1000), // 10 minutes ago
     },

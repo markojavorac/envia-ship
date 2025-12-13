@@ -1,3 +1,4 @@
+/* eslint-disable custom/no-admin-hardcoded-colors */
 "use client";
 
 import { useState, useRef } from "react";

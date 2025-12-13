@@ -14,6 +14,7 @@ import type { DeliveryTicket } from "@/lib/admin/driver-assist-types";
 import { getOrGeocodeCoordinates } from "@/lib/admin/driver-assist-geocoding";
 import { openNavigation } from "@/lib/admin/driver-assist-navigation";
 import { NumberBadge } from "./NumberBadge";
+import { NavigationTimer } from "./NavigationTimer";
 
 interface TicketCardProps {
   ticket: DeliveryTicket;
@@ -27,6 +28,7 @@ interface TicketCardProps {
     originCoordinates: { lat: number; lng: number },
     destinationCoordinates: { lat: number; lng: number }
   ) => void;
+  onUpdateNavigationStart?: (ticketId: string) => void;
 }
 
 /**
@@ -41,6 +43,7 @@ export function TicketCard({
   onComplete,
   onDelete,
   onUpdateCoordinates,
+  onUpdateNavigationStart,
 }: TicketCardProps) {
   const t = useTranslations("admin.driverAssist");
   const [isGeocoding, setIsGeocoding] = useState(false);
@@ -65,6 +68,11 @@ export function TicketCard({
       // Cache coordinates in ticket if not already cached
       if (onUpdateCoordinates && (!ticket.originCoordinates || !ticket.destinationCoordinates)) {
         onUpdateCoordinates(ticket.id, result.origin, result.destination);
+      }
+
+      // Record navigation start time (only if not already set)
+      if (onUpdateNavigationStart && !ticket.navigationStartedAt) {
+        onUpdateNavigationStart(ticket.id);
       }
 
       // Open navigation
@@ -193,17 +201,34 @@ export function TicketCard({
                       ? `${t("done")} ${formatDistanceToNow(ticket.completedAt, { addSuffix: true })}`
                       : `${t("created")} ${formatDistanceToNow(ticket.createdAt, { addSuffix: true })}`}
                   </span>
+
+                  {/* Navigation Timer - Active tickets */}
+                  {ticket.navigationStartedAt && !ticket.isCompleted && (
+                    <NavigationTimer
+                      navigationStartedAt={ticket.navigationStartedAt}
+                      variant={isUpNext ? "large" : "inline"}
+                      className="ml-auto"
+                    />
+                  )}
+
+                  {/* Completed badge with timer */}
                   {ticket.isCompleted && (
-                    <Badge
-                      // eslint-disable-next-line custom/no-admin-hardcoded-colors
-                      className={cn(
-                        "ml-auto shrink-0 bg-green-500 text-white",
-                        isUpNext && "text-sm"
+                    <div className="ml-auto flex items-center gap-2">
+                      <Badge
+                        // eslint-disable-next-line custom/no-admin-hardcoded-colors
+                        className={cn("shrink-0 bg-green-500 text-white", isUpNext && "text-sm")}
+                      >
+                        <CheckCircle className={cn(isUpNext ? "mr-1 h-4 w-4" : "mr-1 h-3 w-3")} />
+                        {t("done")}
+                      </Badge>
+                      {ticket.navigationStartedAt && ticket.completedAt && (
+                        <NavigationTimer
+                          navigationStartedAt={ticket.navigationStartedAt}
+                          completedAt={ticket.completedAt}
+                          variant="inline"
+                        />
                       )}
-                    >
-                      <CheckCircle className={cn(isUpNext ? "mr-1 h-4 w-4" : "mr-1 h-3 w-3")} />
-                      {t("done")}
-                    </Badge>
+                    </div>
                   )}
                 </div>
 

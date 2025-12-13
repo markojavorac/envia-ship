@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Truck, Sparkles } from "lucide-react";
+import { Truck, RefreshCcw, User } from "lucide-react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
@@ -12,13 +12,13 @@ import { TicketCard } from "@/components/admin/driver-assist/TicketCard";
 import { TicketConfirmationDialog } from "@/components/admin/driver-assist/TicketConfirmationDialog";
 import type { DeliveryTicket } from "@/lib/admin/driver-assist-types";
 import {
-  loadTickets,
-  addTicket,
-  updateTicket,
-  completeTicket,
-  deleteTicket,
-  loadMockTickets,
-} from "@/lib/admin/driver-assist-storage";
+  fetchTickets,
+  createTicket,
+  updateTicket as updateTicketAPI,
+  completeTicket as completeTicketAPI,
+  deleteTicket as deleteTicketAPI,
+  startNavigation as startNavigationAPI,
+} from "@/lib/api/tickets";
 import { toast } from "sonner";
 import { decodeUrlToTicket } from "@/lib/admin/ticket-url-encoding";
 import { decodeUrlToRoute } from "@/lib/admin/multi-ticket-url-encoding";
@@ -40,12 +40,41 @@ export default function DriverAssistPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [pendingTicket, setPendingTicket] = useState<DeliveryTicket | null>(null);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState<{
+    name: string;
+    role: "driver" | "admin";
+  } | null>(null);
 
-  // Load tickets from localStorage on mount
+  // Fetch current user session
   useEffect(() => {
-    const loaded = loadTickets();
-    setTickets(loaded);
-    setIsLoading(false);
+    fetch("/api/auth/session")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.driver) {
+          setCurrentUser({
+            name: data.driver.name,
+            role: data.driver.role,
+          });
+        }
+      })
+      .catch(() => setCurrentUser(null));
+  }, []);
+
+  // Load tickets from API on mount
+  useEffect(() => {
+    const loadTicketsFromAPI = async () => {
+      try {
+        const loaded = await fetchTickets();
+        setTickets(loaded);
+      } catch (error) {
+        console.error("Error loading tickets:", error);
+        toast.error("Failed to load tickets");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadTicketsFromAPI();
   }, []);
 
   // URL parameter detection for shared tickets/routes from dispatcher
@@ -70,7 +99,7 @@ export default function DriverAssistPage() {
 
         // Add all tickets from route (preserving optimized sequence)
         let addedCount = 0;
-        decodedTickets.forEach((ticket) => {
+        for (const ticket of decodedTickets) {
           // Check for duplicates
           const isDuplicate = tickets.some(
             (t) =>
@@ -80,11 +109,15 @@ export default function DriverAssistPage() {
           );
 
           if (!isDuplicate) {
-            const updated = addTicket(ticket);
-            setTickets(updated);
-            addedCount++;
+            try {
+              const created = await createTicket(ticket);
+              setTickets((prev) => [created, ...prev]);
+              addedCount++;
+            } catch (error) {
+              console.error("Error adding ticket:", error);
+            }
           }
-        });
+        }
 
         if (addedCount > 0) {
           toast.success(
@@ -145,17 +178,22 @@ export default function DriverAssistPage() {
   }, [tickets, isLoading]); // Run when tickets or loading state changes
 
   // Handle confirmation dialog actions
-  const handleConfirmTicket = () => {
+  const handleConfirmTicket = async () => {
     if (!pendingTicket) return;
 
-    const updated = addTicket(pendingTicket);
-    setTickets(updated);
+    try {
+      const created = await createTicket(pendingTicket);
+      setTickets((prev) => [created, ...prev]);
 
-    toast.success(
-      pendingTicket.ticketNumber
-        ? `Ticket ${pendingTicket.ticketNumber} added to queue`
-        : "Ticket added from dispatcher"
-    );
+      toast.success(
+        pendingTicket.ticketNumber
+          ? `Ticket ${pendingTicket.ticketNumber} added to queue`
+          : "Ticket added from dispatcher"
+      );
+    } catch (error) {
+      console.error("Error adding ticket:", error);
+      toast.error("Failed to add ticket");
+    }
 
     setPendingTicket(null);
     setIsConfirmationOpen(false);
@@ -166,7 +204,7 @@ export default function DriverAssistPage() {
     setIsConfirmationOpen(false);
   };
 
-  const handleSaveTicket = (ticketData: {
+  const handleSaveTicket = async (ticketData: {
     ticketNumber?: string;
     originAddress: string;
     destinationAddress: string;
@@ -188,9 +226,15 @@ export default function DriverAssistPage() {
       createdAt: new Date(),
     };
 
-    const updated = addTicket(newTicket);
-    setTickets(updated);
-    setIsAddDialogOpen(false);
+    try {
+      const created = await createTicket(newTicket);
+      setTickets((prev) => [created, ...prev]);
+      setIsAddDialogOpen(false);
+      toast.success("Ticket created successfully");
+    } catch (error) {
+      console.error("Error creating ticket:", error);
+      toast.error("Failed to create ticket");
+    }
   };
 
   const handleNavigate = (ticket: DeliveryTicket) => {
@@ -199,32 +243,98 @@ export default function DriverAssistPage() {
     console.log("Navigating to ticket:", ticket.id);
   };
 
-  const handleComplete = (ticketId: string) => {
-    const updated = completeTicket(ticketId);
-    setTickets(updated);
+  const handleComplete = async (ticketId: string) => {
+    // Optimistic update
+    setTickets((prev) =>
+      prev.map((t) =>
+        t.id === ticketId ? { ...t, isCompleted: true, completedAt: new Date() } : t
+      )
+    );
+
+    try {
+      const updated = await completeTicketAPI(ticketId);
+      setTickets((prev) => prev.map((t) => (t.id === ticketId ? updated : t)));
+      toast.success("Ticket completed");
+    } catch (error) {
+      console.error("Error completing ticket:", error);
+      toast.error("Failed to complete ticket");
+      // Revert optimistic update
+      setTickets((prev) =>
+        prev.map((t) =>
+          t.id === ticketId ? { ...t, isCompleted: false, completedAt: undefined } : t
+        )
+      );
+    }
   };
 
-  const handleDelete = (ticketId: string) => {
-    const updated = deleteTicket(ticketId);
-    setTickets(updated);
+  const handleDelete = async (ticketId: string) => {
+    // Optimistic update
+    setTickets((prev) => prev.filter((t) => t.id !== ticketId));
+
+    try {
+      await deleteTicketAPI(ticketId);
+      toast.success("Ticket deleted");
+    } catch (error) {
+      console.error("Error deleting ticket:", error);
+      toast.error("Failed to delete ticket");
+      // Reload tickets to restore deleted ticket
+      const loaded = await fetchTickets();
+      setTickets(loaded);
+    }
   };
 
-  const handleUpdateCoordinates = (
+  const handleUpdateCoordinates = async (
     ticketId: string,
     originCoordinates: { lat: number; lng: number },
     destinationCoordinates: { lat: number; lng: number }
   ) => {
-    const updated = updateTicket(ticketId, {
-      originCoordinates,
-      destinationCoordinates,
-    });
-    setTickets(updated);
+    // Optimistic update
+    setTickets((prev) =>
+      prev.map((t) => (t.id === ticketId ? { ...t, originCoordinates, destinationCoordinates } : t))
+    );
+
+    try {
+      await updateTicketAPI(ticketId, {
+        originCoordinates,
+        destinationCoordinates,
+      });
+    } catch (error) {
+      console.error("Error updating coordinates:", error);
+      toast.error("Failed to update coordinates");
+      // Revert optimistic update
+      const loaded = await fetchTickets();
+      setTickets(loaded);
+    }
   };
 
-  const handleLoadMockData = () => {
-    const mockTickets = loadMockTickets();
-    setTickets(mockTickets);
-    toast.success("Loaded 5 mock delivery tickets");
+  const handleUpdateNavigationStart = async (ticketId: string) => {
+    // Optimistic update
+    setTickets((prev) =>
+      prev.map((t) => (t.id === ticketId ? { ...t, navigationStartedAt: new Date() } : t))
+    );
+
+    try {
+      const updated = await startNavigationAPI(ticketId);
+      setTickets((prev) => prev.map((t) => (t.id === ticketId ? updated : t)));
+    } catch (error) {
+      console.error("Error starting navigation:", error);
+      toast.error("Failed to start navigation timer");
+      // Revert optimistic update
+      setTickets((prev) =>
+        prev.map((t) => (t.id === ticketId ? { ...t, navigationStartedAt: undefined } : t))
+      );
+    }
+  };
+
+  const handleLoadMockData = async () => {
+    try {
+      const loaded = await fetchTickets();
+      setTickets(loaded);
+      toast.success("Tickets reloaded from database");
+    } catch (error) {
+      console.error("Error reloading tickets:", error);
+      toast.error("Failed to reload tickets");
+    }
   };
 
   if (isLoading) {
@@ -255,11 +365,24 @@ export default function DriverAssistPage() {
             size="sm"
             className="border-border text-foreground hover:bg-muted"
           >
-            <Sparkles className="mr-2 h-4 w-4" />
-            {t("loadMockData")}
+            <RefreshCcw className="mr-2 h-4 w-4" />
+            Reload
           </Button>
         }
       />
+
+      {/* LOGGED IN USER INFO */}
+      {currentUser && (
+        <div className="border-primary/30 bg-card flex items-center gap-2 rounded-lg border px-4 py-2">
+          <User className="text-primary h-5 w-5" />
+          <div className="flex items-baseline gap-2">
+            <span className="text-foreground font-semibold">{currentUser.name}</span>
+            <span className="text-muted-foreground text-xs">
+              ({currentUser.role === "admin" ? "Admin" : "Driver"})
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* STICKY "UP NEXT" SECTION */}
       <AnimatePresence mode="wait">
@@ -283,6 +406,7 @@ export default function DriverAssistPage() {
               onComplete={handleComplete}
               onDelete={handleDelete}
               onUpdateCoordinates={handleUpdateCoordinates}
+              onUpdateNavigationStart={handleUpdateNavigationStart}
             />
           </motion.div>
         )}
@@ -319,8 +443,8 @@ export default function DriverAssistPage() {
                           : `0 ${15 - index * 3}px ${20 - index * 3}px -3px rgba(0, 0, 0, ${0.15 - index * 0.02})`,
                     }}
                   >
+                    {/* eslint-disable-next-line custom/no-inline-styles, custom/no-admin-hardcoded-colors */}
                     <div
-                      // eslint-disable-next-line custom/no-admin-hardcoded-colors, custom/no-inline-styles
                       className="pointer-events-none absolute inset-0 rounded-lg bg-black transition-opacity duration-200"
                       style={{
                         opacity: darknessLevel,
@@ -335,6 +459,7 @@ export default function DriverAssistPage() {
                       onComplete={handleComplete}
                       onDelete={handleDelete}
                       onUpdateCoordinates={handleUpdateCoordinates}
+                      onUpdateNavigationStart={handleUpdateNavigationStart}
                     />
                   </div>
                 </div>
@@ -358,6 +483,7 @@ export default function DriverAssistPage() {
               onComplete={handleComplete}
               onDelete={handleDelete}
               onUpdateCoordinates={handleUpdateCoordinates}
+              onUpdateNavigationStart={handleUpdateNavigationStart}
             />
           ))}
         </div>

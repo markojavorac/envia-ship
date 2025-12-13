@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Plus, Send, Sparkles, ArrowLeft, Share2, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AdminPageTitle } from "@/components/admin/ui/AdminPageTitle";
@@ -30,6 +31,7 @@ import { toast } from "sonner";
 type PageState = "TICKET_COLLECTION" | "OPTIMIZATION_RESULTS" | "URL_SHARING";
 
 export default function DispatcherUtilityPage() {
+  const t = useTranslations("admin.dispatch");
   const [pageState, setPageState] = useState<PageState>("TICKET_COLLECTION");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [tickets, setTickets] = useState<DeliveryTicket[]>([]);
@@ -63,25 +65,25 @@ export default function DispatcherUtilityPage() {
 
     setTickets((prev) => [...prev, newTicket]);
     setIsAddDialogOpen(false);
-    toast.success(`Ticket ${ticketData.ticketNumber || "added"} to route`);
+    toast.success(t("ticketAdded", { ticketNumber: ticketData.ticketNumber || "" }));
   };
 
   const handleDeleteTicket = (ticketId: string) => {
     setTickets((prev) => prev.filter((t) => t.id !== ticketId));
-    toast.success("Ticket removed");
+    toast.success(t("ticketRemoved"));
   };
 
   const handleLoadDemoData = () => {
     const demoTickets = generateDemoTickets();
     setTickets(demoTickets);
-    toast.success(`Loaded ${demoTickets.length} demo delivery tickets`);
+    toast.success(t("demoDataLoaded", { count: demoTickets.length }));
   };
 
   // === ROUTE OPTIMIZATION === //
 
   const handleOptimizeRoute = async () => {
     if (tickets.length < 2) {
-      toast.error("Add at least 2 tickets to optimize a route");
+      toast.error(t("errorMinTickets"));
       return;
     }
 
@@ -119,11 +121,14 @@ export default function DispatcherUtilityPage() {
       setPageState("OPTIMIZATION_RESULTS");
 
       toast.success(
-        `Route optimized! Saved ${optimized.distanceSaved.toFixed(1)} km (${Math.round(optimized.improvementPercent)}%)`
+        t("routeOptimized", {
+          distanceSaved: optimized.distanceSaved.toFixed(1),
+          percent: Math.round(optimized.improvementPercent),
+        })
       );
     } catch (error) {
       console.error("Route optimization failed:", error);
-      toast.error("Failed to optimize route. Please try again.");
+      toast.error(t("errorOptimization"));
     } finally {
       setIsOptimizing(false);
     }
@@ -133,7 +138,7 @@ export default function DispatcherUtilityPage() {
 
   const handleShareRoute = () => {
     if (!optimizedRoute) {
-      toast.error("No optimized route to share");
+      toast.error(t("errorNoRoute"));
       return;
     }
 
@@ -141,10 +146,10 @@ export default function DispatcherUtilityPage() {
       const url = encodeRouteToUrl(tickets, optimizedRoute);
       setGeneratedUrl(url);
       setPageState("URL_SHARING");
-      toast.success("Route URL generated successfully");
+      toast.success(t("urlGenerated"));
     } catch (error) {
       console.error("Failed to generate route URL:", error);
-      toast.error("Failed to generate shareable URL");
+      toast.error(t("errorUrlGeneration"));
     }
   };
 
@@ -160,7 +165,7 @@ export default function DispatcherUtilityPage() {
     setOptimizedRoute(null);
     setGeneratedUrl(null);
     setPageState("TICKET_COLLECTION");
-    toast.success("Ready to create new route");
+    toast.success(t("readyForNewRoute"));
   };
 
   // === RENDER === //
@@ -171,17 +176,17 @@ export default function DispatcherUtilityPage() {
       <AdminPageTitle
         title={
           pageState === "TICKET_COLLECTION"
-            ? "Route Dispatcher"
+            ? t("title")
             : pageState === "OPTIMIZATION_RESULTS"
-              ? "Optimization Results"
-              : "Share Route"
+              ? t("titleOptimizing")
+              : t("titleSharing")
         }
         description={
           pageState === "TICKET_COLLECTION"
-            ? "Create and optimize delivery routes"
+            ? t("description")
             : pageState === "OPTIMIZATION_RESULTS"
-              ? "Review optimized route and savings"
-              : "Copy URL to share with driver"
+              ? t("descriptionOptimizing")
+              : t("descriptionSharing")
         }
         actions={
           pageState === "TICKET_COLLECTION" ? (
@@ -193,14 +198,14 @@ export default function DispatcherUtilityPage() {
                 className="border-border text-foreground hover:bg-muted"
               >
                 <Sparkles className="mr-2 h-4 w-4" />
-                Load Demo
+                {t("loadDemo")}
               </Button>
               <Button
                 onClick={() => setIsAddDialogOpen(true)}
                 className="bg-primary hover:bg-primary/90 font-semibold text-white"
               >
                 <Plus className="mr-2 h-4 w-4" />
-                Add Ticket
+                {t("addTicket")}
               </Button>
             </div>
           ) : pageState === "OPTIMIZATION_RESULTS" ? (
@@ -211,7 +216,7 @@ export default function DispatcherUtilityPage() {
               className="border-border text-foreground hover:bg-muted"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Edit Tickets
+              {t("editTickets")}
             </Button>
           ) : null
         }
@@ -221,40 +226,28 @@ export default function DispatcherUtilityPage() {
       {pageState === "TICKET_COLLECTION" && (
         <>
           {tickets.length === 0 ? (
-            <AdminCard title="Get Started" icon={Send}>
+            <AdminCard title={t("getStarted")} icon={Send}>
               <div className="space-y-3">
-                <AdminInfoBox variant="info">
-                  Create an optimized delivery route by adding 5-7 tickets. The system will
-                  calculate the most efficient sequence and generate a shareable URL for your
-                  driver.
-                </AdminInfoBox>
+                <AdminInfoBox variant="info">{t("getStartedDescription")}</AdminInfoBox>
 
                 <ol className="text-foreground space-y-2 text-sm">
                   <li className="flex items-start gap-2">
                     <span className="bg-primary mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white">
                       1
                     </span>
-                    <span>
-                      <strong>Add tickets</strong> - Upload photos or enter delivery details
-                      manually
-                    </span>
+                    <span dangerouslySetInnerHTML={{ __html: t.raw("step1") }} />
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="bg-primary mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white">
                       2
                     </span>
-                    <span>
-                      <strong>Optimize route</strong> - System calculates most efficient delivery
-                      sequence
-                    </span>
+                    <span dangerouslySetInnerHTML={{ __html: t.raw("step2") }} />
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="bg-primary mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white">
                       3
                     </span>
-                    <span>
-                      <strong>Share with driver</strong> - Generate URL and send via WhatsApp
-                    </span>
+                    <span dangerouslySetInnerHTML={{ __html: t.raw("step3") }} />
                   </li>
                 </ol>
 
@@ -266,7 +259,7 @@ export default function DispatcherUtilityPage() {
                     className="border-primary text-primary hover:bg-primary/5 flex-1 border-2 font-semibold"
                   >
                     <Sparkles className="mr-2 h-5 w-5" />
-                    Load Demo Data
+                    {t("loadDemoData")}
                   </Button>
                   <Button
                     onClick={() => setIsAddDialogOpen(true)}
@@ -274,7 +267,7 @@ export default function DispatcherUtilityPage() {
                     className="bg-primary hover:bg-primary/90 flex-1 font-semibold text-white"
                   >
                     <Plus className="mr-2 h-5 w-5" />
-                    Add First Ticket
+                    {t("addFirstTicket")}
                   </Button>
                 </div>
               </div>
@@ -289,11 +282,11 @@ export default function DispatcherUtilityPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="text-foreground text-lg font-semibold">
-                      Ready to optimize route
+                      {t("readyToOptimize")}
                     </h3>
                     <p className="text-muted-foreground text-sm">
-                      {tickets.length} {tickets.length === 1 ? "ticket" : "tickets"} in route
-                      {tickets.length < 2 && " (need at least 2)"}
+                      {t("ticketsInRoute", { count: tickets.length })}
+                      {tickets.length < 2 && ` (${t("needAtLeast2")})`}
                     </p>
                   </div>
                   <Button
@@ -305,12 +298,12 @@ export default function DispatcherUtilityPage() {
                     {isOptimizing ? (
                       <>
                         <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                        Optimizing...
+                        {t("optimizing")}
                       </>
                     ) : (
                       <>
                         <Zap className="mr-2 h-5 w-5" />
-                        Optimize Route
+                        {t("optimizeRoute")}
                       </>
                     )}
                   </Button>
@@ -330,10 +323,10 @@ export default function DispatcherUtilityPage() {
           <AdminCard>
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-foreground text-lg font-semibold">Share optimized route</h3>
-                <p className="text-muted-foreground text-sm">
-                  Generate URL to send to driver via WhatsApp
-                </p>
+                <h3 className="text-foreground text-lg font-semibold">
+                  {t("shareOptimizedRoute")}
+                </h3>
+                <p className="text-muted-foreground text-sm">{t("generateUrlDescription")}</p>
               </div>
               <Button
                 onClick={handleShareRoute}
@@ -341,7 +334,7 @@ export default function DispatcherUtilityPage() {
                 size="lg"
               >
                 <Share2 className="mr-2 h-5 w-5" />
-                Generate URL
+                {t("generateUrl")}
               </Button>
             </div>
           </AdminCard>

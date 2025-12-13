@@ -303,6 +303,29 @@
     "sendMessage": "Send Message"
   },
   "admin": {
+    "auth": {
+      "login": {
+        "title": "Driver Login",
+        "subtitle": "Enter your PIN to access the system",
+        "pinLabel": "PIN Code",
+        "pinPlaceholder": "Enter 4-6 digit PIN",
+        "loginButton": "Login",
+        "loggingIn": "Logging in...",
+        "invalidPin": "Invalid PIN. Please try again.",
+        "sessionExpired": "Your session has expired. Please log in again.",
+        "unauthorized": "Unauthorized access.",
+        "serverError": "Server error. Please try again later."
+      },
+      "session": {
+        "loggedInAs": "Logged in as",
+        "admin": "Admin",
+        "driver": "Driver",
+        "logout": "Logout",
+        "loggingOut": "Logging out...",
+        "logoutSuccess": "Logged out successfully",
+        "logoutFailed": "Logout failed"
+      }
+    },
     "common": {
       "actions": "Actions",
       "status": "Status",
@@ -442,38 +465,78 @@
       }
     },
     "dispatch": {
-      "title": "Dispatch Board",
-      "description": "Manage deliveries and driver assignments",
-      "kpis": {
-        "activeDeliveries": "Active Deliveries",
-        "availableDrivers": "Available Drivers",
-        "avgDeliveryTime": "Avg Delivery Time",
-        "onTimeRate": "On-Time Rate",
-        "minutes": "min"
-      },
-      "filters": {
-        "allStatuses": "All Statuses",
-        "allZones": "All Zones",
-        "allDrivers": "All Drivers"
-      },
-      "driverStatus": {
-        "available": "Available",
-        "busy": "Busy",
-        "offline": "Offline"
-      },
-      "deliveryStatus": {
-        "pending": "Pending",
-        "assigned": "Assigned",
-        "inProgress": "In Progress",
-        "completed": "Completed",
-        "delayed": "Delayed"
-      },
-      "assignDriver": "Assign Driver",
-      "unassign": "Unassign",
-      "viewRoute": "View Route",
-      "contactDriver": "Contact Driver",
-      "activeDeliveries": "Active Deliveries",
-      "completedToday": "Completed Today"
+      "title": "Route Dispatcher",
+      "titleOptimizing": "Optimization Results",
+      "titleSharing": "Share Route",
+      "description": "Create and optimize delivery routes",
+      "descriptionOptimizing": "Review optimized route and savings",
+      "descriptionSharing": "Copy URL to share with driver",
+      "loadDemo": "Load Demo",
+      "addTicket": "Add Ticket",
+      "editTickets": "Edit Tickets",
+      "getStartedTitle": "Get Started",
+      "getStartedInfo": "Create an optimized delivery route by adding 5-7 tickets. The system will calculate the most efficient sequence and generate a shareable URL for your driver.",
+      "step1": "Add tickets",
+      "step1Description": "Upload photos or enter delivery details manually",
+      "step2": "Optimize route",
+      "step2Description": "System calculates most efficient delivery sequence",
+      "step3": "Share with driver",
+      "step3Description": "Generate URL and send via WhatsApp",
+      "loadDemoData": "Load Demo Data",
+      "addFirstTicket": "Add First Ticket",
+      "readyToOptimize": "Ready to optimize route",
+      "ticketsInRoute": "{{count}} ticket in route",
+      "ticketsInRoute_plural": "{{count}} tickets in route",
+      "needAtLeast2": "(need at least 2)",
+      "optimizing": "Optimizing...",
+      "optimizeRoute": "Optimize Route",
+      "shareOptimizedRoute": "Share optimized route",
+      "generateUrlDescription": "Generate URL to send to driver via WhatsApp",
+      "generateUrl": "Generate URL",
+      "createNewRoute": "Create New Route",
+      "optimizedSuccessfully": "Route Optimized Successfully!",
+      "savedDistance": "Saved {{distance}} and {{time}} per delivery run",
+      "better": "Better",
+      "routeComparison": "Route Comparison",
+      "beforeOriginal": "Before (Original Order)",
+      "afterOptimized": "After (Optimized Order)",
+      "enteredSequence": "Entered sequence",
+      "nearestNeighbor": "Nearest Neighbor",
+      "distance": "Distance",
+      "time": "Time",
+      "businessImpact": "Business Impact",
+      "distanceSaved": "Distance Saved",
+      "timeSaved": "Time Saved",
+      "fuelCostSaved": "Fuel Cost Saved",
+      "perRoute": "Per route",
+      "co2Reduction": "CO₂ Reduction",
+      "carbonSavings": "Carbon savings",
+      "monthlyProjection": "Monthly Projection",
+      "assumingRoutes": "Assuming {{count}} routes per month:",
+      "monthlyFuelSavings": "Monthly Fuel Savings",
+      "monthlyCo2Reduction": "Monthly CO₂ Reduction",
+      "deliveryTickets": "Delivery Tickets",
+      "totalTickets": "Total",
+      "ticketsCount": "{{count}} ticket",
+      "ticketsCount_plural": "{{count}} tickets",
+      "getStarted": "Get Started",
+      "getStartedDescription": "Create an optimized delivery route by adding 5-7 tickets. The system will calculate the most efficient sequence and generate a shareable URL for your driver.",
+      "step1": "<strong>Add tickets</strong> - Upload photos or enter delivery details manually",
+      "step2": "<strong>Optimize route</strong> - System calculates most efficient delivery sequence",
+      "step3": "<strong>Share with driver</strong> - Generate URL and send via WhatsApp",
+      "ticketAdded": "Ticket {{ticketNumber}} added to route",
+      "ticketRemoved": "Ticket removed",
+      "demoDataLoaded": "Loaded {{count}} demo delivery tickets",
+      "errorMinTickets": "Add at least 2 tickets to optimize a route",
+      "routeOptimized": "Route optimized! Saved {{distanceSaved}} km ({{percent}}%)",
+      "errorOptimization": "Failed to optimize route. Please try again.",
+      "errorNoRoute": "No optimized route to share",
+      "urlGenerated": "Route URL generated successfully",
+      "errorUrlGeneration": "Failed to generate shareable URL",
+      "readyForNewRoute": "Ready to create new route",
+      "minutes": "minute",
+      "minutes_plural": "minutes",
+      "perDeliveryRun": "per delivery run"
     },
     "driverAssist": {
       "title": "Driver Assist",
@@ -538,6 +601,11 @@
         "notes": "Notes",
         "addToQueue": "Add to Queue",
         "cancel": "Cancel"
+      },
+      "timer": {
+        "navigating": "Navigating",
+        "completedIn": "in {time}",
+        "elapsedTime": "Elapsed: {time}"
       }
     },
     "routes": {

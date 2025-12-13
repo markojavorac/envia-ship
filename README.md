@@ -32,14 +32,57 @@ Modern shipping calculator and marketplace platform for ENVÍA de Guatemala.
 - **Drag-and-Drop Upload**: Intuitive interface with visual feedback and instant AI processing
 - **Smart Navigation**: One-tap route opening with intelligent geocoding
   - Waze deep links on mobile, Google Maps on desktop
+  - Live timer showing elapsed time since navigation started
   - Caches coordinates to avoid duplicate API calls
+- **Multi-Ticket URL Sharing**: Share entire ticket queue via WhatsApp URL
+  - Dispatcher can send optimized route directly to driver
+  - Driver confirmation dialog before adding tickets
+  - Automatic appending to existing queue
 - **Ticket Management**: Complete CRUD with localStorage persistence (max 50 tickets)
   - Add/complete/delete tickets
   - Tickets persist across browser sessions
-  - Completed tickets fade but remain visible
-- **Mobile-First Design**: Responsive grid (1/2/3 columns), touch-friendly buttons (44px+)
+  - Completed tickets show total time with smooth animation
+  - Live navigation timers for active deliveries
+- **Mobile-First Design**: Responsive grid (1/2/3 columns), touch-friendly buttons (44px+), stacked card view
 - **Testing Infrastructure**: 13 mock tickets covering Guatemala City zones 1-16
-- Access via `/admin/driver-assist` in the admin dashboard
+- Access via `/admin/driver-assist` (default landing page)
+
+### Dispatcher Terminal (Admin)
+- **Route Optimization**: Integrate route planner with driver assist workflow
+  - Optimize multi-stop routes before sending to drivers
+  - Visual before/after comparison showing route improvements
+  - Detailed metrics: distance saved, time saved, percentage improvement
+- **WhatsApp Integration**: One-click sharing to driver mobile apps
+  - Multi-ticket URL generation with all route stops
+  - Deep link support for instant ticket loading
+  - QR code option for easy mobile scanning
+- **Ticket List Management**: View and organize delivery tickets
+  - Filter by status, zone, recipient
+  - Bulk selection for route optimization
+  - Real-time ticket updates
+- **Driver Assignment**: (Coming soon) Assign optimized routes to specific drivers
+- Access via `/admin/dispatch`
+
+### Reports Dashboard (Admin)
+- **Trip History Table**: Complete delivery analytics with advanced filtering
+  - Sortable columns: driver, completed date, duration
+  - Date range filtering with calendar picker
+  - Driver filtering with dropdown selector
+  - Real-time result counter
+  - Expandable rows for full address display
+- **Driver Performance Metrics**: Individual driver statistics cards
+  - Total completed deliveries
+  - Average delivery time
+  - Fastest and slowest delivery times
+  - Completion rate percentage
+  - Color-coded performance indicators
+- **Export Capabilities**: Multiple export formats with filtered results
+  - **PDF Export**: Branded reports with ENVÍA styling, filter summary, and formatted tables
+  - **CSV Export**: Spreadsheet-ready data for further analysis
+  - Exports match current filters (date range, driver selection)
+  - Download count indicator shows exactly what will export
+- **Live Data**: Auto-refresh with manual refresh button
+- Access via `/admin/reports`
 
 ### Marketplace
 - **5 UI Variations**: Amazon-style, Uber Eats-style, Pinterest-style, Minimalist, Proximity-focused
@@ -116,6 +159,8 @@ To add new translations:
 - **Forms**: React Hook Form + Zod validation
 - **Internationalization**: next-intl (Spanish/English)
 - **Icons**: Lucide React
+- **Data Export**: jsPDF (PDF generation), papaparse (CSV parsing/export)
+- **Date Handling**: react-day-picker (calendar components)
 - **Testing**: Playwright (automated screenshots)
 
 ## Getting Started
@@ -134,7 +179,7 @@ npm run build
 npm start
 ```
 
-Visit `http://localhost:3000`
+Visit `http://localhost:3000` (automatically redirects to `/admin/driver-assist`)
 
 ## Project Structure
 
@@ -142,17 +187,22 @@ Visit `http://localhost:3000`
 /app                    # Next.js App Router pages
   /admin                # Admin dashboard
     /routes             # Route planner page
-    /driver-assist      # Driver assist page
-    /dispatch           # Dispatch terminal
+    /driver-assist      # Driver assist page (default landing)
+    /dispatch           # Dispatcher terminal with route optimization
+    /reports            # Trip history and performance analytics
     /orders             # Order management
     /products           # Product management
   /api/admin
     /geocode            # Geocoding proxy API
     /analyze-ticket     # AI ticket analysis API
+  /api/reports
+    /trips              # Trip history data API
+    /performance        # Driver performance metrics API
   /calculator           # Shipping calculator
   /marketplace          # Product marketplace
     /[productId]        # Product detail pages
   /contact              # Contact page
+  page.tsx              # Root redirect to admin
   layout.tsx            # Root layout with providers
   globals.css           # Tailwind CSS with theme
 
@@ -170,7 +220,17 @@ Visit `http://localhost:3000`
     /driver-assist      # Driver assist components
       AddTicketCard.tsx           # Add ticket button card
       AddTicketDialog.tsx         # AI-powered upload dialog
-      TicketCard.tsx              # Individual ticket display
+      TicketCard.tsx              # Individual ticket display with live timer
+      NavigationTimer.tsx         # Live elapsed time counter
+      StackedTickets.tsx          # Stacked card preview
+    /dispatch           # Dispatcher components
+      TicketList.tsx              # Ticket selection and filtering
+      RouteOptimizationResults.tsx # Before/After comparison with sharing
+    /reports            # Reports dashboard components
+      TripHistoryTable.tsx        # Sortable trip history table
+      DriverPerformanceCards.tsx  # Individual driver metrics
+      DateRangeFilter.tsx         # Calendar date picker
+      DriverFilter.tsx            # Driver selection dropdown
   /calculator           # Calculator form components
   /marketplace          # Marketplace components (cards, modals, filters)
   /ui                   # shadcn/ui base components
@@ -194,6 +254,10 @@ Visit `http://localhost:3000`
     driver-assist-storage.ts       # localStorage CRUD & geocoding cache
     driver-assist-geocoding.ts     # Geocoding service with caching
     driver-assist-navigation.ts    # Waze/Google Maps deep links
+    mock-driver-assist.ts          # Mock trip data for reports testing
+  /reports              # Reports utilities
+    pdf-export.ts       # Branded PDF generation with jsPDF
+    csv-export.ts       # CSV export for trip data
   /services             # API services
     ticket-analysis.ts  # AI ticket parsing with Gemini Vision
     mock-ticket-data.ts # 13 realistic Guatemala City test tickets
@@ -422,16 +486,92 @@ Generates:
 
 ## Deployment
 
-### Vercel (Recommended)
-1. Connect repository
-2. Auto-detects Next.js
-3. Automatic deployments on push
+### Prerequisites
+- Node.js 18+ installed
+- Git repository initialized
+- Vercel account (free tier works)
+
+### Environment Variables
+No environment variables required for current deployment. All features use:
+- Mock data for driver assist trip history
+- localStorage for ticket persistence
+- Client-side state management
+
+**Future (when adding real backend)**:
+- `TURSO_DATABASE_URL` - Database connection string
+- `TURSO_AUTH_TOKEN` - Database authentication token
+- `SESSION_SECRET` - Session encryption key
+- `NEXT_PUBLIC_GEMINI_API_KEY` - Google AI API key (if using real AI)
+
+### Vercel Deployment (Recommended)
+
+**Initial Setup:**
+1. Push code to GitHub/GitLab/Bitbucket
+2. Visit [vercel.com](https://vercel.com) and sign in
+3. Click "Add New Project"
+4. Import your repository
+5. Vercel auto-detects Next.js configuration
+6. Click "Deploy" (no environment variables needed yet)
+
+**Automatic Deployments:**
+- Every `git push` to `main` triggers production deployment
+- Pull requests get preview deployments automatically
+- Build time: ~2-3 minutes with Turbopack
+
+**Custom Domain (Optional):**
+1. Go to Project Settings → Domains
+2. Add your domain (e.g., `envia-ship.com`)
+3. Follow DNS configuration instructions
+4. SSL certificates auto-generated
+
+**Post-Deployment Verification:**
+1. Visit `https://your-project.vercel.app`
+2. Confirm redirect to `/admin/driver-assist`
+3. Test navigation between admin pages
+4. Verify language switcher (ENG/ESP)
+5. Check reports dashboard with mock data
+6. Test responsive design on mobile
 
 ### Build Optimization
-- Turbopack for faster builds
-- Automatic code splitting
-- Image optimization
-- Font optimization
+- **Turbopack**: 5x faster builds than Webpack
+- **Automatic code splitting**: Only loads needed JavaScript
+- **Image optimization**: Next.js Image component handles WebP conversion
+- **Font optimization**: Inline font CSS for zero layout shift
+- **Tree shaking**: Unused code automatically removed
+
+### Build Commands
+```bash
+# Local production build
+npm run build
+npm start
+
+# Lint and format before deploy
+npm run check  # Runs format + lint
+```
+
+### Troubleshooting
+
+**Build Failures:**
+- Check `npm run build` succeeds locally
+- Verify all dependencies in `package.json`
+- Review build logs in Vercel dashboard
+
+**Styling Issues:**
+- Ensure `postcss.config.mjs` exists (required for Tailwind v4)
+- Clear Vercel build cache: Settings → Build & Development → Clear Cache
+
+**Redirect Loop:**
+- Check `middleware.ts` doesn't conflict with routes
+- Verify `app/page.tsx` returns `null` (middleware handles redirect)
+
+**Missing Fonts:**
+- Fonts are self-hosted in `/public/fonts/`
+- Verify files exist and are committed to git
+
+**localStorage Not Working:**
+- Expected - localStorage is client-side only
+- Data persists per-device, not across devices
+- Future: Migrate to database for cross-device sync
 
 ## Future Enhancements
 

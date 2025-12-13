@@ -9,6 +9,9 @@ export interface DeliveryTicket {
   /** Unique identifier (UUID) */
   id: string;
 
+  /** Driver ID (foreign key to drivers table) */
+  driverId?: string;
+
   /** ENVÍA ticket barcode number (e.g., DTLNO1251452370) */
   ticketNumber?: string;
 
@@ -42,8 +45,14 @@ export interface DeliveryTicket {
   /** Timestamp when ticket was created */
   createdAt: Date;
 
+  /** Timestamp when navigation was started (for timer tracking) */
+  navigationStartedAt?: Date;
+
   /** Timestamp when ticket was marked complete */
   completedAt?: Date;
+
+  /** Optional sequence number for route optimization */
+  sequenceNumber?: number;
 }
 
 export interface Coordinates {

@@ -303,6 +303,29 @@
     "sendMessage": "Enviar Mensaje"
   },
   "admin": {
+    "auth": {
+      "login": {
+        "title": "Inicio de Sesión del Conductor",
+        "subtitle": "Ingrese su PIN para acceder al sistema",
+        "pinLabel": "Código PIN",
+        "pinPlaceholder": "Ingrese PIN de 4-6 dígitos",
+        "loginButton": "Iniciar Sesión",
+        "loggingIn": "Iniciando sesión...",
+        "invalidPin": "PIN inválido. Por favor, inténtelo de nuevo.",
+        "sessionExpired": "Su sesión ha expirado. Por favor, inicie sesión nuevamente.",
+        "unauthorized": "Acceso no autorizado.",
+        "serverError": "Error del servidor. Por favor, inténtelo más tarde."
+      },
+      "session": {
+        "loggedInAs": "Sesión iniciada como",
+        "admin": "Administrador",
+        "driver": "Conductor",
+        "logout": "Cerrar Sesión",
+        "loggingOut": "Cerrando sesión...",
+        "logoutSuccess": "Sesión cerrada exitosamente",
+        "logoutFailed": "Error al cerrar sesión"
+      }
+    },
     "common": {
       "actions": "Acciones",
       "status": "Estado",
@@ -442,38 +465,78 @@
       }
     },
     "dispatch": {
-      "title": "Panel de Despacho",
-      "description": "Gestiona entregas y asignaciones de conductores",
-      "kpis": {
-        "activeDeliveries": "Entregas Activas",
-        "availableDrivers": "Conductores Disponibles",
-        "avgDeliveryTime": "Tiempo Promedio de Entrega",
-        "onTimeRate": "Tasa de Puntualidad",
-        "minutes": "min"
-      },
-      "filters": {
-        "allStatuses": "Todos los Estados",
-        "allZones": "Todas las Zonas",
-        "allDrivers": "Todos los Conductores"
-      },
-      "driverStatus": {
-        "available": "Disponible",
-        "busy": "Ocupado",
-        "offline": "Desconectado"
-      },
-      "deliveryStatus": {
-        "pending": "Pendiente",
-        "assigned": "Asignado",
-        "inProgress": "En Progreso",
-        "completed": "Completado",
-        "delayed": "Retrasado"
-      },
-      "assignDriver": "Asignar Conductor",
-      "unassign": "Desasignar",
-      "viewRoute": "Ver Ruta",
-      "contactDriver": "Contactar Conductor",
-      "activeDeliveries": "Entregas Activas",
-      "completedToday": "Completadas Hoy"
+      "title": "Despachador de Rutas",
+      "titleOptimizing": "Resultados de Optimización",
+      "titleSharing": "Compartir Ruta",
+      "description": "Crear y optimizar rutas de entrega",
+      "descriptionOptimizing": "Revisar ruta optimizada y ahorros",
+      "descriptionSharing": "Copiar URL para compartir con conductor",
+      "loadDemo": "Cargar Demo",
+      "addTicket": "Agregar Ticket",
+      "editTickets": "Editar Tickets",
+      "getStartedTitle": "Comenzar",
+      "getStartedInfo": "Cree una ruta de entrega optimizada agregando 5-7 tickets. El sistema calculará la secuencia más eficiente y generará una URL compartible para su conductor.",
+      "step1": "Agregar tickets",
+      "step1Description": "Suba fotos o ingrese detalles de entrega manualmente",
+      "step2": "Optimizar ruta",
+      "step2Description": "El sistema calcula la secuencia de entrega más eficiente",
+      "step3": "Compartir con conductor",
+      "step3Description": "Generar URL y enviar por WhatsApp",
+      "loadDemoData": "Cargar Datos de Demo",
+      "addFirstTicket": "Agregar Primer Ticket",
+      "readyToOptimize": "Listo para optimizar ruta",
+      "ticketsInRoute": "{{count}} ticket en la ruta",
+      "ticketsInRoute_plural": "{{count}} tickets en la ruta",
+      "needAtLeast2": "(se necesitan al menos 2)",
+      "optimizing": "Optimizando...",
+      "optimizeRoute": "Optimizar Ruta",
+      "shareOptimizedRoute": "Compartir ruta optimizada",
+      "generateUrlDescription": "Generar URL para enviar al conductor por WhatsApp",
+      "generateUrl": "Generar URL",
+      "createNewRoute": "Crear Nueva Ruta",
+      "optimizedSuccessfully": "¡Ruta Optimizada Exitosamente!",
+      "savedDistance": "Ahorró {{distance}} y {{time}} por ruta de entrega",
+      "better": "Mejor",
+      "routeComparison": "Comparación de Rutas",
+      "beforeOriginal": "Antes (Orden Original)",
+      "afterOptimized": "Después (Orden Optimizado)",
+      "enteredSequence": "Secuencia ingresada",
+      "nearestNeighbor": "Vecino Más Cercano",
+      "distance": "Distancia",
+      "time": "Tiempo",
+      "businessImpact": "Impacto Comercial",
+      "distanceSaved": "Distancia Ahorrada",
+      "timeSaved": "Tiempo Ahorrado",
+      "fuelCostSaved": "Ahorro en Combustible",
+      "perRoute": "Por ruta",
+      "co2Reduction": "Reducción de CO₂",
+      "carbonSavings": "Ahorro de carbono",
+      "monthlyProjection": "Proyección Mensual",
+      "assumingRoutes": "Asumiendo {{count}} rutas por mes:",
+      "monthlyFuelSavings": "Ahorro Mensual en Combustible",
+      "monthlyCo2Reduction": "Reducción Mensual de CO₂",
+      "deliveryTickets": "Tickets de Entrega",
+      "totalTickets": "Total",
+      "ticketsCount": "{{count}} ticket",
+      "ticketsCount_plural": "{{count}} tickets",
+      "getStarted": "Comenzar",
+      "getStartedDescription": "Cree una ruta de entrega optimizada agregando 5-7 tickets. El sistema calculará la secuencia más eficiente y generará una URL compartible para su conductor.",
+      "step1": "<strong>Agregar tickets</strong> - Suba fotos o ingrese detalles de entrega manualmente",
+      "step2": "<strong>Optimizar ruta</strong> - El sistema calcula la secuencia de entrega más eficiente",
+      "step3": "<strong>Compartir con conductor</strong> - Generar URL y enviar por WhatsApp",
+      "ticketAdded": "Ticket {{ticketNumber}} agregado a la ruta",
+      "ticketRemoved": "Ticket eliminado",
+      "demoDataLoaded": "Se cargaron {{count}} tickets de demostración",
+      "errorMinTickets": "Agregue al menos 2 tickets para optimizar una ruta",
+      "routeOptimized": "¡Ruta optimizada! Ahorró {{distanceSaved}} km ({{percent}}%)",
+      "errorOptimization": "Error al optimizar la ruta. Por favor intente de nuevo.",
+      "errorNoRoute": "No hay ruta optimizada para compartir",
+      "urlGenerated": "URL de ruta generada exitosamente",
+      "errorUrlGeneration": "Error al generar URL compartible",
+      "readyForNewRoute": "Listo para crear nueva ruta",
+      "minutes": "minuto",
+      "minutes_plural": "minutos",
+      "perDeliveryRun": "por ruta de entrega"
     },
     "driverAssist": {
       "title": "Asistencia al Conductor",
@@ -538,6 +601,11 @@
         "notes": "Notas",
         "addToQueue": "Agregar a la Cola",
         "cancel": "Cancelar"
+      },
+      "timer": {
+        "navigating": "Navegando",
+        "completedIn": "en {time}",
+        "elapsedTime": "Transcurrido: {time}"
       }
     },
     "routes": {

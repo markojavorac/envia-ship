@@ -31,6 +31,9 @@ export function loadTickets(): DeliveryTicket[] {
     return parsed.map((ticket: DeliveryTicket) => ({
       ...ticket,
       createdAt: new Date(ticket.createdAt),
+      navigationStartedAt: ticket.navigationStartedAt
+        ? new Date(ticket.navigationStartedAt)
+        : undefined,
       completedAt: ticket.completedAt ? new Date(ticket.completedAt) : undefined,
     }));
   } catch (error) {
@@ -113,6 +116,15 @@ export function completeTicket(ticketId: string): DeliveryTicket[] {
   return updateTicket(ticketId, {
     isCompleted: true,
     completedAt: new Date(),
+  });
+}
+
+/**
+ * Start navigation for a ticket (records timestamp)
+ */
+export function startNavigation(ticketId: string): DeliveryTicket[] {
+  return updateTicket(ticketId, {
+    navigationStartedAt: new Date(),
   });
 }
 
