@@ -12,13 +12,13 @@ import { TicketCard } from "@/components/admin/driver-assist/TicketCard";
 import { TicketConfirmationDialog } from "@/components/admin/driver-assist/TicketConfirmationDialog";
 import type { DeliveryTicket } from "@/lib/admin/driver-assist-types";
 import {
-  fetchTickets,
-  createTicket,
-  updateTicket as updateTicketAPI,
-  completeTicket as completeTicketAPI,
-  deleteTicket as deleteTicketAPI,
-  startNavigation as startNavigationAPI,
-} from "@/lib/api/tickets";
+  loadTickets,
+  addTicket,
+  updateTicket,
+  completeTicket,
+  deleteTicket,
+  startNavigation,
+} from "@/lib/admin/driver-assist-storage";
 import { toast } from "sonner";
 import { decodeUrlToTicket } from "@/lib/admin/ticket-url-encoding";
 import { decodeUrlToRoute } from "@/lib/admin/multi-ticket-url-encoding";
@@ -64,7 +64,7 @@ export default function DriverAssistPage() {
   useEffect(() => {
     const loadTicketsFromAPI = async () => {
       try {
-        const loaded = await fetchTickets();
+        const loaded = loadTickets();
         setTickets(loaded);
       } catch (error) {
         console.error("Error loading tickets:", error);
@@ -110,7 +110,7 @@ export default function DriverAssistPage() {
 
           if (!isDuplicate) {
             try {
-              const created = await createTicket(ticket);
+              const created = addTicket(ticket);
               setTickets((prev) => [created, ...prev]);
               addedCount++;
             } catch (error) {
@@ -182,7 +182,7 @@ export default function DriverAssistPage() {
     if (!pendingTicket) return;
 
     try {
-      const created = await createTicket(pendingTicket);
+      const created = addTicket(pendingTicket);
       setTickets((prev) => [created, ...prev]);
 
       toast.success(
@@ -227,7 +227,7 @@ export default function DriverAssistPage() {
     };
 
     try {
-      const created = await createTicket(newTicket);
+      const created = addTicket(newTicket);
       setTickets((prev) => [created, ...prev]);
       setIsAddDialogOpen(false);
       toast.success("Ticket created successfully");
@@ -252,7 +252,7 @@ export default function DriverAssistPage() {
     );
 
     try {
-      const updated = await completeTicketAPI(ticketId);
+      const updated = completeTicket(ticketId);
       setTickets((prev) => prev.map((t) => (t.id === ticketId ? updated : t)));
       toast.success("Ticket completed");
     } catch (error) {
@@ -272,7 +272,7 @@ export default function DriverAssistPage() {
     setTickets((prev) => prev.filter((t) => t.id !== ticketId));
 
     try {
-      await deleteTicketAPI(ticketId);
+      deleteTicket(ticketId);
       toast.success("Ticket deleted");
     } catch (error) {
       console.error("Error deleting ticket:", error);
@@ -294,7 +294,7 @@ export default function DriverAssistPage() {
     );
 
     try {
-      await updateTicketAPI(ticketId, {
+      updateTicket(ticketId, {
         originCoordinates,
         destinationCoordinates,
       });
@@ -314,7 +314,7 @@ export default function DriverAssistPage() {
     );
 
     try {
-      const updated = await startNavigationAPI(ticketId);
+      const updated = startNavigation(ticketId);
       setTickets((prev) => prev.map((t) => (t.id === ticketId ? updated : t)));
     } catch (error) {
       console.error("Error starting navigation:", error);
