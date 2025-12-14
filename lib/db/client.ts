@@ -10,8 +10,9 @@ let _db: Client | null = null;
 
 /**
  * Get database client (lazy initialization)
+ * Use this function to access the database client
  */
-export function getDb(): Client {
+function getDb(): Client {
   if (_db) {
     return _db;
   }
@@ -32,11 +33,9 @@ export function getDb(): Client {
   return _db;
 }
 
-// Export a getter for backward compatibility
-export const db = new Proxy({} as Client, {
-  get(target, prop) {
-    return getDb()[prop as keyof Client];
-  },
-});
+// Export db as an object with execute method
+export const db = {
+  execute: (...args: Parameters<Client["execute"]>) => getDb().execute(...args),
+};
 
 export default db;
