@@ -11,6 +11,7 @@ import { DriverFilter } from "@/components/admin/reports/DriverFilter";
 import { toast } from "sonner";
 import Papa from "papaparse";
 import { generatePDFReport } from "@/lib/reports/pdf-export";
+import { getMockTrips, getMockPerformanceMetrics } from "@/lib/admin/mock-driver-assist";
 
 interface TripData {
   id: string;
@@ -68,9 +69,7 @@ export default function ReportsPage() {
       setIsRefreshing(true);
 
       try {
-        // Load mock data from localStorage (or use embedded mock if empty)
-        const { getMockTrips, getMockPerformanceMetrics } = require("@/lib/admin/mock-driver-assist");
-
+        // Load mock data
         let allTrips = getMockTrips();
 
         // Apply driver filter

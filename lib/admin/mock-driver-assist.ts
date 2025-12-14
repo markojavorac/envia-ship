@@ -2,9 +2,36 @@
  * Mock Driver Assist Data
  *
  * Generates sample delivery tickets for testing the driver assist UI
+ * Also provides mock trip history and performance metrics for reports
  */
 
 import type { DeliveryTicket } from "./driver-assist-types";
+
+// Types for Reports Dashboard
+interface TripData {
+  id: string;
+  ticketNumber?: string;
+  driverName: string;
+  driverId: string;
+  originAddress: string;
+  destinationAddress: string;
+  createdAt: Date;
+  navigationStartedAt?: Date;
+  completedAt?: Date;
+  durationMs: number | null;
+  durationMinutes: number | null;
+}
+
+interface PerformanceMetric {
+  driverId: string;
+  driverName: string;
+  totalTickets: number;
+  totalCompleted: number;
+  completionRate: number;
+  avgDurationMinutes: number;
+  fastestMinutes: number;
+  slowestMinutes: number;
+}
 
 export function generateMockTickets(): DeliveryTicket[] {
   const now = new Date();
@@ -75,4 +102,106 @@ export function generateMockTickets(): DeliveryTicket[] {
       createdAt: new Date(now.getTime() - 10 * 60 * 1000), // 10 minutes ago
     },
   ];
+}
+
+/**
+ * Generate 18 mock completed trips for reports dashboard
+ * Distributed across 3 drivers: Carlos Mendez, Maria Lopez, Juan Garcia
+ */
+export function getMockTrips(): TripData[] {
+  const now = new Date();
+  const baseTime = now.getTime();
+
+  // Helper to create a trip
+  const createTrip = (
+    id: number,
+    driverId: string,
+    driverName: string,
+    hoursAgo: number,
+    durationMinutes: number
+  ): TripData => {
+    const completedAt = new Date(baseTime - hoursAgo * 60 * 60 * 1000);
+    const navigationStartedAt = new Date(completedAt.getTime() - durationMinutes * 60 * 1000);
+    const createdAt = new Date(navigationStartedAt.getTime() - 10 * 60 * 1000); // Created 10 min before nav
+
+    return {
+      id: `trip-${id}`,
+      ticketNumber: `DTLNO125145${2370 + id}`,
+      driverName,
+      driverId,
+      originAddress: `Origin ${id}, Guatemala City`,
+      destinationAddress: `Destination ${id}, Guatemala`,
+      createdAt,
+      navigationStartedAt,
+      completedAt,
+      durationMs: durationMinutes * 60 * 1000,
+      durationMinutes,
+    };
+  };
+
+  return [
+    // Carlos Mendez - 7 trips (fastest driver, 15-25 min average)
+    createTrip(1, "carlos-mendez", "Carlos Mendez", 24, 18),
+    createTrip(2, "carlos-mendez", "Carlos Mendez", 22, 22),
+    createTrip(3, "carlos-mendez", "Carlos Mendez", 20, 15),
+    createTrip(4, "carlos-mendez", "Carlos Mendez", 18, 20),
+    createTrip(5, "carlos-mendez", "Carlos Mendez", 16, 25),
+    createTrip(6, "carlos-mendez", "Carlos Mendez", 14, 19),
+    createTrip(7, "carlos-mendez", "Carlos Mendez", 12, 21),
+
+    // Maria Lopez - 6 trips (consistent driver, 20-30 min average)
+    createTrip(8, "maria-lopez", "Maria Lopez", 23, 25),
+    createTrip(9, "maria-lopez", "Maria Lopez", 21, 28),
+    createTrip(10, "maria-lopez", "Maria Lopez", 19, 22),
+    createTrip(11, "maria-lopez", "Maria Lopez", 17, 30),
+    createTrip(12, "maria-lopez", "Maria Lopez", 15, 26),
+    createTrip(13, "maria-lopez", "Maria Lopez", 13, 24),
+
+    // Juan Garcia - 5 trips (slower driver, 25-40 min average)
+    createTrip(14, "juan-garcia", "Juan Garcia", 22, 35),
+    createTrip(15, "juan-garcia", "Juan Garcia", 20, 28),
+    createTrip(16, "juan-garcia", "Juan Garcia", 18, 40),
+    createTrip(17, "juan-garcia", "Juan Garcia", 16, 32),
+    createTrip(18, "juan-garcia", "Juan Garcia", 14, 30),
+  ];
+}
+
+/**
+ * Calculate performance metrics from mock trips
+ */
+export function getMockPerformanceMetrics(): PerformanceMetric[] {
+  const trips = getMockTrips();
+  const driverGroups = new Map<string, TripData[]>();
+
+  // Group trips by driver
+  trips.forEach((trip) => {
+    const existing = driverGroups.get(trip.driverId) || [];
+    existing.push(trip);
+    driverGroups.set(trip.driverId, existing);
+  });
+
+  // Calculate metrics for each driver
+  const metrics: PerformanceMetric[] = [];
+
+  driverGroups.forEach((driverTrips, driverId) => {
+    const completedTrips = driverTrips.filter((t) => t.completedAt);
+    const durations = completedTrips
+      .map((t) => t.durationMinutes)
+      .filter((d): d is number => d !== null);
+
+    const avgDuration = durations.length > 0 ? durations.reduce((a, b) => a + b, 0) / durations.length : 0;
+
+    metrics.push({
+      driverId,
+      driverName: driverTrips[0].driverName,
+      totalTickets: driverTrips.length,
+      totalCompleted: completedTrips.length,
+      completionRate: (completedTrips.length / driverTrips.length) * 100,
+      avgDurationMinutes: Math.round(avgDuration),
+      fastestMinutes: durations.length > 0 ? Math.min(...durations) : 0,
+      slowestMinutes: durations.length > 0 ? Math.max(...durations) : 0,
+    });
+  });
+
+  return metrics;
 }
