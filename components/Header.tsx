@@ -40,8 +40,11 @@ export default function Header() {
   const router = useRouter();
   const t = useTranslations("navigation");
 
+  // Hide header completely on login page
+  const isLoginPage = pathname?.startsWith("/admin/login");
+
   // Detect if we're in admin section (exclude login page)
-  const isAdminRoute = pathname?.startsWith("/admin") && !pathname.startsWith("/admin/login");
+  const isAdminRoute = pathname?.startsWith("/admin") && !isLoginPage;
 
   // Check session on mount
   useEffect(() => {
@@ -94,6 +97,11 @@ export default function Header() {
   ];
 
   const navigationLinks = isAdminRoute ? adminNavigationLinks : userNavigationLinks;
+
+  // Don't render header on login page
+  if (isLoginPage) {
+    return null;
+  }
 
   return (
     <header

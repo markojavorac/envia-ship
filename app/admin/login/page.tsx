@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Lock } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -50,71 +50,96 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-secondary/5 p-4">
-      <Card className="w-full max-w-md bg-white border-2 border-primary/30">
-        <CardHeader className="text-center pb-4">
-          <div className="mx-auto h-16 w-16 rounded-full bg-primary flex items-center justify-center mb-4">
-            <Lock className="h-8 w-8 text-white" />
-          </div>
-          <CardTitle className="text-2xl font-bold text-secondary">Admin Login</CardTitle>
-          <CardDescription>Enter your credentials to access the admin panel</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="username" className="font-semibold text-foreground">
-                Username
-              </Label>
-              <Input
-                id="username"
-                type="text"
-                placeholder="Enter your username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="bg-white border-2 border-gray-200 focus:border-primary focus:ring-primary/20"
+    <div className="min-h-screen flex items-center justify-center bg-background p-4" data-theme="admin">
+      <div className="w-full max-w-sm">
+        {/* Logo */}
+        <div className="flex justify-center mb-8">
+          <Image
+            src="/envia-logo.png"
+            alt="ENVÍA"
+            width={160}
+            height={53}
+            className="h-auto w-[160px]"
+            priority
+          />
+        </div>
+
+        {/* Login Card */}
+        <Card className="bg-card border border-border shadow-lg">
+          <CardHeader className="space-y-1 pb-4">
+            <CardTitle className="text-2xl font-bold text-center text-foreground">
+              Welcome back
+            </CardTitle>
+            <CardDescription className="text-center text-muted-foreground">
+              Enter your credentials to access your account
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="username" className="text-sm font-medium text-foreground">
+                  Username
+                </Label>
+                <Input
+                  id="username"
+                  type="text"
+                  placeholder="Enter your username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="bg-input border border-border focus:border-primary focus:ring-1 focus:ring-primary text-foreground placeholder:text-muted-foreground"
+                  disabled={isLoading}
+                  autoComplete="username"
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="pin" className="text-sm font-medium text-foreground">
+                  PIN
+                </Label>
+                <Input
+                  id="pin"
+                  type="password"
+                  placeholder="Enter your PIN"
+                  value={pin}
+                  onChange={(e) => setPin(e.target.value.replace(/\D/g, "").substring(0, 6))}
+                  className="bg-input border border-border focus:border-primary focus:ring-1 focus:ring-primary text-foreground placeholder:text-muted-foreground"
+                  disabled={isLoading}
+                  autoComplete="current-password"
+                  maxLength={6}
+                  required
+                />
+                <p className="text-xs text-muted-foreground">4-6 digit numeric PIN</p>
+              </div>
+
+              <Button
+                type="submit"
+                className="w-full bg-primary text-white hover:bg-primary/90 font-semibold h-10"
                 disabled={isLoading}
-                autoComplete="username"
-              />
+              >
+                {isLoading ? "Signing in..." : "Sign in"}
+              </Button>
+            </form>
+
+            {/* Demo Credentials */}
+            <div className="mt-6 pt-4 border-t border-border">
+              <div className="bg-primary/10 border border-primary/20 rounded-md p-3">
+                <p className="text-xs font-medium text-center text-foreground mb-1">
+                  Demo credentials
+                </p>
+                <div className="space-y-1 text-xs text-muted-foreground text-center">
+                  <p>
+                    <span className="font-semibold text-foreground">Username:</span> Admin User
+                  </p>
+                  <p>
+                    <span className="font-semibold text-foreground">PIN:</span> 1234
+                  </p>
+                </div>
+              </div>
             </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="pin" className="font-semibold text-foreground">
-                PIN
-              </Label>
-              <Input
-                id="pin"
-                type="password"
-                placeholder="Enter your 4-6 digit PIN"
-                value={pin}
-                onChange={(e) => setPin(e.target.value.replace(/\D/g, "").substring(0, 6))}
-                className="bg-white border-2 border-gray-200 focus:border-primary focus:ring-primary/20"
-                disabled={isLoading}
-                autoComplete="current-password"
-                maxLength={6}
-              />
-              <p className="text-xs text-muted-foreground">4-6 digit numeric PIN</p>
-            </div>
-
-            <Button
-              type="submit"
-              className="w-full bg-primary text-white hover:bg-primary/90 font-semibold"
-              disabled={isLoading}
-            >
-              {isLoading ? "Logging in..." : "Login"}
-            </Button>
-          </form>
-
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <p className="text-xs text-center text-muted-foreground">
-              Default login for testing:
-              <br />
-              <span className="font-mono font-semibold">Username: Admin User</span>
-              <br />
-              <span className="font-mono font-semibold">PIN: 1234</span>
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
