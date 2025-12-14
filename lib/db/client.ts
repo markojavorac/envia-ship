@@ -4,19 +4,39 @@
  * Provides connection to LibSQL/Turso database for driver assist data
  */
 
-import { createClient } from "@libsql/client";
+import { createClient, Client } from "@libsql/client";
 
-if (!process.env.TURSO_DATABASE_URL) {
-  throw new Error("TURSO_DATABASE_URL is not set");
+let _db: Client | null = null;
+
+/**
+ * Get database client (lazy initialization)
+ */
+export function getDb(): Client {
+  if (_db) {
+    return _db;
+  }
+
+  if (!process.env.TURSO_DATABASE_URL) {
+    throw new Error("TURSO_DATABASE_URL is not set");
+  }
+
+  if (!process.env.TURSO_AUTH_TOKEN) {
+    throw new Error("TURSO_AUTH_TOKEN is not set");
+  }
+
+  _db = createClient({
+    url: process.env.TURSO_DATABASE_URL,
+    authToken: process.env.TURSO_AUTH_TOKEN,
+  });
+
+  return _db;
 }
 
-if (!process.env.TURSO_AUTH_TOKEN) {
-  throw new Error("TURSO_AUTH_TOKEN is not set");
-}
-
-export const db = createClient({
-  url: process.env.TURSO_DATABASE_URL,
-  authToken: process.env.TURSO_AUTH_TOKEN,
+// Export a getter for backward compatibility
+export const db = new Proxy({} as Client, {
+  get(target, prop) {
+    return getDb()[prop as keyof Client];
+  },
 });
 
 export default db;
