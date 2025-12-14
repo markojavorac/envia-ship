@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import Image from "next/image";
@@ -17,18 +17,67 @@ import {
   MapIcon,
   Home,
   Calculator,
+  User,
+  LogOut,
   type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { toast } from "sonner";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [user, setUser] = useState<{ id: string; username: string } | null>(null);
   const pathname = usePathname();
+  const router = useRouter();
   const t = useTranslations("navigation");
 
-  // Detect if we're in admin section
-  const isAdminRoute = pathname?.startsWith("/admin");
+  // Detect if we're in admin section (exclude login page)
+  const isAdminRoute = pathname?.startsWith("/admin") && !pathname.startsWith("/admin/login");
+
+  // Check session on mount
+  useEffect(() => {
+    if (isAdminRoute) {
+      checkSession();
+    }
+  }, [isAdminRoute]);
+
+  const checkSession = async () => {
+    try {
+      const response = await fetch("/api/auth/session");
+      if (response.ok) {
+        const data = await response.json();
+        if (data.authenticated) {
+          setUser(data.user);
+        }
+      }
+    } catch (error) {
+      console.error("Session check failed:", error);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/api/auth/logout", { method: "POST" });
+      if (response.ok) {
+        toast.success("Logged out successfully");
+        setUser(null);
+        router.push("/admin/login");
+        router.refresh();
+      }
+    } catch (error) {
+      console.error("Logout failed:", error);
+      toast.error("Logout failed");
+    }
+  };
 
   // User-facing navigation links
   const userNavigationLinks = [
@@ -92,6 +141,32 @@ export default function Header() {
         <div className="hidden items-center gap-4 md:flex">
           {/* Language Switcher */}
           <LanguageSwitcher />
+
+          {/* Admin User Menu */}
+          {isAdminRoute && user && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="flex items-center gap-2 text-foreground hover:text-primary hover:bg-card"
+                >
+                  <User className="h-4 w-4" />
+                  <span className="text-sm font-semibold">{user.username}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48 bg-card text-foreground">
+                <DropdownMenuLabel className="text-foreground">Account</DropdownMenuLabel>
+                <DropdownMenuSeparator className="bg-border" />
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="cursor-pointer text-destructive hover:text-destructive hover:bg-destructive/10"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
 
           {/* Toggle between Admin Dashboard and Back to Store (Non-Admin Routes) */}
           {!isAdminRoute && (
@@ -158,6 +233,16 @@ export default function Header() {
               <LanguageSwitcher />
             </div>
 
+            {/* Admin User Info (Mobile) */}
+            {isAdminRoute && user && (
+              <div className="text-foreground py-3 border-t border-border">
+                <div className="flex items-center gap-2 text-sm font-semibold">
+                  <User className="h-4 w-4" />
+                  {user.username}
+                </div>
+              </div>
+            )}
+
             {/* Toggle Admin/Store Link (Mobile) */}
             {isAdminRoute ? (
               <Link
@@ -179,14 +264,31 @@ export default function Header() {
               </Link>
             )}
 
-            <Button
-              asChild
-              className="bg-primary hover:bg-primary/90 mt-4 w-full font-semibold text-white"
-            >
-              <Link href={isAdminRoute ? "#" : "/contact"} onClick={() => setMobileMenuOpen(false)}>
-                {isAdminRoute ? t("itHelp") : t("contact")}
-              </Link>
-            </Button>
+            {/* Admin Logout Button (Mobile) */}
+            {isAdminRoute && user && (
+              <Button
+                onClick={() => {
+                  handleLogout();
+                  setMobileMenuOpen(false);
+                }}
+                className="bg-destructive hover:bg-destructive/90 mt-4 w-full font-semibold text-white"
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </Button>
+            )}
+
+            {/* Contact Button (Non-Admin) */}
+            {!isAdminRoute && (
+              <Button
+                asChild
+                className="bg-primary hover:bg-primary/90 mt-4 w-full font-semibold text-white"
+              >
+                <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>
+                  {t("contact")}
+                </Link>
+              </Button>
+            )}
           </nav>
         </div>
       )}
