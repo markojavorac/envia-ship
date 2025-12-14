@@ -62,62 +62,52 @@ export default function ReportsPage() {
     endDate: null,
   });
 
-  // Fetch data
+  // Fetch data from mock data source
   const fetchData = useCallback(
-    async (showRefreshToast = false) => {
+    (showRefreshToast = false) => {
       setIsRefreshing(true);
 
       try {
-        // Build query params
-        const tripsParams = new URLSearchParams();
-        const metricsParams = new URLSearchParams();
+        // Load mock data from localStorage (or use embedded mock if empty)
+        const { getMockTrips, getMockPerformanceMetrics } = require("@/lib/admin/mock-driver-assist");
 
+        let allTrips = getMockTrips();
+
+        // Apply driver filter
         if (selectedDriverId) {
-          tripsParams.set("driverId", selectedDriverId);
-          metricsParams.set("driverId", selectedDriverId);
+          allTrips = allTrips.filter((trip: any) => trip.driverId === selectedDriverId);
         }
 
-        if (dateRange.startDate) {
-          const startMs = dateRange.startDate.getTime();
-          tripsParams.set("startDate", startMs.toString());
-          metricsParams.set("startDate", startMs.toString());
+        // Apply date range filter
+        if (dateRange.startDate || dateRange.endDate) {
+          allTrips = allTrips.filter((trip: any) => {
+            const completedDate = trip.completedAt;
+            if (!completedDate) return false;
+
+            if (dateRange.startDate && completedDate < dateRange.startDate) {
+              return false;
+            }
+            if (dateRange.endDate && completedDate > dateRange.endDate) {
+              return false;
+            }
+            return true;
+          });
         }
 
-        if (dateRange.endDate) {
-          const endMs = dateRange.endDate.getTime();
-          tripsParams.set("endDate", endMs.toString());
-          metricsParams.set("endDate", endMs.toString());
-        }
+        // Get performance metrics (filtered by driver if applicable)
+        const allMetrics = getMockPerformanceMetrics();
+        const filteredMetrics = selectedDriverId
+          ? allMetrics.filter((m: any) => m.driverId === selectedDriverId)
+          : allMetrics;
 
-        // Fetch trips and metrics in parallel
-        const [tripsRes, metricsRes] = await Promise.all([
-          fetch(`/api/reports/trips?${tripsParams.toString()}`),
-          fetch(`/api/reports/performance?${metricsParams.toString()}`),
-        ]);
-
-        if (!tripsRes.ok || !metricsRes.ok) {
-          throw new Error("Failed to fetch reports data");
-        }
-
-        const tripsData = await tripsRes.json();
-        const metricsData = await metricsRes.json();
-
-        // Convert timestamps to Date objects
-        const processedTrips = tripsData.tickets.map((t: any) => ({
-          ...t,
-          createdAt: new Date(t.createdAt),
-          navigationStartedAt: t.navigationStartedAt ? new Date(t.navigationStartedAt) : undefined,
-          completedAt: t.completedAt ? new Date(t.completedAt) : undefined,
-        }));
-
-        setTrips(processedTrips);
-        setMetrics(metricsData.metrics);
+        setTrips(allTrips);
+        setMetrics(filteredMetrics);
 
         if (showRefreshToast) {
           toast.success("Reports refreshed");
         }
       } catch (error) {
-        console.error("Error fetching reports:", error);
+        console.error("Error loading mock reports:", error);
         toast.error("Failed to load reports");
       } finally {
         setIsRefreshing(false);
