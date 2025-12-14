@@ -215,6 +215,43 @@ Build process runs `npm run check` automatically via `prebuild` script.
 - NO force push to main
 - NO skip hooks
 
+## Vercel Deployment
+
+### CLI Commands
+
+```bash
+# Check login status
+vercel whoami
+
+# List recent deployments
+vercel ls envia-ship
+
+# View runtime logs for a deployment
+vercel logs <deployment-url>
+
+# Example: View logs for latest deployment
+vercel logs https://envia-ship-abc123.vercel.app
+```
+
+### Deployment Status
+
+- **● Building** - Deployment in progress
+- **● Ready** - Deployment successful and live
+- **● Error** - Build failed, check logs
+
+### Debugging Production Issues
+
+1. **Check deployment status**: `vercel ls envia-ship | head -10`
+2. **View runtime logs**: `vercel logs <deployment-url>`
+3. **Test API directly**: `curl -X POST https://envia-ship.vercel.app/api/endpoint`
+4. **Check environment variables** in Vercel dashboard → Settings → Environment Variables
+
+### Common Issues
+
+- **Build fails with missing env vars**: Ensure `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`, and `SESSION_SECRET` are set in Vercel
+- **Auto-deploy not triggering**: Check GitHub integration in Vercel dashboard
+- **Database client errors**: Verify env vars are available at build time (use lazy initialization)
+
 ## Documentation
 
 - **CLAUDE.md** (this file): High-level project config (<200 lines)
