@@ -288,7 +288,9 @@ export async function getRouteById(routeId: string) {
     args: [routeId],
   });
 
-  const tickets = ticketsResult.rows.map((row) => dbTicketToDeliveryTicket(row as unknown as DbTicket));
+  const tickets = ticketsResult.rows.map((row) =>
+    dbTicketToDeliveryTicket(row as unknown as DbTicket)
+  );
 
   return {
     id: routeRow.id,

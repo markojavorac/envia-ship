@@ -63,6 +63,55 @@ Modern shipping calculator and marketplace platform for ENVÍA de Guatemala.
 - **Driver Assignment**: (Coming soon) Assign optimized routes to specific drivers
 - Access via `/admin/dispatch`
 
+### Driver Tracking Map (Experimental - Admin)
+- **Real-Time Location Monitoring**: Interactive map showing live driver positions in Guatemala City
+  - MapLibre GL JS for smooth, hardware-accelerated mapping
+  - 6 map style themes: Voyager (default), Positron, Dark Matter + no-labels variants
+  - Style switcher dropdown for easy theme experimentation
+- **Driver Visualization**: Color-coded markers with status-based styling
+  - Active drivers: Green markers with pulse animation
+  - Available drivers: Orange markers
+  - Offline drivers: Gray markers
+  - 20px markers with white border and shadow for visibility
+- **Real-Time Simulation**: Smooth driver movement along delivery routes
+  - 2.5-second position updates with linear interpolation
+  - Drivers follow realistic paths between stops (45 seconds per segment)
+  - Automatic route progression with stop completion tracking
+- **Route Visualization**: Interactive route display for selected drivers
+  - Orange route lines connecting stops
+  - Numbered stop markers (green when completed, orange when pending)
+  - Progressive disclosure: routes only shown when driver is clicked
+- **Interactive Controls**: Full map manipulation and filtering
+  - Click markers to select drivers and view route details
+  - Status filters: Toggle Active/Available/Offline driver visibility
+  - Zoom to selected driver (14x zoom level)
+  - Reset view to fit all drivers
+- **Status Dashboard**: Real-time statistics cards
+  - Active drivers count with pulse indicator
+  - Available drivers count
+  - Offline drivers count
+  - Total deliveries today (aggregate)
+- **Driver Highlight Panel**: Selected driver details with route progress
+  - Driver name and status badge
+  - Visual progress bar (X/Y stops completed)
+  - Next stop address display
+  - "Route complete" state when all stops delivered
+- **Responsive Design**: Optimized for desktop and mobile
+  - Desktop: Fixed left sidebar (320px) with scrollable controls
+  - Mobile: Full-screen map with swipeable bottom sheet (70vh)
+  - Floating trigger button on mobile showing active count
+- **Mock Data**: 4 realistic Guatemala City drivers for testing
+  - 2 active drivers with 4-stop routes (Zona 1-16 coverage)
+  - 1 available driver (idle at last delivery)
+  - 1 offline driver (last known position)
+  - Real Guatemala City coordinates centered at 14.6349°N, -90.5068°W
+- **Technical Stack**:
+  - MapLibre GL: Free, open-source WebGL mapping (no API keys)
+  - CartoDB tiles: High-quality, reliable vector tiles
+  - State management: Custom useDriverTracking hook with setInterval simulation
+  - Position updates: Linear interpolation between route waypoints
+- Access via `/admin/experiments/driver-tracking`
+
 ### Reports Dashboard (Admin)
 - **Trip History Table**: Complete delivery analytics with advanced filtering
   - Sortable columns: driver, completed date, duration

@@ -226,6 +226,17 @@ input[type="number"] {
   border-width: 0;
 }
 
+/* Driver tracking map - pulse animation for active drivers */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

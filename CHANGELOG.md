@@ -7,6 +7,50 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Experiments Section in Admin**: Testing ground for new features without impacting production
+  - New "Experiments" navigation section in admin sidebar with Flask icon
+  - Scalable experiments landing page with card grid layout (`/admin/experiments`)
+  - Framework for adding future experimental features easily
+- **Shipping Calculator Restored as Experimental Feature**: AI-powered package analysis and pricing
+  - Full calculator functionality restored from archived code
+  - AI package analysis using Gemini 2.5 Flash vision API
+  - Manual entry form with dimensional weight calculations
+  - Service type selection (Express, Standard, International)
+  - Scheduled delivery with time slot picking (Morning, Afternoon, Evening)
+  - Quote generation with pricing breakdown
+  - Quote saving to browser localStorage (max 10 quotes)
+  - All components converted to admin dark theme styling
+  - Route: `/admin/experiments/calculator`
+  - Warning banner indicates experimental status
+  - Components: CalculatorTabs, ShippingCalculatorForm, AIPackageAnalyzer, ImageUpload, TimeSlotPicker, PricingResultsCard, ConfidenceIndicator
+  - Libraries: shipping-schema validation, quote-storage utilities, CalculatorContext
+  - API: `/api/analyze-package` (POST) with mock/real Gemini modes
+  - **Dark Theme Conversion**: All calculator components use CSS variables
+    - Replaced `bg-white` → `bg-card`
+    - Replaced `text-gray-*` → `text-foreground` / `text-muted-foreground`
+    - Replaced `border-gray-*` → `border-border`
+    - Added `text-foreground` to all Label components (ESLint enforced)
+    - Info boxes use `bg-primary/10 border-l-4 border-primary` pattern
+- **Driver Tracking Map (Experimental)**: Real-time driver location monitoring with interactive map
+  - Live map view showing driver locations in Guatemala City using MapLibre GL JS
+  - Color-coded driver markers: Active (green + pulse animation), Available (orange), Offline (gray)
+  - Real-time simulation: Drivers move smoothly along routes with 2.5s position updates
+  - Route visualization: Orange route lines with numbered stop markers (only shown for selected driver)
+  - Interactive controls: Click markers to select drivers, zoom to selection, reset view
+  - Status filtering: Toggle visibility of Active/Available/Offline drivers
+  - **Map Style Switcher**: 6 free CartoDB map themes (Voyager, Positron, Dark Matter + no-labels variants)
+  - Desktop layout: Map with fixed left sidebar (stats cards, driver highlight, controls)
+  - Mobile layout: Full-screen map with swipeable bottom sheet
+  - Route: `/admin/experiments/driver-tracking`
+  - Components: DriverTrackingMap, DriverStatusCards, MapControls, DriverHighlight, MobileControls
+  - Libraries: types, mock-data (4 drivers with Guatemala City coordinates), simulation (linear interpolation)
+  - Hooks: useDriverTracking (state management + real-time updates via setInterval)
+  - Dependencies: maplibre-gl (free, open-source WebGL mapping, no API keys required)
+  - Mock data: 2 active drivers with 4-stop routes, 1 available, 1 offline
+  - Stats tracking: Active count, Available count, Offline count, Total deliveries today
+  - Route progress: Visual progress bar showing completed/total stops for active routes
+
 ### Changed
 - **Archived Public-Facing Features**: Simplified app to admin-only functionality
   - Archived all public-facing code to `archived-public/` directory for potential future restoration

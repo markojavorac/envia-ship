@@ -147,7 +147,6 @@ export function TicketCard({
               exit={{ opacity: 0 }}
               transition={{ duration: 0.4 }}
               className="pointer-events-none absolute inset-0 z-50 rounded-lg bg-green-500"
-               
             />
           )}
         </AnimatePresence>
@@ -155,7 +154,7 @@ export function TicketCard({
         <Card
           className={cn(
             "bg-card transition-all",
-             
+
             isUpNext && "border-4 border-[#FF8C00] shadow-lg",
             !isUpNext && "border-border border-2 shadow-md hover:shadow-lg",
             ticket.isCompleted && !isUpNext && "opacity-50",
@@ -215,7 +214,6 @@ export function TicketCard({
                   {ticket.isCompleted && (
                     <div className="ml-auto flex items-center gap-2">
                       <Badge
-                         
                         className={cn("shrink-0 bg-green-500 text-white", isUpNext && "text-sm")}
                       >
                         <CheckCircle className={cn(isUpNext ? "mr-1 h-4 w-4" : "mr-1 h-3 w-3")} />
@@ -310,7 +308,6 @@ export function TicketCard({
                 <Button
                   onClick={handleComplete}
                   size={isUpNext ? "default" : "sm"}
-                   
                   className={cn(
                     "w-full bg-green-600 font-semibold text-white hover:bg-green-700 sm:w-auto",
                     isUpNext && "text-base"
@@ -324,7 +321,6 @@ export function TicketCard({
                   <Button
                     onClick={handleDelete}
                     size={isUpNext ? "default" : "sm"}
-                     
                     className={cn(
                       "w-full bg-red-600 font-semibold text-white hover:bg-red-700 sm:w-auto",
                       isUpNext && "text-base"

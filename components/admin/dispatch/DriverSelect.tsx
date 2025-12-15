@@ -57,7 +57,7 @@ export function DriverSelect({ value, onValueChange }: DriverSelectProps) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center gap-2 text-muted-foreground">
+      <div className="text-muted-foreground flex items-center gap-2">
         <Loader2 className="h-4 w-4 animate-spin" />
         <span className="text-sm">Loading drivers...</span>
       </div>
@@ -66,16 +66,16 @@ export function DriverSelect({ value, onValueChange }: DriverSelectProps) {
 
   if (error) {
     return (
-      <div className="rounded-md border border-destructive/50 bg-destructive/10 p-3">
-        <p className="text-sm text-destructive">{error}</p>
+      <div className="border-destructive/50 bg-destructive/10 rounded-md border p-3">
+        <p className="text-destructive text-sm">{error}</p>
       </div>
     );
   }
 
   if (drivers.length === 0) {
     return (
-      <div className="rounded-md border border-border bg-muted p-3">
-        <p className="text-sm text-muted-foreground">
+      <div className="border-border bg-muted rounded-md border p-3">
+        <p className="text-muted-foreground text-sm">
           No active drivers available. Please create a driver first.
         </p>
       </div>

@@ -1,4 +1,3 @@
- 
 /* eslint-disable custom/no-inline-styles */
 import { ImageResponse } from "next/og";
 

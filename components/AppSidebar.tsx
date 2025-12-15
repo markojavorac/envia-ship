@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
-import { Truck, BarChart3, MapIcon, User, LogOut } from "lucide-react";
+import { Truck, BarChart3, MapIcon, User, LogOut, FlaskConical } from "lucide-react";
 import {
   Sidebar,
   SidebarHeader,
@@ -135,6 +135,23 @@ export default function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Experiments Section */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Experiments</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={pathname?.startsWith("/admin/experiments")}>
+                  <Link href="/admin/experiments" onClick={handleNavClick}>
+                    <FlaskConical className="h-6 w-6" />
+                    <span>Experiments</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
