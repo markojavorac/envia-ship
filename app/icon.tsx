@@ -1,5 +1,5 @@
-/* eslint-disable custom/no-admin-hardcoded-colors, custom/no-inline-styles */
-/* eslint-disable custom/no-admin-hardcoded-colors, custom/no-inline-styles */
+ 
+/* eslint-disable custom/no-inline-styles */
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";

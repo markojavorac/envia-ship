@@ -1,4 +1,4 @@
-/* eslint-disable custom/no-admin-hardcoded-colors, custom/no-inline-styles */
+/* eslint-disable custom/no-inline-styles */
 "use client";
 
 import { motion } from "framer-motion";

@@ -29,7 +29,7 @@ export default function AppSidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const t = useTranslations("navigation");
-  const { state } = useSidebar();
+  const { state, setOpenMobile, isMobile } = useSidebar();
   const [user, setUser] = useState<{ id: string; username: string } | null>(null);
 
   const isLoginPage = pathname?.startsWith("/admin/login");
@@ -73,6 +73,13 @@ export default function AppSidebar() {
     } catch (error) {
       console.error("Logout failed:", error);
       toast.error("Logout failed");
+    }
+  };
+
+  const handleNavClick = () => {
+    // Auto-close mobile sidebar when navigating to a new page
+    if (isMobile) {
+      setOpenMobile(false);
     }
   };
 
@@ -121,7 +128,7 @@ export default function AppSidebar() {
               {navItems.map((item) => (
                 <SidebarMenuItem key={item.href}>
                   <SidebarMenuButton asChild isActive={pathname === item.href}>
-                    <Link href={item.href}>
+                    <Link href={item.href} onClick={handleNavClick}>
                       <item.icon className="h-6 w-6" />
                       <span>{item.label}</span>
                     </Link>

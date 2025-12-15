@@ -45,6 +45,9 @@ export default function DriverAssistPage() {
     name: string;
     role: "driver" | "admin";
   } | null>(null);
+  const [routeId, setRouteId] = useState<string | null>(null);
+  const [isLoadingRoute, setIsLoadingRoute] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   // Fetch current user session
   useEffect(() => {
@@ -78,16 +81,64 @@ export default function DriverAssistPage() {
     loadTicketsFromAPI();
   }, []);
 
-  // URL parameter detection for shared tickets/routes from dispatcher
+  // Load route from database if routeId is provided
+  useEffect(() => {
+    if (typeof window === "undefined" || isLoading) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const routeIdParam = params.get("routeId");
+
+    if (routeIdParam) {
+      setIsLoadingRoute(true);
+      setRouteId(routeIdParam);
+
+      fetch(`/api/routes/${routeIdParam}`)
+        .then(async (res) => {
+          if (res.status === 403) {
+            setAuthError("This route is not assigned to you");
+            toast.error("Access denied: This route is not assigned to you");
+            return null;
+          }
+          if (!res.ok) {
+            throw new Error("Failed to load route");
+          }
+          return res.json();
+        })
+        .then((data) => {
+          if (data?.route) {
+            const routeTickets = data.route.tickets;
+            // Add tickets from route to state
+            setTickets(routeTickets);
+            toast.success(`Loaded route with ${routeTickets.length} tickets`);
+            // Clear URL parameter
+            window.history.replaceState({}, "", "/admin/driver-assist");
+          }
+        })
+        .catch((error) => {
+          console.error("Failed to load route:", error);
+          toast.error("Failed to load route from database");
+          window.history.replaceState({}, "", "/admin/driver-assist");
+        })
+        .finally(() => {
+          setIsLoadingRoute(false);
+        });
+    }
+  }, [isLoading]);
+
+  // URL parameter detection for shared tickets/routes from dispatcher (backward compatibility)
   useEffect(() => {
     // Skip if on server-side or still loading
     if (typeof window === "undefined" || isLoading) return;
 
     const params = new URLSearchParams(window.location.search);
     const ticketParam = params.get("ticket"); // Single ticket
-    const routeParam = params.get("route"); // Multiple tickets (route)
+    const routeParam = params.get("route"); // Multiple tickets (route) - OLD FORMAT
+    const routeIdParam = params.get("routeId"); // Skip if new format is present
 
-    // Handle route URL (multiple tickets)
+    // Skip if new routeId format is present
+    if (routeIdParam) return;
+
+    // Handle old route URL format (multiple tickets) - DEPRECATED
     if (routeParam) {
       try {
         const decodedTickets = decodeUrlToRoute(routeParam);
@@ -123,6 +174,10 @@ export default function DriverAssistPage() {
         if (addedCount > 0) {
           toast.success(
             `Added ${addedCount} ${addedCount === 1 ? "ticket" : "tickets"} from optimized route`
+          );
+          toast.warning(
+            "Note: This is an old format route URL. Please use the new dispatcher to create routes.",
+            { duration: 5000 }
           );
         } else {
           toast.warning("All tickets from this route are already in your queue");
@@ -376,6 +431,26 @@ export default function DriverAssistPage() {
               ({currentUser.role === "admin" ? "Admin" : "Driver"})
             </span>
           </div>
+        </div>
+      )}
+
+      {/* AUTHORIZATION ERROR */}
+      {authError && (
+        <div className="border-destructive/50 bg-destructive/10 rounded-lg border p-4">
+          <h3 className="text-destructive mb-2 font-semibold">Access Denied</h3>
+          <p className="text-destructive/80 text-sm">{authError}</p>
+          <p className="text-muted-foreground mt-2 text-xs">
+            This route is assigned to a different driver. Please contact your dispatcher if you
+            believe this is an error.
+          </p>
+        </div>
+      )}
+
+      {/* LOADING ROUTE */}
+      {isLoadingRoute && (
+        <div className="bg-card flex items-center justify-center gap-3 rounded-lg border p-8">
+          <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
+          <span className="text-muted-foreground">Loading route...</span>
         </div>
       )}
 

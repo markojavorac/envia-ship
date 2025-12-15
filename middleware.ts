@@ -45,7 +45,11 @@ export async function middleware(request: NextRequest) {
     const authenticated = await isAuthenticated(request);
 
     if (!authenticated) {
-      return NextResponse.redirect(new URL("/admin/login", request.url));
+      // Preserve original URL with query parameters for redirect after login
+      const redirectUrl = new URL("/admin/login", request.url);
+      const originalPath = pathname + request.nextUrl.search; // Include query params
+      redirectUrl.searchParams.set("redirect", originalPath);
+      return NextResponse.redirect(redirectUrl);
     }
   }
 

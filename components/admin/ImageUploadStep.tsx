@@ -1,4 +1,4 @@
-/* eslint-disable custom/no-admin-hardcoded-colors, custom/no-inline-styles */
+/* eslint-disable custom/no-admin-hardcoded-colors */
 import { useState, useRef } from "react";
 import { Upload, X, Image as ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";

@@ -36,7 +36,13 @@ export default function LoginPage() {
 
       if (response.ok) {
         toast.success("Login successful!");
-        router.push("/admin");
+
+        // Check for redirect parameter (preserves query strings)
+        const params = new URLSearchParams(window.location.search);
+        const redirectPath = params.get("redirect");
+
+        // Redirect to original URL or default to /admin
+        router.push(redirectPath || "/admin");
         router.refresh();
       } else {
         toast.error(data.error || "Login failed");

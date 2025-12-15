@@ -1,4 +1,4 @@
-/* eslint-disable custom/no-admin-hardcoded-colors, custom/no-inline-styles */
+/* eslint-disable custom/no-admin-hardcoded-colors */
 import { Card, CardContent } from "@/components/ui/card";
 import { LucideIcon, TrendingUp, TrendingDown } from "lucide-react";
 import { cn } from "@/lib/utils";

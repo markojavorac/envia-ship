@@ -120,7 +120,12 @@ export async function getCompletedTrips(driverId?: string) {
 /**
  * Create a new delivery ticket
  */
-export async function createTicket(ticket: DeliveryTicket, driverId = "driver-001"): Promise<void> {
+export async function createTicket(
+  ticket: DeliveryTicket,
+  driverId = "driver-001",
+  routeId?: string,
+  sequenceNumber?: number
+): Promise<void> {
   const originCoords = JSON.stringify(ticket.originCoordinates);
   const destCoords = JSON.stringify(ticket.destinationCoordinates);
 
@@ -130,8 +135,8 @@ export async function createTicket(ticket: DeliveryTicket, driverId = "driver-00
       origin_address, destination_address,
       recipient_name, recipient_phone, notes,
       origin_coordinates, destination_coordinates,
-      created_at, is_completed
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      created_at, is_completed, route_id, sequence_number
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     args: [
       ticket.id,
       ticket.ticketNumber || `TICKET-${ticket.id.substring(0, 8)}`,
@@ -145,6 +150,8 @@ export async function createTicket(ticket: DeliveryTicket, driverId = "driver-00
       destCoords,
       ticket.createdAt.getTime(),
       ticket.isCompleted ? 1 : 0,
+      routeId || null,
+      sequenceNumber || null,
     ],
   });
 }
@@ -214,4 +221,202 @@ export async function getAllDrivers() {
     "SELECT id, name, phone, role, is_active FROM drivers WHERE role = 'driver'"
   );
   return result.rows;
+}
+
+// =============================================================================
+// ROUTE MANAGEMENT FUNCTIONS
+// =============================================================================
+
+export interface RouteData {
+  id: string;
+  routeName: string;
+  driverId: string;
+  assignedBy: string;
+  totalTickets: number;
+  totalDistanceKm?: number;
+  estimatedDurationMin?: number;
+  optimizationData?: string; // JSON string of optimization metrics
+  status?: "assigned" | "in_progress" | "completed";
+}
+
+/**
+ * Create a new route with metadata
+ */
+export async function createRoute(route: RouteData): Promise<void> {
+  await db.execute({
+    sql: `INSERT INTO routes (
+      id, route_name, driver_id, assigned_by,
+      total_tickets, total_distance_km, estimated_duration_min,
+      optimization_data, created_at, status
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    args: [
+      route.id,
+      route.routeName,
+      route.driverId,
+      route.assignedBy,
+      route.totalTickets,
+      route.totalDistanceKm || null,
+      route.estimatedDurationMin || null,
+      route.optimizationData || null,
+      Date.now(),
+      route.status || "assigned",
+    ],
+  });
+}
+
+/**
+ * Get route by ID with all associated tickets
+ */
+export async function getRouteById(routeId: string) {
+  // Fetch route metadata
+  const routeResult = await db.execute({
+    sql: "SELECT * FROM routes WHERE id = ?",
+    args: [routeId],
+  });
+
+  if (routeResult.rows.length === 0) {
+    return null;
+  }
+
+  const routeRow = routeResult.rows[0] as any;
+
+  // Fetch associated tickets
+  const ticketsResult = await db.execute({
+    sql: `SELECT * FROM delivery_tickets
+          WHERE route_id = ?
+          ORDER BY sequence_number ASC`,
+    args: [routeId],
+  });
+
+  const tickets = ticketsResult.rows.map((row) => dbTicketToDeliveryTicket(row as unknown as DbTicket));
+
+  return {
+    id: routeRow.id,
+    routeName: routeRow.route_name,
+    driverId: routeRow.driver_id,
+    assignedBy: routeRow.assigned_by,
+    totalTickets: routeRow.total_tickets,
+    totalDistanceKm: routeRow.total_distance_km,
+    estimatedDurationMin: routeRow.estimated_duration_min,
+    optimizationData: routeRow.optimization_data,
+    createdAt: new Date(routeRow.created_at),
+    startedAt: routeRow.started_at ? new Date(routeRow.started_at) : undefined,
+    completedAt: routeRow.completed_at ? new Date(routeRow.completed_at) : undefined,
+    status: routeRow.status,
+    tickets,
+  };
+}
+
+/**
+ * Get all routes for a specific driver
+ */
+export async function getRoutesByDriver(driverId: string) {
+  const result = await db.execute({
+    sql: `SELECT r.*, d.name as driver_name
+          FROM routes r
+          JOIN drivers d ON r.driver_id = d.id
+          WHERE r.driver_id = ?
+          ORDER BY r.created_at DESC`,
+    args: [driverId],
+  });
+
+  return result.rows.map((row: any) => ({
+    id: row.id,
+    routeName: row.route_name,
+    driverId: row.driver_id,
+    driverName: row.driver_name,
+    assignedBy: row.assigned_by,
+    totalTickets: row.total_tickets,
+    totalDistanceKm: row.total_distance_km,
+    estimatedDurationMin: row.estimated_duration_min,
+    createdAt: new Date(row.created_at),
+    startedAt: row.started_at ? new Date(row.started_at) : undefined,
+    completedAt: row.completed_at ? new Date(row.completed_at) : undefined,
+    status: row.status,
+  }));
+}
+
+/**
+ * Get all routes (admin view)
+ */
+export async function getAllRoutes() {
+  const result = await db.execute(`
+    SELECT r.*, d.name as driver_name
+    FROM routes r
+    JOIN drivers d ON r.driver_id = d.id
+    ORDER BY r.created_at DESC
+  `);
+
+  return result.rows.map((row: any) => ({
+    id: row.id,
+    routeName: row.route_name,
+    driverId: row.driver_id,
+    driverName: row.driver_name,
+    assignedBy: row.assigned_by,
+    totalTickets: row.total_tickets,
+    totalDistanceKm: row.total_distance_km,
+    estimatedDurationMin: row.estimated_duration_min,
+    createdAt: new Date(row.created_at),
+    startedAt: row.started_at ? new Date(row.started_at) : undefined,
+    completedAt: row.completed_at ? new Date(row.completed_at) : undefined,
+    status: row.status,
+  }));
+}
+
+/**
+ * Update route status
+ */
+export async function updateRouteStatus(
+  routeId: string,
+  status: "assigned" | "in_progress" | "completed",
+  timestamp?: Date
+): Promise<void> {
+  const now = timestamp?.getTime() || Date.now();
+
+  if (status === "in_progress") {
+    await db.execute({
+      sql: "UPDATE routes SET status = ?, started_at = ? WHERE id = ?",
+      args: [status, now, routeId],
+    });
+  } else if (status === "completed") {
+    await db.execute({
+      sql: "UPDATE routes SET status = ?, completed_at = ? WHERE id = ?",
+      args: [status, now, routeId],
+    });
+  } else {
+    await db.execute({
+      sql: "UPDATE routes SET status = ? WHERE id = ?",
+      args: [status, routeId],
+    });
+  }
+}
+
+/**
+ * Assign tickets to a route with sequence numbers
+ */
+export async function assignTicketsToRoute(
+  ticketIds: string[],
+  routeId: string,
+  sequences: number[]
+): Promise<void> {
+  // Batch update all tickets
+  for (let i = 0; i < ticketIds.length; i++) {
+    await db.execute({
+      sql: "UPDATE delivery_tickets SET route_id = ?, sequence_number = ? WHERE id = ?",
+      args: [routeId, sequences[i], ticketIds[i]],
+    });
+  }
+}
+
+/**
+ * Get tickets by route ID (ordered by sequence)
+ */
+export async function getTicketsByRoute(routeId: string): Promise<DeliveryTicket[]> {
+  const result = await db.execute({
+    sql: `SELECT * FROM delivery_tickets
+          WHERE route_id = ?
+          ORDER BY sequence_number ASC`,
+    args: [routeId],
+  });
+  return result.rows.map((row) => dbTicketToDeliveryTicket(row as unknown as DbTicket));
 }

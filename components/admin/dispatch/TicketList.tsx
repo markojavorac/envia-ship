@@ -8,7 +8,7 @@
 import { X, MapPin, Package } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { AdminCard } from "@/components/admin/ui/AdminCard";
+import { AdminCard, AdminCardContent } from "@/components/admin/ui/AdminCard";
 import type { DeliveryTicket } from "@/lib/admin/driver-assist-types";
 import { cn } from "@/lib/utils";
 
@@ -22,12 +22,13 @@ export function TicketList({ tickets, onDeleteTicket }: TicketListProps) {
 
   return (
     <AdminCard title={t("deliveryTickets")} icon={Package}>
-      <div className="space-y-2">
-        {tickets.map((ticket, index) => (
+      <AdminCardContent>
+        <div className="space-y-3">
+          {tickets.map((ticket, index) => (
           <div
             key={ticket.id}
             className={cn(
-              "flex items-center gap-3 rounded-lg border-2 p-3 transition-all",
+              "flex items-center gap-3 rounded-lg border-2 p-4 transition-all",
               "bg-card border-border hover:border-primary/30"
             )}
           >
@@ -65,18 +66,20 @@ export function TicketList({ tickets, onDeleteTicket }: TicketListProps) {
             >
               <X className="h-4 w-4" />
             </Button>
-          </div>
-        ))}
-      </div>
+            </div>
+          ))}
+        </div>
 
-      {/* Summary */}
-      <div className="border-border mt-4 border-t pt-4">
-        <p className="text-muted-foreground text-sm">
-          {t("totalTickets")}:{" "}
-          <span className="text-foreground font-semibold">{tickets.length}</span>{" "}
-          {t("ticketsCount", { count: tickets.length })}
-        </p>
-      </div>
+        {/* Summary */}
+        <div className="border-border mt-6 border-t pt-4">
+          <p className="text-muted-foreground text-sm">
+            {t("totalTickets")}:{" "}
+            <span className="text-foreground font-semibold">
+              {tickets.length} {tickets.length === 1 ? "ticket" : "tickets"}
+            </span>
+          </p>
+        </div>
+      </AdminCardContent>
     </AdminCard>
   );
 }
