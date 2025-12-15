@@ -5,9 +5,6 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
-import { MarketplaceProvider } from "@/contexts/MarketplaceContext";
-import ConditionalFooter from "@/components/ConditionalFooter";
-import { ProductDiscoveryPopup } from "@/components/copilot/ProductDiscoveryPopup";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/AppSidebar";
 import MobileBottomNav from "@/components/MobileBottomNav";
@@ -65,19 +62,15 @@ export default async function RootLayout({
             enableSystem={false}
             storageKey="envia-theme"
           >
-            <MarketplaceProvider>
-              <SidebarProvider defaultOpen={true}>
-                <div className="flex min-h-screen w-full max-w-full overflow-x-hidden">
-                  <AppSidebar />
-                  <main className="flex flex-1 flex-col px-4 pb-20 md:px-6 md:pb-0">
-                    <div className="flex-1">{children}</div>
-                    <ConditionalFooter />
-                  </main>
-                  <MobileBottomNav />
-                </div>
-              </SidebarProvider>
-              <ProductDiscoveryPopup />
-            </MarketplaceProvider>
+            <SidebarProvider defaultOpen={true}>
+              <div className="flex min-h-screen w-full max-w-full overflow-x-hidden">
+                <AppSidebar />
+                <main className="flex flex-1 flex-col px-4 pb-20 md:px-6 md:pb-0">
+                  <div className="flex-1">{children}</div>
+                </main>
+                <MobileBottomNav />
+              </div>
+            </SidebarProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

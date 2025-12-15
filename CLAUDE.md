@@ -2,7 +2,9 @@
 
 ## Project Overview
 
-Modern shipping calculator and marketplace for ENVÍA de Guatemala. Built with Next.js 15.5+, React 19, TypeScript, Tailwind CSS v4, and shadcn/ui components.
+Admin dashboard for ENVÍA de Guatemala shipping operations. Built with Next.js 15.5+, React 19, TypeScript, Tailwind CSS v4, and shadcn/ui components.
+
+**Note**: Public-facing features (calculator, marketplace, contact) have been archived to `archived-public/` directory.
 
 ## Tech Stack
 
@@ -46,8 +48,6 @@ Modern shipping calculator and marketplace for ENVÍA de Guatemala. Built with N
 ### Page-Level Spacing
 - **Containers**: `container mx-auto px-4 xl:px-6`
 - **Max-width constraints**:
-  - Narrow content (forms): `max-w-3xl` (Calculator, Contact)
-  - Wide content: `max-w-7xl` (Marketplace)
   - Admin pages: No max-width (use full available space)
 
 ### Vertical Rhythm
@@ -92,12 +92,11 @@ Modern shipping calculator and marketplace for ENVÍA de Guatemala. Built with N
 - `components.json` - shadcn/ui config
 
 ### Layout
-- `app/layout.tsx` - Root with providers (Theme, Marketplace)
+- `app/layout.tsx` - Root with providers (Theme, Sidebar)
 - `app/globals.css` - Tailwind v4 with inline @theme
 
 ### Theme
-- `lib/themes.ts` - Envia brand config
-- CSS vars in `:root` with `hsl()` wrapper
+- CSS vars in `:root` with `hsl()` wrapper for light/dark modes
 
 ## Common Patterns
 
@@ -142,7 +141,7 @@ Modern shipping calculator and marketplace for ENVÍA de Guatemala. Built with N
 ### Architecture
 - **Provider**: next-themes with `attribute="class"` (v0.4.6+)
 - **Storage**: localStorage key `envia-theme`
-- **Defaults**: Public (light), Admin (dark via useEffect)
+- **Default**: Light theme (user can toggle to dark)
 - **Toggle**: ThemeToggle component in AppSidebar footer
 
 ### Theme Definitions
@@ -188,30 +187,6 @@ The app uses `nextjs-toploader` for route change loading feedback:
 - **Top progress bar**: Orange (#FF8C00) with subtle shadow
 - **Auto-configured**: Added to root layout, works globally
 - **No manual setup needed**: Automatically tracks all route changes
-
-## Navigation
-
-**Header**: Sticky navy (`bg-secondary`), bold white links, orange CTA button
-**Links**: Home, Calculator, Marketplace
-**Marketplace Controls** (shown on /marketplace only):
-- ZoneSelector: `bg-white text-secondary font-semibold`
-- UIStyleSwitcher: `bg-white text-secondary font-semibold`
-
-## Marketplace
-
-### Overview
-- 5 UI variations (Amazon, Uber Eats, Pinterest, Minimalist, Proximity)
-- 70 mock products (Food, Medical, Retail)
-- Zone-based shipping integration
-- Single product checkout
-
-### Critical Architecture
-- **MarketplaceContext**: Wrapped at root layout (required for Header access)
-- **Images**: Use placehold.co (NOT Unsplash - causes 503 errors)
-- **Header Dropdowns**: Must use `bg-white text-secondary` (NOT `bg-secondary/10`)
-
-### Key Files
-See `/MARKETPLACE.md` for quick reference
 
 ## Admin Dark Theme Patterns (CRITICAL)
 
@@ -274,12 +249,7 @@ Build process runs `npm run check` automatically via `prebuild` script.
 - Remove `node_modules`, `.next`, `package-lock.json`, reinstall
 - NO `@layer base` with `@apply` in globals.css (v4 incompatible)
 
-### Context Errors (Marketplace)
-- Ensure `MarketplaceProvider` wraps entire app in `app/layout.tsx`
-- DO NOT wrap individual pages
-
 ### Images Not Loading
-- Switch to placehold.co in `/lib/marketplace/product-data.ts`
 - Configure remote patterns in `next.config.ts`
 
 ## Git Workflow
@@ -328,9 +298,8 @@ vercel logs https://envia-ship-abc123.vercel.app
 
 ## Documentation
 
-- **CLAUDE.md** (this file): High-level project config (<200 lines)
+- **CLAUDE.md** (this file): High-level project config
 - **README.md**: Detailed project/feature documentation
-- **MARKETPLACE.md**: Quick reference for marketplace
 - **CHANGELOG.md**: Version history and updates
 - **Code comments**: Why decisions were made (not what code does)
 
@@ -338,8 +307,7 @@ vercel logs https://envia-ship-abc123.vercel.app
 
 **"Update documentation" typically means:**
 - ✅ **CHANGELOG.md**: Always update for feature additions, fixes, changes
-- ✅ **README.md**: Update if necessary for user-facing features
-- ✅ **MARKETPLACE.md**: Update if marketplace-specific changes
+- ✅ **README.md**: Update if necessary for admin features
 
 **Do NOT update CLAUDE.md unless:**
 - ❌ Large-scale fundamental project changes (tech stack, architecture)
@@ -348,6 +316,17 @@ vercel logs https://envia-ship-abc123.vercel.app
 - ❌ Changes to design system fundamentals
 
 **Keep documentation updates efficient and lean.**
+
+## Archived Public Features
+
+All public-facing code (calculator, marketplace, contact) has been archived to `archived-public/` directory:
+- Pages: calculator, marketplace, contact, root
+- Components: calculator (7), marketplace (10), copilot, footer
+- Libraries: marketplace data/utilities, copilot AI tools (partially)
+- Contexts: MarketplaceContext, CalculatorContext
+- API routes: analyze-package, copilot
+
+**Note**: Some marketplace libraries (types, product data, shipping integration) remain in `lib/marketplace/` as they are dependencies for the admin system.
 
 ## Support
 

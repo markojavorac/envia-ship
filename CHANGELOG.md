@@ -8,6 +8,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- **Archived Public-Facing Features**: Simplified app to admin-only functionality
+  - Archived all public-facing code to `archived-public/` directory for potential future restoration
+  - Cleaned up root layout, sidebar, and mobile navigation to remove public dependencies
+  - Removed public page routes: calculator, marketplace, contact, root redirect
+  - Removed public API routes: analyze-package, copilot
+  - Removed public components: calculator (7 components), marketplace (10 components), copilot, footer
+  - Removed public libraries: marketplace data/utilities, shipping calculator, copilot AI tools
+  - Removed public contexts: MarketplaceContext, CalculatorContext
+  - Archived MARKETPLACE.md documentation
+  - **Result**: Leaner admin-focused codebase with all public code preserved in version-controlled archive
+
+### Removed
+- Public calculator page and all calculator-related components
+- Marketplace listing and product detail pages
+- Contact page
+- Product discovery copilot AI assistant
+- Public footer and conditional footer
+- MarketplaceContext and CalculatorContext providers from root layout
+
+### Preserved
+- All archived code stored in `archived-public/` directory in git
+- Authentication system (required for admin login)
+- All admin features unchanged (driver-assist, dispatch, reports, routes, orders, products)
+
 - **Complete Theme Migration**: Migrated all components to CSS variables for full dark mode support
   - Removed all hardcoded colors (bg-white, bg-gray-*, text-gray-*, border-gray-*)
   - Updated 50+ files across calculator, marketplace, admin, and contact pages

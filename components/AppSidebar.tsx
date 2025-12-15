@@ -6,15 +6,11 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import {
-  Home,
-  Calculator,
-  Store,
   Truck,
   BarChart3,
   MapIcon,
   User,
   LogOut,
-  LayoutDashboard,
 } from "lucide-react";
 import {
   Sidebar,
@@ -47,19 +43,11 @@ export default function AppSidebar() {
   const isLoginPage = pathname?.startsWith("/admin/login");
   const isAdminRoute = pathname?.startsWith("/admin") && !isLoginPage;
 
-  const publicNavItems = [
-    { href: "/", label: t("home"), icon: Home },
-    { href: "/calculator", label: t("calculator"), icon: Calculator },
-    { href: "/marketplace", label: t("marketplace"), icon: Store },
-  ];
-
-  const adminNavItems = [
+  const navItems = [
     { href: "/admin/dispatch", label: "Dispatcher", icon: Truck },
     { href: "/admin/reports", label: "Reports", icon: BarChart3 },
     { href: "/admin/driver-assist", label: "Driver Assist", icon: MapIcon },
   ];
-
-  const navItems = isAdminRoute ? adminNavItems : publicNavItems;
 
   useEffect(() => {
     if (isAdminRoute) {
@@ -133,9 +121,7 @@ export default function AppSidebar() {
       {/* Navigation Content */}
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>
-            {isAdminRoute ? "Admin Tools" : "Navigation"}
-          </SidebarGroupLabel>
+          <SidebarGroupLabel>Admin Tools</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map((item) => (
@@ -154,39 +140,6 @@ export default function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-
-        {/* Toggle Admin/Store Link */}
-        {!isAdminRoute ? (
-          <SidebarGroup>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link href="/admin">
-                      <LayoutDashboard className="h-5 w-5" />
-                      <span>{t("adminDashboard")}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        ) : (
-          <SidebarGroup>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link href="/">
-                      <Store className="h-5 w-5" />
-                      <span>{t("backToStore")}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
       </SidebarContent>
 
       {/* Footer with Language + Theme + User */}

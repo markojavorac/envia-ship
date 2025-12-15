@@ -3,36 +3,21 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import {
-  Home,
-  Calculator,
-  Store,
   Truck,
   BarChart3,
   MapIcon,
-  LayoutDashboard,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function MobileBottomNav() {
   const pathname = usePathname();
   const isLoginPage = pathname?.startsWith("/admin/login");
-  const isAdminRoute = pathname?.startsWith("/admin") && !isLoginPage;
 
-  const publicNavItems = [
-    { href: "/", icon: Home, label: "Home" },
-    { href: "/calculator", icon: Calculator, label: "Calculator" },
-    { href: "/marketplace", icon: Store, label: "Store" },
-    { href: "/admin", icon: LayoutDashboard, label: "Admin" },
-  ];
-
-  const adminNavItems = [
+  const navItems = [
     { href: "/admin/dispatch", icon: Truck, label: "Dispatch" },
     { href: "/admin/reports", icon: BarChart3, label: "Reports" },
     { href: "/admin/driver-assist", icon: MapIcon, label: "Assist" },
-    { href: "/", icon: Store, label: "Store" },
   ];
-
-  const navItems = isAdminRoute ? adminNavItems : publicNavItems;
 
   if (isLoginPage) return null;
 
