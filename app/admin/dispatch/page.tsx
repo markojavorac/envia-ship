@@ -171,7 +171,7 @@ export default function DispatcherUtilityPage() {
   // === RENDER === //
 
   return (
-    <div className="space-y-6">
+    <div className="w-full max-w-full space-y-6 pt-6">
       {/* Page Header */}
       <AdminPageTitle
         title={

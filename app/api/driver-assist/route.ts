@@ -44,11 +44,7 @@ export async function POST(request: NextRequest) {
 
     if (action === "complete") {
       const { ticketId, navigationStartedAt, completedAt } = body;
-      await completeTicket(
-        ticketId,
-        new Date(navigationStartedAt),
-        new Date(completedAt)
-      );
+      await completeTicket(ticketId, new Date(navigationStartedAt), new Date(completedAt));
       return NextResponse.json({ success: true, message: "Ticket completed" });
     }
 

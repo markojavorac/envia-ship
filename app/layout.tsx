@@ -45,7 +45,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${dmSans.variable} ${jetbrainsMono.variable} font-sans antialiased`}
+        className={`${inter.variable} ${dmSans.variable} ${jetbrainsMono.variable} font-sans antialiased overflow-x-hidden`}
       >
         <NextIntlClientProvider messages={messages}>
           <NextTopLoader
@@ -67,9 +67,9 @@ export default async function RootLayout({
           >
             <MarketplaceProvider>
               <SidebarProvider defaultOpen={true}>
-                <div className="flex min-h-screen w-full">
+                <div className="flex min-h-screen w-full max-w-full overflow-x-hidden">
                   <AppSidebar />
-                  <main className="flex flex-1 flex-col pb-20 md:pb-0">
+                  <main className="flex flex-1 flex-col px-4 pb-20 md:px-6 md:pb-0">
                     <div className="flex-1">{children}</div>
                     <ConditionalFooter />
                   </main>

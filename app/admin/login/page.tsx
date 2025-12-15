@@ -50,10 +50,13 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4" data-theme="admin">
+    <div
+      className="bg-background flex min-h-screen items-center justify-center p-4"
+      data-theme="admin"
+    >
       <div className="w-full max-w-sm">
         {/* Logo */}
-        <div className="flex justify-center mb-8">
+        <div className="mb-8 flex justify-center">
           <Image
             src="/envia-logo.png"
             alt="ENVÍA"
@@ -65,19 +68,19 @@ export default function LoginPage() {
         </div>
 
         {/* Login Card */}
-        <Card className="bg-card border border-border shadow-lg">
+        <Card className="bg-card border-border border shadow-lg">
           <CardHeader className="space-y-1 pb-4">
-            <CardTitle className="text-2xl font-bold text-center text-foreground">
+            <CardTitle className="text-foreground text-center text-2xl font-bold">
               Welcome back
             </CardTitle>
-            <CardDescription className="text-center text-muted-foreground">
+            <CardDescription className="text-muted-foreground text-center">
               Enter your credentials to access your account
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="username" className="text-sm font-medium text-foreground">
+                <Label htmlFor="username" className="text-foreground text-sm font-medium">
                   Username
                 </Label>
                 <Input
@@ -86,7 +89,7 @@ export default function LoginPage() {
                   placeholder="Enter your username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="bg-input border border-border focus:border-primary focus:ring-1 focus:ring-primary text-foreground placeholder:text-muted-foreground"
+                  className="bg-input border-border focus:border-primary focus:ring-primary text-foreground placeholder:text-muted-foreground border focus:ring-1"
                   disabled={isLoading}
                   autoComplete="username"
                   required
@@ -94,7 +97,7 @@ export default function LoginPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="pin" className="text-sm font-medium text-foreground">
+                <Label htmlFor="pin" className="text-foreground text-sm font-medium">
                   PIN
                 </Label>
                 <Input
@@ -103,18 +106,18 @@ export default function LoginPage() {
                   placeholder="Enter your PIN"
                   value={pin}
                   onChange={(e) => setPin(e.target.value.replace(/\D/g, "").substring(0, 6))}
-                  className="bg-input border border-border focus:border-primary focus:ring-1 focus:ring-primary text-foreground placeholder:text-muted-foreground"
+                  className="bg-input border-border focus:border-primary focus:ring-primary text-foreground placeholder:text-muted-foreground border focus:ring-1"
                   disabled={isLoading}
                   autoComplete="current-password"
                   maxLength={6}
                   required
                 />
-                <p className="text-xs text-muted-foreground">4-6 digit numeric PIN</p>
+                <p className="text-muted-foreground text-xs">4-6 digit numeric PIN</p>
               </div>
 
               <Button
                 type="submit"
-                className="w-full bg-primary text-white hover:bg-primary/90 font-semibold h-10"
+                className="bg-primary hover:bg-primary/90 h-10 w-full font-semibold text-white"
                 disabled={isLoading}
               >
                 {isLoading ? "Signing in..." : "Sign in"}
@@ -122,17 +125,17 @@ export default function LoginPage() {
             </form>
 
             {/* Demo Credentials */}
-            <div className="mt-6 pt-4 border-t border-border">
-              <div className="bg-primary/10 border border-primary/20 rounded-md p-3">
-                <p className="text-xs font-medium text-center text-foreground mb-1">
+            <div className="border-border mt-6 border-t pt-4">
+              <div className="bg-primary/10 border-primary/20 rounded-md border p-3">
+                <p className="text-foreground mb-1 text-center text-xs font-medium">
                   Demo credentials
                 </p>
-                <div className="space-y-1 text-xs text-muted-foreground text-center">
+                <div className="text-muted-foreground space-y-1 text-center text-xs">
                   <p>
-                    <span className="font-semibold text-foreground">Username:</span> Admin User
+                    <span className="text-foreground font-semibold">Username:</span> Admin User
                   </p>
                   <p>
-                    <span className="font-semibold text-foreground">PIN:</span> 1234
+                    <span className="text-foreground font-semibold">PIN:</span> 1234
                   </p>
                 </div>
               </div>

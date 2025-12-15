@@ -41,7 +41,7 @@ export function ShippingEstimateBadge({
         {formatPrice(estimate.cost)} shipping
       </Badge>
       {showDetails && (
-        <span className="text-xs text-gray-600">
+        <span className="text-xs text-muted-foreground">
           {getDeliveryTimeDescription(estimate.estimatedDays)} delivery
         </span>
       )}

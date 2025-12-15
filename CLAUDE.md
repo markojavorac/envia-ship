@@ -37,12 +37,41 @@ Modern shipping calculator and marketplace for ENVÍA de Guatemala. Built with N
 - **Body**: `text-base`
 - **Small**: `text-sm`
 
+## Spacing Standards (shadcn/ui Guidelines)
+
+### Main Layout
+- **Main container**: `px-4 md:px-6` (provides breathing room from sidebar)
+- **Mobile bottom spacing**: `pb-20` (clears bottom nav)
+
+### Page-Level Spacing
+- **Containers**: `container mx-auto px-4 xl:px-6`
+- **Max-width constraints**:
+  - Narrow content (forms): `max-w-3xl` (Calculator, Contact)
+  - Wide content: `max-w-7xl` (Marketplace)
+  - Admin pages: No max-width (use full available space)
+
+### Vertical Rhythm
+- **Hero sections**: `py-12` (48px) - Spacious introductions
+- **Content sections**: `py-8` (32px) - Standard sections
+- **Admin sections**: `py-6` (24px) - Compact feel for dashboards
+
+### Gaps & Grids
+- **Product grids**: `gap-4 md:gap-6` (responsive comfortable spacing)
+- **Form fields**: `gap-4` (16px standard)
+- **Card groups**: `gap-6` (24px comfortable)
+- **Navigation items**: `gap-2` (8px tight)
+
+### Cards
+- **Standard padding**: `p-6` (24px)
+- **Compact cards**: `p-4` (16px)
+- **Header/Content split**: Header `p-6 pb-3`, Content `p-6 pt-0`
+
 ## Key Constraints
 
 ### DO
 - Use shadcn/ui components exclusively
+- Follow spacing standards above
 - Trust code as ground truth
-- Keep spacing condensed
 - Test responsive on mobile
 - Use `cn()` for conditional classes
 

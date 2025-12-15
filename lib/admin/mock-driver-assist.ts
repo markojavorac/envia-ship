@@ -189,7 +189,8 @@ export function getMockPerformanceMetrics(): PerformanceMetric[] {
       .map((t) => t.durationMinutes)
       .filter((d): d is number => d !== null);
 
-    const avgDuration = durations.length > 0 ? durations.reduce((a, b) => a + b, 0) / durations.length : 0;
+    const avgDuration =
+      durations.length > 0 ? durations.reduce((a, b) => a + b, 0) / durations.length : 0;
 
     metrics.push({
       driverId,

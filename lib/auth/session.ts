@@ -8,7 +8,9 @@ import { cookies } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
 
 const SESSION_COOKIE_NAME = "envia_session";
-const SECRET_KEY = new TextEncoder().encode(process.env.SESSION_SECRET || "fallback-secret-key-change-in-production");
+const SECRET_KEY = new TextEncoder().encode(
+  process.env.SESSION_SECRET || "fallback-secret-key-change-in-production"
+);
 const SESSION_EXPIRY_HOURS = parseInt(process.env.SESSION_EXPIRY_HOURS || "24", 10);
 
 export interface SessionData {

@@ -14,8 +14,8 @@ export default function CalculatorPage() {
   return (
     <div className="flex flex-col">
       {/* Vibrant Intro Section */}
-      <section className="bg-secondary py-8 text-white">
-        <div className="container mx-auto px-4">
+      <section className="bg-secondary py-12 text-white">
+        <div className="container mx-auto px-4 xl:px-6">
           <div className="mx-auto max-w-3xl">
             <div className="mb-4 flex items-center gap-3">
               <div className="bg-primary flex h-12 w-12 items-center justify-center rounded-full">
@@ -32,7 +32,7 @@ export default function CalculatorPage() {
             </div>
 
             {/* Quick Guide Cards */}
-            <div className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-3">
+            <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
               <Card className="border-primary/30 border-2 bg-card/10">
                 <CardContent className="flex items-start gap-3 p-4">
                   <div className="bg-primary/20 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg">
@@ -80,8 +80,8 @@ export default function CalculatorPage() {
       </section>
 
       {/* Calculator Form Section */}
-      <section className="bg-gray-50 py-8">
-        <div className="container mx-auto px-4">
+      <section className="py-8">
+        <div className="container mx-auto px-4 xl:px-6">
           <div className="mx-auto max-w-3xl">
             {/* Calculator Form with AI Analysis */}
             <CalculatorTabs />

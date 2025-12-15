@@ -34,7 +34,6 @@ async function checkDatabase() {
     } catch (e) {
       console.log("\nTickets table doesn't exist yet");
     }
-
   } catch (error) {
     console.error("Database error:", error);
   }

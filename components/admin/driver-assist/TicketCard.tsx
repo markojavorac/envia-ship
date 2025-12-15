@@ -233,8 +233,8 @@ export function TicketCard({
                 </div>
 
                 {/* Addresses: Compact Vertical Stack */}
-                <div className={cn(isUpNext ? "space-y-2" : "space-y-1")}>
-                  <div className="flex items-center gap-1.5">
+                <div className={cn("w-full", isUpNext ? "space-y-2" : "space-y-1")}>
+                  <div className="flex w-full min-w-0 items-center gap-1.5">
                     <MapPin
                       className={cn("text-primary shrink-0", isUpNext ? "h-4 w-4" : "h-3.5 w-3.5")}
                     />
@@ -247,14 +247,12 @@ export function TicketCard({
                       {t("from")}
                     </span>
                     <span
-                      className={cn("text-foreground truncate", isUpNext ? "text-sm" : "text-xs")}
+                      className={cn("text-foreground min-w-0 flex-1 truncate", isUpNext ? "text-sm" : "text-xs")}
                     >
-                      {ticket.originAddress.length > 60
-                        ? `${ticket.originAddress.slice(0, 60)}...`
-                        : ticket.originAddress}
+                      {ticket.originAddress}
                     </span>
                   </div>
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex w-full min-w-0 items-center gap-1.5">
                     <MapPin
                       className={cn(
                         "text-destructive shrink-0",
@@ -270,11 +268,9 @@ export function TicketCard({
                       {t("to")}
                     </span>
                     <span
-                      className={cn("text-foreground truncate", isUpNext ? "text-sm" : "text-xs")}
+                      className={cn("text-foreground min-w-0 flex-1 truncate", isUpNext ? "text-sm" : "text-xs")}
                     >
-                      {ticket.destinationAddress.length > 60
-                        ? `${ticket.destinationAddress.slice(0, 60)}...`
-                        : ticket.destinationAddress}
+                      {ticket.destinationAddress}
                     </span>
                   </div>
                 </div>

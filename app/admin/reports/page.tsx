@@ -1,17 +1,24 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { BarChart3, Download, RefreshCcw, Calendar, FileText, Database, TestTube } from "lucide-react";
+import {
+  BarChart3,
+  RefreshCcw,
+  Calendar,
+  FileText,
+  Download,
+  Database,
+  TestTube,
+} from "lucide-react";
 import { AdminPageTitle } from "@/components/admin/ui/AdminPageTitle";
 import { Button } from "@/components/ui/button";
 import { TripHistoryTable } from "@/components/admin/reports/TripHistoryTable";
-import { DriverPerformanceCards } from "@/components/admin/reports/DriverPerformanceCards";
 import { DateRangeFilter } from "@/components/admin/reports/DateRangeFilter";
 import { DriverFilter } from "@/components/admin/reports/DriverFilter";
 import { toast } from "sonner";
 import Papa from "papaparse";
 import { generatePDFReport } from "@/lib/reports/pdf-export";
-import { getMockTrips, getMockPerformanceMetrics } from "@/lib/admin/mock-driver-assist";
+import { getMockTrips } from "@/lib/admin/mock-driver-assist";
 import { AdminInfoBox } from "@/components/admin/ui";
 
 interface TripData {
@@ -28,32 +35,19 @@ interface TripData {
   durationMinutes: number | null;
 }
 
-interface PerformanceMetric {
-  driverId: string;
-  driverName: string;
-  totalTickets: number;
-  totalCompleted: number;
-  completionRate: number;
-  avgDurationMinutes: number;
-  fastestMinutes: number;
-  slowestMinutes: number;
-}
-
 /**
  * Admin Reports Dashboard
  *
- * Displays trip history and driver performance metrics with:
- * - Filterable trip history table
- * - Driver performance cards
- * - CSV export capability
- * - Auto-refresh (optional)
+ * Displays trip history with:
+ * - Data source toggle (Mock/Database)
+ * - Filterable trip history table (by driver and date range)
+ * - CSV and PDF export capability
+ * - Auto-refresh
  */
 export default function ReportsPage() {
   const [trips, setTrips] = useState<TripData[]>([]);
-  const [metrics, setMetrics] = useState<PerformanceMetric[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [isLoadingMockData, setIsLoadingMockData] = useState(false);
 
   // Data source toggle: 'mock' or 'database'
   const [dataSource, setDataSource] = useState<"mock" | "database">("mock");
@@ -99,14 +93,7 @@ export default function ReportsPage() {
             });
           }
 
-          // Get performance metrics (filtered by driver if applicable)
-          const allMetrics = getMockPerformanceMetrics();
-          const filteredMetrics = selectedDriverId
-            ? allMetrics.filter((m: any) => m.driverId === selectedDriverId)
-            : allMetrics;
-
           setTrips(allTrips);
-          setMetrics(filteredMetrics);
         } else {
           // Load from database via API
           const params = new URLSearchParams();
@@ -114,28 +101,25 @@ export default function ReportsPage() {
           if (dateRange.startDate) params.append("startDate", dateRange.startDate.toISOString());
           if (dateRange.endDate) params.append("endDate", dateRange.endDate.toISOString());
 
-          const [tripsResponse, metricsResponse] = await Promise.all([
-            fetch(`/api/reports/trips?${params}`),
-            fetch(`/api/reports/performance${selectedDriverId ? `?driverId=${selectedDriverId}` : ""}`),
-          ]);
+          const tripsResponse = await fetch(`/api/reports/trips?${params}`);
 
-          if (!tripsResponse.ok || !metricsResponse.ok) {
+          if (!tripsResponse.ok) {
             throw new Error("Failed to fetch data from database");
           }
 
           const tripsData = await tripsResponse.json();
-          const metricsData = await metricsResponse.json();
 
           // Convert date strings to Date objects
           const parsedTrips = tripsData.trips.map((trip: any) => ({
             ...trip,
             createdAt: new Date(trip.createdAt),
-            navigationStartedAt: trip.navigationStartedAt ? new Date(trip.navigationStartedAt) : undefined,
+            navigationStartedAt: trip.navigationStartedAt
+              ? new Date(trip.navigationStartedAt)
+              : undefined,
             completedAt: trip.completedAt ? new Date(trip.completedAt) : undefined,
           }));
 
           setTrips(parsedTrips);
-          setMetrics(metricsData.metrics);
         }
 
         if (showRefreshToast) {
@@ -151,33 +135,6 @@ export default function ReportsPage() {
     },
     [dataSource, selectedDriverId, dateRange]
   );
-
-  // Load mock data into database
-  const handleLoadMockData = async () => {
-    setIsLoadingMockData(true);
-    try {
-      const response = await fetch("/api/reports/load-mock", {
-        method: "POST",
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to load mock data");
-      }
-
-      const data = await response.json();
-      toast.success(`Loaded ${data.count} mock tickets into database`);
-
-      // Refresh data if we're in database mode
-      if (dataSource === "database") {
-        await fetchData();
-      }
-    } catch (error) {
-      console.error("Error loading mock data:", error);
-      toast.error("Failed to load mock data");
-    } finally {
-      setIsLoadingMockData(false);
-    }
-  };
 
   // Initial fetch
   useEffect(() => {
@@ -255,27 +212,15 @@ export default function ReportsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="w-full max-w-full space-y-6 pt-6">
       {/* Header */}
       <AdminPageTitle
         title="Reports & Analytics"
         description="View trip history and driver performance metrics"
-        actions={
-          <Button
-            onClick={() => fetchData(true)}
-            disabled={isRefreshing}
-            variant="outline"
-            size="sm"
-            className="border-border text-foreground hover:bg-muted"
-          >
-            <RefreshCcw className={`mr-2 h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`} />
-            Refresh
-          </Button>
-        }
       />
 
       {/* Data Source Toggle */}
-      <div className="border-border bg-card rounded-lg border p-4">
+      <div className="w-full max-w-full border-border bg-card rounded-lg border p-4">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
@@ -303,7 +248,7 @@ export default function ReportsPage() {
               size="sm"
               className={
                 dataSource === "mock"
-                  ? "bg-primary text-white hover:bg-primary/90"
+                  ? "bg-primary hover:bg-primary/90 text-white"
                   : "border-border text-foreground hover:bg-muted"
               }
             >
@@ -320,33 +265,19 @@ export default function ReportsPage() {
               size="sm"
               className={
                 dataSource === "database"
-                  ? "bg-primary text-white hover:bg-primary/90"
+                  ? "bg-primary hover:bg-primary/90 text-white"
                   : "border-border text-foreground hover:bg-muted"
               }
             >
               <Database className="mr-2 h-4 w-4" />
               Database
             </Button>
-
-            <Button
-              onClick={handleLoadMockData}
-              disabled={isLoadingMockData}
-              variant="outline"
-              size="sm"
-              className="border-primary text-primary hover:bg-primary/10"
-            >
-              <Download className="mr-2 h-4 w-4" />
-              {isLoadingMockData ? "Loading..." : "Load Mock Data"}
-            </Button>
           </div>
         </div>
       </div>
 
-      {/* Performance Metrics */}
-      <DriverPerformanceCards metrics={metrics} isLoading={isRefreshing} />
-
       {/* Filters & Export */}
-      <div className="border-border bg-card rounded-lg border p-4">
+      <div className="w-full max-w-full border-border bg-card rounded-lg border p-4">
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Calendar className="text-primary h-5 w-5" />

@@ -51,7 +51,7 @@ export function ZoneModal() {
           <div className="space-y-2">
             <label className="text-secondary text-sm font-semibold">Delivery Zone</label>
             <Select value={selectedZone} onValueChange={setSelectedZone}>
-              <SelectTrigger className="focus:border-primary focus:ring-primary/20 w-full border-2 border-gray-200 bg-white">
+              <SelectTrigger className="focus:border-primary focus:ring-primary/20 w-full border-2 border-border bg-input">
                 <SelectValue placeholder="Select your zone..." />
               </SelectTrigger>
               <SelectContent>
@@ -82,14 +82,14 @@ export function ZoneModal() {
           <Button
             variant="outline"
             onClick={() => setShowZoneModal(false)}
-            className="flex-1 border-2 border-gray-200 text-muted-foreground hover:bg-gray-50"
+            className="flex-1 border-2 border-border text-muted-foreground hover:bg-muted"
           >
             Browse Without Zone
           </Button>
           <Button
             onClick={handleConfirm}
             disabled={!selectedZone}
-            className="bg-primary hover:bg-primary/90 flex-1 font-semibold text-white disabled:cursor-not-allowed disabled:bg-gray-300"
+            className="bg-primary hover:bg-primary/90 flex-1 font-semibold text-white disabled:cursor-not-allowed disabled:bg-muted"
           >
             Continue
           </Button>

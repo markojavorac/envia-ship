@@ -107,20 +107,20 @@ export function TripHistoryTable({ trips, isLoading }: TripHistoryTableProps) {
   }
 
   return (
-    <div className="border-border bg-card rounded-lg border">
-      <div className="overflow-x-auto">
-        <Table>
+    <div className="border-border bg-card rounded-lg border w-full">
+      <div className="overflow-x-auto -mx-px">
+        <Table className="min-w-full">
           <TableHeader>
             <TableRow className="border-border hover:bg-muted/50">
-              <TableHead className="text-foreground">Ticket</TableHead>
+              <TableHead className="text-foreground w-32">Ticket</TableHead>
               <TableHead
-                className="text-foreground hover:text-primary cursor-pointer"
+                className="text-foreground hover:text-primary cursor-pointer w-40"
                 onClick={() => handleSort("driverName")}
               >
                 Driver
                 <SortIcon field="driverName" />
               </TableHead>
-              <TableHead className="text-foreground">Route</TableHead>
+              <TableHead className="text-foreground min-w-[200px]">Route</TableHead>
               <TableHead
                 className="text-foreground hover:text-primary cursor-pointer"
                 onClick={() => handleSort("completedAt")}
@@ -158,7 +158,7 @@ export function TripHistoryTable({ trips, isLoading }: TripHistoryTableProps) {
                 </TableCell>
                 <TableCell className="text-foreground">{trip.driverName}</TableCell>
                 <TableCell>
-                  <div className="max-w-md space-y-1">
+                  <div className="min-w-[200px] max-w-md space-y-1">
                     <div className="flex items-start gap-1.5">
                       <MapPin className="text-primary mt-0.5 h-4 w-4 shrink-0" />
                       <span className="text-foreground text-sm">

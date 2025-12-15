@@ -67,7 +67,7 @@ function MarketplaceContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Zone Modal */}
       <ZoneModal />
 
@@ -76,14 +76,14 @@ function MarketplaceContent() {
 
       {/* Category Tabs (Uber Eats view) */}
       {currentView === MarketplaceView.UBER_EATS && (
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 xl:px-6">
           <CategoryTabs />
         </div>
       )}
 
       {/* Products Section */}
       <section className="py-8">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 xl:px-6">
           {/* Amazon View: Sidebar + Grid */}
           {currentView === MarketplaceView.AMAZON && (
             <div className="flex gap-6">
@@ -95,7 +95,7 @@ function MarketplaceContent() {
                 {/* Search and Sort Bar */}
                 <div className="mb-6 flex gap-4">
                   <div className="relative flex-1">
-                    <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                    <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                       placeholder="Search products..."
                       value={filterState.searchQuery}
@@ -118,12 +118,12 @@ function MarketplaceContent() {
                 </div>
 
                 {/* Product Count */}
-                <p className="mb-4 text-sm text-gray-600">
+                <p className="mb-4 text-sm text-muted-foreground">
                   Showing {filteredProducts.length} products
                 </p>
 
                 {/* Products Grid */}
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <div className="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   {filteredProducts.map((product) => (
                     <ProductCard key={product.id} product={product} variant={currentView} />
                   ))}
@@ -138,7 +138,7 @@ function MarketplaceContent() {
               {/* Search and Sort Bar */}
               <div className="flex gap-4">
                 <div className="relative flex-1">
-                  <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                  <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     placeholder="Search products..."
                     value={filterState.searchQuery}
@@ -160,7 +160,7 @@ function MarketplaceContent() {
                 </Select>
               </div>
 
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {filteredProducts.map((product) => (
                   <ProductCard key={product.id} product={product} variant={currentView} />
                 ))}
@@ -173,7 +173,7 @@ function MarketplaceContent() {
             <div className="space-y-6">
               {/* Search Bar */}
               <div className="relative mx-auto max-w-2xl">
-                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   placeholder="Search products..."
                   value={filterState.searchQuery}
@@ -195,7 +195,7 @@ function MarketplaceContent() {
             <div className="space-y-12">
               {/* Centered Search */}
               <div className="relative mx-auto max-w-xl">
-                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   placeholder="Search products..."
                   value={filterState.searchQuery}
@@ -218,7 +218,7 @@ function MarketplaceContent() {
               {/* Search and Sort Bar */}
               <div className="flex gap-4">
                 <div className="relative flex-1">
-                  <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                  <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     placeholder="Search products..."
                     value={filterState.searchQuery}
@@ -267,9 +267,9 @@ function MarketplaceContent() {
           {/* Empty State */}
           {filteredProducts.length === 0 && (
             <div className="py-20 text-center">
-              <ShoppingBag className="mx-auto mb-4 h-16 w-16 text-gray-300" />
+              <ShoppingBag className="mx-auto mb-4 h-16 w-16 text-muted-foreground" />
               <h2 className="text-secondary mb-2 text-2xl font-bold">No products found</h2>
-              <p className="text-gray-600">Try adjusting your filters or search query</p>
+              <p className="text-muted-foreground">Try adjusting your filters or search query</p>
             </div>
           )}
         </div>

@@ -9,10 +9,10 @@ export default function ContactPage() {
   const tFooter = useTranslations("footer");
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Hero Section */}
       <section className="bg-secondary py-12">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 xl:px-6">
           <div className="text-center">
             <h1 className="mb-4 text-2xl font-bold text-white md:text-3xl lg:text-5xl">
               {t("title")}
@@ -23,8 +23,8 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Information */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
+      <section className="py-8">
+        <div className="container mx-auto px-4 xl:px-6">
           <div className="mx-auto max-w-2xl">
             <Card className="border-primary/30 border-2 bg-card">
               <CardContent className="p-8">
@@ -70,7 +70,7 @@ export default function ContactPage() {
                       <h3 className="text-secondary mb-1 text-lg font-bold">
                         {tFooter("address")}
                       </h3>
-                      <p className="text-gray-700">{t("address")}</p>
+                      <p className="text-foreground">{t("address")}</p>
                     </div>
                   </div>
 
@@ -83,7 +83,7 @@ export default function ContactPage() {
                       <h3 className="text-secondary mb-1 text-lg font-bold">
                         {t("businessHours")}
                       </h3>
-                      <p className="text-gray-700">
+                      <p className="text-foreground">
                         {t("mondayFriday")}: {t("hours")}
                       </p>
                     </div>

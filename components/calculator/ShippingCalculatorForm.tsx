@@ -176,7 +176,7 @@ export default function ShippingCalculatorForm({
             </Card>
 
             {/* Locations Section */}
-            <Card className="border-primary/30 border-2 bg-white">
+            <Card className="border-primary/30 border-2 bg-card">
               <CardHeader className="pb-3">
                 <h3 className="text-primary text-sm font-semibold">Locations</h3>
               </CardHeader>
@@ -236,7 +236,7 @@ export default function ShippingCalculatorForm({
             </Card>
 
             {/* Service Type */}
-            <Card className="border-primary/30 border-2 bg-white">
+            <Card className="border-primary/30 border-2 bg-card">
               <CardHeader className="pb-3">
                 <Label className="text-primary text-sm font-semibold">Service Type</Label>
               </CardHeader>
@@ -267,7 +267,7 @@ export default function ShippingCalculatorForm({
             </Card>
 
             {/* Delivery Timing */}
-            <Card className="border-primary/30 border-2 bg-white">
+            <Card className="border-primary/30 border-2 bg-card">
               <CardHeader className="pb-3">
                 <Label className="text-primary text-sm font-semibold">Delivery Timing</Label>
               </CardHeader>

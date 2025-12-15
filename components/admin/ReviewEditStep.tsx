@@ -484,7 +484,7 @@ export function ReviewEditStep({
           type="button"
           variant="outline"
           onClick={onStartOver}
-          className="border-2 border-gray-200 hover:bg-gray-50"
+          className="border-2 border-border hover:bg-muted"
         >
           <RefreshCw className="mr-2 h-4 w-4" />
           Start Over

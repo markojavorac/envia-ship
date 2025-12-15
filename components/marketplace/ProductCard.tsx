@@ -185,7 +185,7 @@ export function ProductCard({ product, variant }: ProductCardProps) {
     return (
       <Link href={`/marketplace/${product.id}`}>
         <Card className="cursor-pointer border-0 bg-card shadow-sm transition-shadow hover:shadow-xl">
-          <div className="relative aspect-square bg-gray-50">
+          <div className="relative aspect-square bg-muted">
             <Image
               src={product.thumbnail}
               alt={product.name}
@@ -272,7 +272,7 @@ export function ProductCard({ product, variant }: ProductCardProps) {
                 </Badge>
               )}
             </div>
-            <div className="mt-3 flex items-center justify-between border-t border-gray-200 pt-3">
+            <div className="mt-3 flex items-center justify-between border-t border-border pt-3">
               <span className="text-xs text-muted-foreground">
                 {shippingEstimate
                   ? `+ ${formatPrice(shippingEstimate.cost)} shipping`

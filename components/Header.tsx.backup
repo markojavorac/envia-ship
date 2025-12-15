@@ -156,20 +156,20 @@ export default function Header() {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="flex items-center gap-2 text-foreground hover:text-primary hover:bg-card"
+                  className="text-foreground hover:text-primary hover:bg-card flex items-center gap-2"
                 >
                   <User className="h-4 w-4" />
                   <span className="text-sm font-semibold">{user.username}</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48 bg-card text-foreground">
+              <DropdownMenuContent align="end" className="bg-card text-foreground w-48">
                 <DropdownMenuLabel className="text-foreground">Account</DropdownMenuLabel>
                 <DropdownMenuSeparator className="bg-border" />
                 <DropdownMenuItem
                   onClick={handleLogout}
-                  className="cursor-pointer text-destructive hover:text-destructive hover:bg-destructive/10"
+                  className="text-destructive hover:text-destructive hover:bg-destructive/10 cursor-pointer"
                 >
-                  <LogOut className="h-4 w-4 mr-2" />
+                  <LogOut className="mr-2 h-4 w-4" />
                   Logout
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -243,7 +243,7 @@ export default function Header() {
 
             {/* Admin User Info (Mobile) */}
             {isAdminRoute && user && (
-              <div className="text-foreground py-3 border-t border-border">
+              <div className="text-foreground border-border border-t py-3">
                 <div className="flex items-center gap-2 text-sm font-semibold">
                   <User className="h-4 w-4" />
                   {user.username}
@@ -281,7 +281,7 @@ export default function Header() {
                 }}
                 className="bg-destructive hover:bg-destructive/90 mt-4 w-full font-semibold text-white"
               >
-                <LogOut className="h-4 w-4 mr-2" />
+                <LogOut className="mr-2 h-4 w-4" />
                 Logout
               </Button>
             )}

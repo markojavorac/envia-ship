@@ -46,7 +46,7 @@ export function ConfidenceIndicator({
               sizeClasses[size],
               i < indicator.stars
                 ? `fill-${indicator.color}-500 ${colorClasses[indicator.color]}`
-                : "text-gray-300"
+                : "text-muted-foreground"
             )}
           />
         ))}

@@ -48,7 +48,7 @@ export function ProductImageGallery({ images, productName }: ProductImageGallery
             <Button
               variant="ghost"
               size="icon"
-              className="absolute top-1/2 left-2 -translate-y-1/2 bg-white/80 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-white"
+              className="absolute top-1/2 left-2 -translate-y-1/2 bg-card/80 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-card"
               onClick={goToPrevious}
             >
               <ChevronLeft className="h-6 w-6" />
@@ -56,7 +56,7 @@ export function ProductImageGallery({ images, productName }: ProductImageGallery
             <Button
               variant="ghost"
               size="icon"
-              className="absolute top-1/2 right-2 -translate-y-1/2 bg-white/80 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-white"
+              className="absolute top-1/2 right-2 -translate-y-1/2 bg-card/80 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-card"
               onClick={goToNext}
             >
               <ChevronRight className="h-6 w-6" />
@@ -82,7 +82,7 @@ export function ProductImageGallery({ images, productName }: ProductImageGallery
               className={`relative aspect-square overflow-hidden rounded-lg border-2 bg-muted transition-all ${
                 index === currentIndex
                   ? "border-primary ring-primary/20 ring-2"
-                  : "hover:border-primary/50 border-gray-200"
+                  : "hover:border-primary/50 border-border"
               }`}
             >
               <Image

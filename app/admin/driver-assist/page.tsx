@@ -355,20 +355,9 @@ export default function DriverAssistPage() {
     .sort((a, b) => (b.completedAt?.getTime() ?? 0) - (a.completedAt?.getTime() ?? 0)); // Most recent first
 
   return (
-    <div className="space-y-2">
+    <div className="w-full max-w-full space-y-2 pt-6">
       <AdminPageTitle
         title={t("title")}
-        actions={
-          <Button
-            onClick={handleLoadMockData}
-            variant="outline"
-            size="sm"
-            className="border-border text-foreground hover:bg-muted"
-          >
-            <RefreshCcw className="mr-2 h-4 w-4" />
-            Reload
-          </Button>
-        }
       />
 
       {/* LOGGED IN USER INFO */}

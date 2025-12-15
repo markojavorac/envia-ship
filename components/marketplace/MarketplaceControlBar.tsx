@@ -5,8 +5,8 @@ import { UIStyleSwitcher } from "./UIStyleSwitcher";
 
 export function MarketplaceControlBar() {
   return (
-    <div className="border-b border-border bg-background">
-      <div className="container mx-auto px-4 py-4">
+    <div className="sticky top-0 z-10 border-b border-border bg-background">
+      <div className="container mx-auto px-4 py-4 xl:px-6">
         <div className="flex items-center justify-between gap-3">
           <h1 className="text-foreground text-2xl font-bold md:text-3xl">Marketplace</h1>
           <div className="flex items-center gap-3">

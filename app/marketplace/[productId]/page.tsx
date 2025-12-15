@@ -46,11 +46,11 @@ function ProductDetailContent() {
 
   if (!product) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+      <div className="flex min-h-screen items-center justify-center bg-muted">
         <div className="text-center">
-          <Package className="mx-auto mb-4 h-16 w-16 text-gray-300" />
+          <Package className="mx-auto mb-4 h-16 w-16 text-muted-foreground" />
           <h2 className="text-secondary mb-2 text-2xl font-bold">Product Not Found</h2>
-          <p className="mb-6 text-gray-600">
+          <p className="mb-6 text-muted-foreground">
             The product you&rsquo;re looking for doesn&rsquo;t exist or has been removed.
           </p>
           <Button asChild className="bg-primary hover:bg-primary/90 text-white">
@@ -67,13 +67,13 @@ function ProductDetailContent() {
   const category = CATEGORY_OPTIONS.find((c) => c.value === product.category);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Marketplace Control Bar */}
       <MarketplaceControlBar />
 
       {/* Breadcrumb */}
-      <div className="border-b border-gray-200 bg-white">
-        <div className="container mx-auto px-4 py-4">
+      <div className="border-b border-border bg-card">
+        <div className="container mx-auto px-4 py-4 xl:px-6">
           <Button
             variant="ghost"
             onClick={() => router.push("/marketplace")}
@@ -87,7 +87,7 @@ function ProductDetailContent() {
 
       {/* Product Detail */}
       <section className="py-8">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 xl:px-6">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             {/* Left: Image Gallery */}
             <div>
@@ -118,12 +118,12 @@ function ProductDetailContent() {
                         className={`h-5 w-5 ${
                           i < Math.floor(product.rating)
                             ? "text-primary fill-primary"
-                            : "text-gray-300"
+                            : "text-muted-foreground"
                         }`}
                       />
                     ))}
                   </div>
-                  <span className="text-sm font-semibold text-gray-700">
+                  <span className="text-sm font-semibold text-foreground">
                     {product.rating.toFixed(1)} ({product.reviews} reviews)
                   </span>
                 </div>
@@ -135,7 +135,7 @@ function ProductDetailContent() {
                   <span className="text-primary text-4xl font-bold">
                     {formatPrice(product.price)}
                   </span>
-                  <span className="text-gray-500">per unit</span>
+                  <span className="text-muted-foreground">per unit</span>
                 </div>
                 {shippingEstimate && (
                   <ShippingEstimateBadge estimate={shippingEstimate} showDetails />
@@ -145,7 +145,7 @@ function ProductDetailContent() {
               <Separator />
 
               {/* Seller Info */}
-              <Card className="border-primary/20 border-2 bg-white">
+              <Card className="border-primary/20 border-2 bg-card">
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-3">
@@ -168,7 +168,7 @@ function ProductDetailContent() {
                             </Badge>
                           )}
                         </div>
-                        <div className="mt-2 flex items-center gap-1 text-xs text-gray-600">
+                        <div className="mt-2 flex items-center gap-1 text-xs text-muted-foreground">
                           <MapPin className="h-3 w-3" />
                           <span>Ships from {product.originZone.replace("-", " ")}</span>
                         </div>
@@ -180,8 +180,8 @@ function ProductDetailContent() {
 
               {/* Stock Status */}
               <div className="flex items-center gap-2">
-                <Package className="h-5 w-5 text-gray-600" />
-                <span className="text-sm text-gray-600">
+                <Package className="h-5 w-5 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">
                   {product.stock > 0 ? (
                     <>
                       <span className="text-primary font-semibold">{product.stock}</span> units in
@@ -209,19 +209,19 @@ function ProductDetailContent() {
                   <div className="bg-primary/10 mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full">
                     <Shield className="text-primary h-6 w-6" />
                   </div>
-                  <p className="text-xs font-semibold text-gray-700">Secure Payment</p>
+                  <p className="text-xs font-semibold text-foreground">Secure Payment</p>
                 </div>
                 <div className="text-center">
                   <div className="bg-primary/10 mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full">
                     <Truck className="text-primary h-6 w-6" />
                   </div>
-                  <p className="text-xs font-semibold text-gray-700">Fast Delivery</p>
+                  <p className="text-xs font-semibold text-foreground">Fast Delivery</p>
                 </div>
                 <div className="text-center">
                   <div className="bg-primary/10 mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full">
                     <CheckCircle2 className="text-primary h-6 w-6" />
                   </div>
-                  <p className="text-xs font-semibold text-gray-700">Quality Assured</p>
+                  <p className="text-xs font-semibold text-foreground">Quality Assured</p>
                 </div>
               </div>
             </div>
@@ -229,34 +229,34 @@ function ProductDetailContent() {
 
           {/* Product Description */}
           <div className="mt-12">
-            <Card className="border-primary/20 border-2 bg-white">
+            <Card className="border-primary/20 border-2 bg-card">
               <CardContent className="p-6">
                 <h2 className="text-secondary mb-4 text-2xl font-bold">Product Description</h2>
-                <p className="leading-relaxed text-gray-700">{product.description}</p>
+                <p className="leading-relaxed text-foreground">{product.description}</p>
 
                 <Separator className="my-6" />
 
                 <h3 className="text-secondary mb-4 text-xl font-bold">Product Details</h3>
                 <div className="grid grid-cols-1 gap-4 text-sm md:grid-cols-2">
-                  <div className="flex justify-between border-b border-gray-200 py-2">
-                    <span className="text-gray-600">Weight</span>
+                  <div className="flex justify-between border-b border-border py-2">
+                    <span className="text-muted-foreground">Weight</span>
                     <span className="text-secondary font-semibold">
                       {product.weight.toFixed(2)} kg
                     </span>
                   </div>
-                  <div className="flex justify-between border-b border-gray-200 py-2">
-                    <span className="text-gray-600">Dimensions</span>
+                  <div className="flex justify-between border-b border-border py-2">
+                    <span className="text-muted-foreground">Dimensions</span>
                     <span className="text-secondary font-semibold">
                       {product.dimensions.length} × {product.dimensions.width} ×{" "}
                       {product.dimensions.height} cm
                     </span>
                   </div>
-                  <div className="flex justify-between border-b border-gray-200 py-2">
-                    <span className="text-gray-600">Category</span>
+                  <div className="flex justify-between border-b border-border py-2">
+                    <span className="text-muted-foreground">Category</span>
                     <span className="text-secondary font-semibold">{category?.label}</span>
                   </div>
-                  <div className="flex justify-between border-b border-gray-200 py-2">
-                    <span className="text-gray-600">Origin Zone</span>
+                  <div className="flex justify-between border-b border-border py-2">
+                    <span className="text-muted-foreground">Origin Zone</span>
                     <span className="text-secondary font-semibold">
                       {product.originZone.replace("-", " ")}
                     </span>

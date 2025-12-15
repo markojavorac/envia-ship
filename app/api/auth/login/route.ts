@@ -20,7 +20,10 @@ export async function POST(request: NextRequest) {
     }
 
     if (!pin || !isValidPinFormat(pin)) {
-      return NextResponse.json({ error: "Invalid PIN format (4-6 digits required)" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid PIN format (4-6 digits required)" },
+        { status: 400 }
+      );
     }
 
     // Get user from database

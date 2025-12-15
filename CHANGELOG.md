@@ -7,6 +7,66 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **Complete Theme Migration**: Migrated all components to CSS variables for full dark mode support
+  - Removed all hardcoded colors (bg-white, bg-gray-*, text-gray-*, border-gray-*)
+  - Updated 50+ files across calculator, marketplace, admin, and contact pages
+  - All components now use theme-aware CSS variables (bg-card, bg-muted, text-foreground, etc.)
+  - Ensures consistent theming across light and dark modes
+  - **Components Updated**:
+    - MobileBottomNav, AppSidebar navigation
+    - Calculator: ShippingCalculatorForm, ConfidenceIndicator, calculator page
+    - Marketplace: FilterSidebar, ProductCard, QuickCheckoutModal, ZoneModal, ProductImageGallery, ShippingEstimateBadge, marketplace page, product detail page
+    - Admin: NumberBadge, ReviewEditStep, ConfidenceIndicator
+    - UI primitives: Input, Select, Slider
+    - Contact page
+
+- **Comprehensive Spacing Standardization**: Implemented shadcn/ui spacing guidelines across entire app
+  - **Main Layout**: Added horizontal padding to main container (`px-4 md:px-6`) - creates breathing room from sidebar
+  - **Page-Level Spacing**: Standardized all pages with consistent container and section spacing
+  - **Responsive Containers**: All containers now use `px-4 xl:px-6` for desktop optimization
+  - **Vertical Rhythm**: Hero sections (`py-12`), Content sections (`py-8`), standardized gaps (`gap-4 md:gap-6`)
+  - **Product Grids**: Mobile `gap-4`, desktop `gap-6` for comfortable browsing
+  - **Files Updated**:
+    - Layout: `app/layout.tsx` (main padding)
+    - Pages: Calculator, Marketplace, Marketplace Product Detail, Contact (5 pages)
+    - Removed redundant bg-muted from page roots (main provides background)
+  - **Result**: Professional spacing matching shadcn/ui standards, better mobile/desktop UX
+
+### Fixed
+- **Mobile Layout Issues**: Resolved horizontal overflow and navigation problems on mobile devices
+  - Added `overflow-x-hidden` to body and layout wrapper to prevent horizontal scrolling
+  - Fixed table responsiveness in admin reports with proper min-widths and scroll containers
+  - Made MarketplaceControlBar sticky on mobile (`sticky top-0 z-10`)
+  - Ensured sidebar properly hidden on mobile (uses Sheet component)
+  - **Admin Page Mobile Fixes**: Fixed content extending beyond viewport on mobile
+    - Added `w-full max-w-full` to all admin page root containers (reports, driver-assist, dispatch)
+    - Fixed card width constraints with `w-full max-w-full` on all admin cards
+    - Fixed text truncation in TicketCard addresses with proper `flex-1 min-w-0 truncate` classes
+    - Removed manual 60-character truncation in favor of CSS truncate for responsive behavior
+  - **Result**: Clean mobile experience without horizontal scroll, sticky navigation working, admin pages properly constrained
+
+- **Page Title Spacing**: Added healthy breathing room at top of all pages
+  - Added `pt-6` (24px) top padding to all admin pages (reports, driver-assist, dispatch, routes)
+  - Ensures page titles have proper space from top edge
+  - Consistent spacing across entire application
+  - Removed unnecessary Refresh/Reload buttons from admin pages (data refreshes automatically)
+  - **Result**: Professional appearance with balanced whitespace, cleaner UI
+
+- **Sidebar Logo Update**: Replaced text "E" with icon logo in collapsed sidebar
+  - Now uses `/envia-logo-icon.tiff` (icon-only version) when sidebar is collapsed
+  - Maintains full logo (`/envia-logo.png`) when sidebar is expanded
+  - Consistent branding across all sidebar states
+  - **Result**: Professional icon logo instead of text placeholder
+
+- **Sidebar Footer Restructure**: Fixed sidebar footer layout following shadcn/ui best practices
+  - Moved collapse/expand toggle (SidebarTrigger) from header to bottom of footer
+  - Fixed theme toggle placement - now properly contained within sidebar footer
+  - Separated footer items into individual SidebarMenuItems for proper layout
+  - Added tooltips to user/logout buttons for collapsed state
+  - Toggle button now always visible at bottom of sidebar (expanded and collapsed states)
+  - **Result**: Proper sidebar footer hierarchy, theme toggle contained within sidebar, better UX
+
 ## [0.4.0] - 2025-12-14
 
 ### Added

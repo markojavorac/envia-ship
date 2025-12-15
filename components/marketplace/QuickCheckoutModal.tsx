@@ -128,7 +128,7 @@ export function QuickCheckoutModal({ product, open, onOpenChange }: QuickCheckou
             </div>
 
             <div className="bg-secondary/5 border-secondary/20 rounded-lg border p-3 text-sm">
-              <p className="text-gray-700">
+              <p className="text-foreground">
                 You will receive a confirmation call shortly. Delivery in{" "}
                 <span className="font-semibold">
                   {product.shippingEstimate?.estimatedDays || 4} days
@@ -167,7 +167,7 @@ export function QuickCheckoutModal({ product, open, onOpenChange }: QuickCheckou
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* Product Summary */}
-          <div className="border-primary/30 rounded-lg border-2 bg-white p-4">
+          <div className="border-primary/30 rounded-lg border-2 bg-card p-4">
             <div className="flex gap-4">
               <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-muted-100">
                 <img
@@ -212,14 +212,14 @@ export function QuickCheckoutModal({ product, open, onOpenChange }: QuickCheckou
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="deliveryZone" className="text-sm font-semibold text-gray-700">
+                <Label htmlFor="deliveryZone" className="text-sm font-semibold text-foreground">
                   Delivery Zone
                 </Label>
                 <Select
                   value={watch("deliveryZone")}
                   onValueChange={(value) => setValue("deliveryZone", value)}
                 >
-                  <SelectTrigger className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-white">
+                  <SelectTrigger className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-input">
                     <SelectValue placeholder="Select zone..." />
                   </SelectTrigger>
                   <SelectContent>
@@ -243,7 +243,7 @@ export function QuickCheckoutModal({ product, open, onOpenChange }: QuickCheckou
                   value={selectedServiceType}
                   onValueChange={(value) => setValue("serviceType", value as ServiceType)}
                 >
-                  <SelectTrigger className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-white">
+                  <SelectTrigger className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-input">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -265,7 +265,7 @@ export function QuickCheckoutModal({ product, open, onOpenChange }: QuickCheckou
                 id="deliveryAddress"
                 placeholder="Street address, building number, apartment..."
                 {...register("deliveryAddress")}
-                className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-white"
+                className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-input"
               />
               {errors.deliveryAddress && (
                 <p className="text-destructive text-xs">{errors.deliveryAddress.message}</p>
@@ -286,7 +286,7 @@ export function QuickCheckoutModal({ product, open, onOpenChange }: QuickCheckou
                   id="customerName"
                   placeholder="Your name"
                   {...register("customerName")}
-                  className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-white"
+                  className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-input"
                 />
                 {errors.customerName && (
                   <p className="text-destructive text-xs">{errors.customerName.message}</p>
@@ -301,7 +301,7 @@ export function QuickCheckoutModal({ product, open, onOpenChange }: QuickCheckou
                   id="customerPhone"
                   placeholder="12345678"
                   {...register("customerPhone")}
-                  className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-white"
+                  className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-input"
                 />
                 {errors.customerPhone && (
                   <p className="text-destructive text-xs">{errors.customerPhone.message}</p>
@@ -318,7 +318,7 @@ export function QuickCheckoutModal({ product, open, onOpenChange }: QuickCheckou
                 type="email"
                 placeholder="your@email.com"
                 {...register("customerEmail")}
-                className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-white"
+                className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-input"
               />
               {errors.customerEmail && (
                 <p className="text-destructive text-xs">{errors.customerEmail.message}</p>
@@ -333,7 +333,7 @@ export function QuickCheckoutModal({ product, open, onOpenChange }: QuickCheckou
                 id="notes"
                 placeholder="Special instructions, delivery preferences..."
                 {...register("notes")}
-                className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-white"
+                className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-input"
               />
               {errors.notes && <p className="text-destructive text-xs">{errors.notes.message}</p>}
             </div>

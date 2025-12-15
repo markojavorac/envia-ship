@@ -54,7 +54,7 @@ export function FilterSidebar({ priceRange, className = "" }: FilterSidebarProps
     filterState.minRating > 0;
 
   return (
-    <Card className={`border-primary/30 border-2 bg-white ${className}`}>
+    <Card className={`border-primary/30 border-2 bg-card ${className}`}>
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-primary flex items-center gap-2 text-lg font-bold">
@@ -84,7 +84,7 @@ export function FilterSidebar({ priceRange, className = "" }: FilterSidebarProps
               className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-colors ${
                 filterState.category === "all"
                   ? "bg-primary font-semibold text-white"
-                  : "text-gray-700 hover:bg-gray-100"
+                  : "text-foreground hover:bg-muted"
               }`}
             >
               All Products
@@ -96,7 +96,7 @@ export function FilterSidebar({ priceRange, className = "" }: FilterSidebarProps
                 className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-colors ${
                   filterState.category === cat.value
                     ? "bg-primary font-semibold text-white"
-                    : "text-gray-700 hover:bg-gray-100"
+                    : "text-foreground hover:bg-muted"
                 }`}
               >
                 {cat.label}
@@ -139,7 +139,7 @@ export function FilterSidebar({ priceRange, className = "" }: FilterSidebarProps
                 className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${
                   filterState.minRating === rating
                     ? "bg-primary/10 border-primary border-2"
-                    : "border-2 border-transparent hover:bg-gray-100"
+                    : "border-2 border-transparent hover:bg-muted"
                 }`}
               >
                 <div className="flex items-center gap-1">
@@ -147,12 +147,12 @@ export function FilterSidebar({ priceRange, className = "" }: FilterSidebarProps
                     <Star
                       key={i}
                       className={`h-4 w-4 ${
-                        i < rating ? "text-primary fill-primary" : "text-gray-300"
+                        i < rating ? "text-primary fill-primary" : "text-muted-foreground"
                       }`}
                     />
                   ))}
                 </div>
-                <span className="text-gray-700">
+                <span className="text-foreground">
                   {rating === 0 ? "All ratings" : `${rating}+ stars`}
                 </span>
               </button>
@@ -171,7 +171,7 @@ export function FilterSidebar({ priceRange, className = "" }: FilterSidebarProps
               checked={filterState.inStock}
               onCheckedChange={handleInStockToggle}
             />
-            <label htmlFor="in-stock" className="cursor-pointer text-sm text-gray-700">
+            <label htmlFor="in-stock" className="cursor-pointer text-sm text-foreground">
               In stock only
             </label>
           </div>
@@ -199,7 +199,7 @@ export function FilterSidebar({ priceRange, className = "" }: FilterSidebarProps
                 />
                 <label
                   htmlFor={`zone-${zone.value}`}
-                  className="flex-grow cursor-pointer text-sm text-gray-700"
+                  className="flex-grow cursor-pointer text-sm text-foreground"
                 >
                   {zone.label}
                 </label>

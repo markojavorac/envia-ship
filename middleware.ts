@@ -8,7 +8,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 
 const SESSION_COOKIE_NAME = "envia_session";
-const SECRET_KEY = new TextEncoder().encode(process.env.SESSION_SECRET || "fallback-secret-key-change-in-production");
+const SECRET_KEY = new TextEncoder().encode(
+  process.env.SESSION_SECRET || "fallback-secret-key-change-in-production"
+);
 
 async function isAuthenticated(request: NextRequest): Promise<boolean> {
   const token = request.cookies.get(SESSION_COOKIE_NAME);

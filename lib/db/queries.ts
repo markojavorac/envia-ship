@@ -91,14 +91,13 @@ export async function getCompletedTrips(driverId?: string) {
        WHERE dt.is_completed = 1
        ORDER BY dt.completed_at DESC`;
 
-  const result = driverId
-    ? await db.execute({ sql, args: [driverId] })
-    : await db.execute(sql);
+  const result = driverId ? await db.execute({ sql, args: [driverId] }) : await db.execute(sql);
 
   return result.rows.map((row: any) => {
-    const durationMs = row.navigation_started_at && row.completed_at
-      ? row.completed_at - row.navigation_started_at
-      : null;
+    const durationMs =
+      row.navigation_started_at && row.completed_at
+        ? row.completed_at - row.navigation_started_at
+        : null;
 
     return {
       id: row.id,
@@ -108,7 +107,9 @@ export async function getCompletedTrips(driverId?: string) {
       originAddress: row.origin_address,
       destinationAddress: row.destination_address,
       createdAt: new Date(row.created_at),
-      navigationStartedAt: row.navigation_started_at ? new Date(row.navigation_started_at) : undefined,
+      navigationStartedAt: row.navigation_started_at
+        ? new Date(row.navigation_started_at)
+        : undefined,
       completedAt: row.completed_at ? new Date(row.completed_at) : undefined,
       durationMs,
       durationMinutes: durationMs ? Math.round(durationMs / 60000) : null,
@@ -162,11 +163,7 @@ export async function completeTicket(
               navigation_started_at = ?,
               completed_at = ?
           WHERE id = ?`,
-    args: [
-      navigationStartedAt.getTime(),
-      completedAt.getTime(),
-      ticketId,
-    ],
+    args: [navigationStartedAt.getTime(), completedAt.getTime(), ticketId],
   });
 }
 
@@ -213,6 +210,8 @@ export async function getUserByUsername(username: string) {
  * Get all drivers
  */
 export async function getAllDrivers() {
-  const result = await db.execute("SELECT id, name, phone, role, is_active FROM drivers WHERE role = 'driver'");
+  const result = await db.execute(
+    "SELECT id, name, phone, role, is_active FROM drivers WHERE role = 'driver'"
+  );
   return result.rows;
 }
