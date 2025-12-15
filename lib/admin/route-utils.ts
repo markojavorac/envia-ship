@@ -13,7 +13,8 @@ import {
   RoutingMode,
 } from "./route-types";
 import { getOSRMDistance, convertOSRMResponse } from "./osrm-client";
-import { getCachedDistance, cacheDistance } from "./distance-cache";
+import { getCachedDistance, cacheDistance, getCachedMatrix, cacheMatrix } from "./distance-cache";
+import { getOSRMDistanceMatrix, hasUnreachablePairs } from "./osrm-table-client";
 
 /**
  * Convert degrees to radians
@@ -46,8 +47,9 @@ export function haversineDistance(coord1: Coordinates, coord2: Coordinates): num
 }
 
 /**
- * Build a distance matrix for all stops
+ * Build a distance matrix for all stops (LEGACY - Haversine only)
  *
+ * @deprecated Use buildDistanceMatrixAsync for road-based routing
  * @param stops Array of route stops
  * @returns 2D array where matrix[i][j] is distance from stop i to stop j
  */
@@ -68,6 +70,229 @@ export function buildDistanceMatrix(stops: RouteStop[]): number[][] {
   }
 
   return matrix;
+}
+
+/**
+ * Build distance and duration matrices using OSRM Table API (async)
+ *
+ * This is MUCH faster than n² point-to-point requests:
+ * - 25 stops: 1 API call instead of ~300 calls
+ * - 50 stops: 1 API call instead of ~1,225 calls
+ *
+ * Falls back gracefully:
+ * 1. Try OSRM Table API (fast, accurate)
+ * 2. If fails → Point-to-point OSRM with cache (slower, accurate)
+ * 3. If fails → Haversine (instant, approximate)
+ *
+ * @param stops Array of route stops
+ * @param useRoadRouting If true, use OSRM; if false, use Haversine
+ * @param onProgress Optional progress callback
+ * @returns Distance matrix (km), duration matrix (min), and method used
+ */
+export async function buildDistanceMatrixAsync(
+  stops: RouteStop[],
+  useRoadRouting: boolean = true,
+  onProgress?: (phase: string, percent: number) => void
+): Promise<{
+  distanceMatrix: number[][];
+  durationMatrix: number[][];
+  method: "osrm-table" | "osrm-point-to-point" | "haversine";
+}> {
+  const n = stops.length;
+
+  const coordinates = stops.map((s) => s.coordinates);
+
+  // Report progress
+  onProgress?.("distance_matrix", 10);
+
+  // Check cache first
+  const cachedResult = getCachedMatrix(coordinates);
+  if (cachedResult) {
+    console.log(
+      `[Distance Matrix] ✅ Using cached ${n}x${n} matrix (method: ${cachedResult.method})`
+    );
+    onProgress?.("distance_matrix", 100);
+    return {
+      distanceMatrix: cachedResult.distanceMatrix,
+      durationMatrix: cachedResult.durationMatrix,
+      method: cachedResult.method,
+    };
+  }
+
+  // If not using road routing, use Haversine immediately
+  if (!useRoadRouting) {
+    console.log("[Distance Matrix] Using Haversine (road routing disabled)");
+    const distanceMatrix = buildDistanceMatrix(stops);
+    const durationMatrix = distanceMatrix.map((row) => row.map((dist) => estimateTravelTime(dist)));
+    onProgress?.("distance_matrix", 100);
+
+    // Cache the result
+    cacheMatrix(coordinates, {
+      coordinates,
+      distanceMatrix,
+      durationMatrix,
+      method: "haversine",
+    });
+
+    return { distanceMatrix, durationMatrix, method: "haversine" };
+  }
+
+  // Strategy 1: Try OSRM Table API (single batch request)
+  try {
+    console.log(`[Distance Matrix] Attempting OSRM Table API for ${n}x${n} matrix`);
+    onProgress?.("distance_matrix", 30);
+
+    const tableResult = await getOSRMDistanceMatrix(coordinates);
+
+    if (tableResult) {
+      const { distances, durations } = tableResult;
+
+      // Check for unreachable pairs (null cells converted to 0)
+      if (hasUnreachablePairs(distances)) {
+        console.warn("[Distance Matrix] ⚠️  Some routes unreachable, filling with Haversine");
+        // Fill null cells with Haversine estimates
+        fillUnreachablePairs(stops, distances, durations);
+      }
+
+      console.log("[Distance Matrix] ✅ OSRM Table API success");
+      onProgress?.("distance_matrix", 100);
+
+      // Cache the result
+      cacheMatrix(coordinates, {
+        coordinates,
+        distanceMatrix: distances,
+        durationMatrix: durations,
+        method: "osrm-table",
+      });
+
+      return {
+        distanceMatrix: distances,
+        durationMatrix: durations,
+        method: "osrm-table",
+      };
+    }
+
+    console.warn("[Distance Matrix] OSRM Table API failed, trying point-to-point");
+  } catch (error) {
+    console.warn("[Distance Matrix] OSRM Table API error:", error);
+  }
+
+  // Strategy 2: Fall back to point-to-point OSRM with caching
+  try {
+    console.log("[Distance Matrix] Attempting point-to-point OSRM with cache");
+    onProgress?.("distance_matrix", 50);
+
+    const distanceMatrix: number[][] = Array(n)
+      .fill(0)
+      .map(() => Array(n).fill(0));
+    const durationMatrix: number[][] = Array(n)
+      .fill(0)
+      .map(() => Array(n).fill(0));
+
+    let successCount = 0;
+    let totalPairs = n * (n - 1); // Exclude diagonal
+
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j < n; j++) {
+        if (i === j) {
+          distanceMatrix[i][j] = 0;
+          durationMatrix[i][j] = 0;
+          continue;
+        }
+
+        try {
+          const result = await getDistanceBetweenStops(
+            stops[i].coordinates,
+            stops[j].coordinates,
+            true
+          );
+          distanceMatrix[i][j] = result.distance;
+          durationMatrix[i][j] = result.duration;
+          successCount++;
+        } catch {
+          // Fall back to Haversine for this pair
+          const dist = haversineDistance(stops[i].coordinates, stops[j].coordinates);
+          distanceMatrix[i][j] = dist;
+          durationMatrix[i][j] = estimateTravelTime(dist);
+        }
+      }
+    }
+
+    // If at least 50% succeeded, consider it successful
+    if (successCount >= totalPairs * 0.5) {
+      console.log(
+        `[Distance Matrix] ✅ Point-to-point OSRM success (${successCount}/${totalPairs} pairs)`
+      );
+      onProgress?.("distance_matrix", 100);
+
+      // Cache the result
+      cacheMatrix(coordinates, {
+        coordinates,
+        distanceMatrix,
+        durationMatrix,
+        method: "osrm-point-to-point",
+      });
+
+      return {
+        distanceMatrix,
+        durationMatrix,
+        method: "osrm-point-to-point",
+      };
+    }
+
+    console.warn(
+      `[Distance Matrix] Point-to-point success rate too low (${successCount}/${totalPairs}), using Haversine`
+    );
+  } catch (error) {
+    console.warn("[Distance Matrix] Point-to-point OSRM error:", error);
+  }
+
+  // Strategy 3: Final fallback to Haversine
+  console.log("[Distance Matrix] Using Haversine fallback");
+  onProgress?.("distance_matrix", 80);
+
+  const distanceMatrix = buildDistanceMatrix(stops);
+  const durationMatrix = distanceMatrix.map((row) => row.map((dist) => estimateTravelTime(dist)));
+
+  onProgress?.("distance_matrix", 100);
+
+  // Cache the result
+  cacheMatrix(coordinates, {
+    coordinates,
+    distanceMatrix,
+    durationMatrix,
+    method: "haversine",
+  });
+
+  return { distanceMatrix, durationMatrix, method: "haversine" };
+}
+
+/**
+ * Fill unreachable pairs (0 values) with Haversine estimates
+ *
+ * @param stops Route stops
+ * @param distanceMatrix Distance matrix (modified in place)
+ * @param durationMatrix Duration matrix (modified in place)
+ */
+function fillUnreachablePairs(
+  stops: RouteStop[],
+  distanceMatrix: number[][],
+  durationMatrix: number[][]
+): void {
+  const n = stops.length;
+
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      if (i === j) continue;
+
+      // If distance is 0 (unreachable or null), use Haversine
+      if (distanceMatrix[i][j] === 0) {
+        const dist = haversineDistance(stops[i].coordinates, stops[j].coordinates);
+        distanceMatrix[i][j] = dist;
+        durationMatrix[i][j] = estimateTravelTime(dist);
+      }
+    }
+  }
 }
 
 /**
@@ -219,6 +444,54 @@ async function calculateTotalDistanceAsync(
 }
 
 /**
+ * Calculate total distance and duration from pre-built distance/duration matrices
+ *
+ * This is MUCH faster than making API calls for each leg of the route.
+ * Use after optimization when you have the complete matrices.
+ *
+ * @param stopSequence Array of stops in route order
+ * @param distanceMatrix Pre-built distance matrix (km)
+ * @param durationMatrix Pre-built duration matrix (minutes)
+ * @param stopIndexMap Map from stop ID to matrix index
+ * @returns Total distance (km) and duration (minutes)
+ */
+function calculateRouteMetricsFromMatrix(
+  stopSequence: RouteStop[],
+  distanceMatrix: number[][],
+  durationMatrix: number[][],
+  stopIndexMap: Map<string, number>
+): { totalDistance: number; totalTime: number } {
+  if (stopSequence.length < 2) {
+    return { totalDistance: 0, totalTime: 0 };
+  }
+
+  let totalDistance = 0;
+  let totalTime = 0;
+
+  // Sum up distances/durations between consecutive stops
+  for (let i = 0; i < stopSequence.length - 1; i++) {
+    const fromIdx = stopIndexMap.get(stopSequence[i].id);
+    const toIdx = stopIndexMap.get(stopSequence[i + 1].id);
+
+    if (fromIdx === undefined || toIdx === undefined) {
+      console.warn(
+        `[Route Metrics] Stop not found in matrix: ${stopSequence[i].id} or ${stopSequence[i + 1].id}`
+      );
+      // Fall back to Haversine for this leg
+      const dist = haversineDistance(stopSequence[i].coordinates, stopSequence[i + 1].coordinates);
+      totalDistance += dist;
+      totalTime += estimateTravelTime(dist);
+      continue;
+    }
+
+    totalDistance += distanceMatrix[fromIdx][toIdx];
+    totalTime += durationMatrix[fromIdx][toIdx];
+  }
+
+  return { totalDistance, totalTime };
+}
+
+/**
  * Optimize route using Nearest Neighbor algorithm (async with road routing support)
  *
  * Algorithm:
@@ -286,29 +559,56 @@ export async function optimizeRouteNearestNeighbor(
     unvisited = unvisited.slice(1);
   }
 
-  // Report initial progress
+  // Build distance matrix ONCE upfront (OSRM Table API - fast!)
   config.onProgress?.({
-    phase: 'distance_matrix',
+    phase: "distance_matrix",
     currentStep: 0,
     totalSteps: stops.length,
-    message: 'Building distance matrix',
+    message: "Building distance matrix",
     percent: 5,
   });
 
-  // Nearest Neighbor greedy algorithm (async)
+  const { distanceMatrix, durationMatrix, method } = await buildDistanceMatrixAsync(
+    stops,
+    useRoadRouting
+  );
+
+  console.log(
+    `[Route Optimizer] Distance matrix built using: ${method} (${stops.length}x${stops.length})`
+  );
+
+  config.onProgress?.({
+    phase: "nearest_neighbor",
+    currentStep: 0,
+    totalSteps: stops.length,
+    message: "Optimizing route sequence",
+    percent: 15,
+  });
+
+  // Create index map for fast lookups
+  const stopIndexMap = new Map(stops.map((stop, index) => [stop.id, index]));
+
+  // Nearest Neighbor greedy algorithm (using pre-built matrix)
   while (unvisited.length > 0) {
     let nearestIndex = 0;
     let nearestDistance = Infinity;
 
-    // Find nearest unvisited stop (async distance calculation)
+    // Get current stop's index in original stops array
+    const currentIdx = stopIndexMap.get(current.id);
+    if (currentIdx === undefined) {
+      throw new Error(`Stop ${current.id} not found in index map`);
+    }
+
+    // Find nearest unvisited stop (instant matrix lookup!)
     for (let i = 0; i < unvisited.length; i++) {
-      const result = await getDistanceBetweenStops(
-        current.coordinates,
-        unvisited[i].coordinates,
-        useRoadRouting
-      );
-      if (result.distance < nearestDistance) {
-        nearestDistance = result.distance;
+      const candidateIdx = stopIndexMap.get(unvisited[i].id);
+      if (candidateIdx === undefined) {
+        throw new Error(`Stop ${unvisited[i].id} not found in index map`);
+      }
+
+      const distance = distanceMatrix[currentIdx][candidateIdx];
+      if (distance < nearestDistance) {
+        nearestDistance = distance;
         nearestIndex = i;
       }
     }
@@ -320,10 +620,10 @@ export async function optimizeRouteNearestNeighbor(
 
     // Report progress after each iteration
     config.onProgress?.({
-      phase: 'nearest_neighbor',
+      phase: "nearest_neighbor",
       currentStep: ordered.length,
       totalSteps: stops.length,
-      message: 'Finding optimal sequence',
+      message: "Finding optimal sequence",
       percent: 20 + Math.round((ordered.length / stops.length) * 60),
     });
   }
@@ -332,6 +632,10 @@ export async function optimizeRouteNearestNeighbor(
   const completeOptimizedRoute: RouteStop[] = [];
   if (config.startPoint) {
     completeOptimizedRoute.push(config.startPoint);
+  } else {
+    // When no startPoint is configured, include the first stop (which was used as starting point)
+    const firstStop = stops[0];
+    completeOptimizedRoute.push(firstStop);
   }
   completeOptimizedRoute.push(...ordered);
 
@@ -346,20 +650,20 @@ export async function optimizeRouteNearestNeighbor(
 
   // Report progress before metrics calculation
   config.onProgress?.({
-    phase: 'calculating_metrics',
+    phase: "calculating_metrics",
     currentStep: stops.length,
     totalSteps: stops.length,
-    message: 'Calculating savings',
+    message: "Calculating savings",
     percent: 85,
   });
 
-  // Calculate optimized route metrics (async)
-  const optimizedMetrics = await calculateTotalDistanceAsync(
+  // Calculate optimized route metrics from pre-built matrices (instant!)
+  const { totalDistance, totalTime } = calculateRouteMetricsFromMatrix(
     completeOptimizedRoute,
-    useRoadRouting
+    distanceMatrix,
+    durationMatrix,
+    stopIndexMap
   );
-  const totalDistance = optimizedMetrics.distance;
-  const totalTime = optimizedMetrics.duration;
 
   // Calculate original route metrics (visiting in entered order)
   const originalOrder: RouteStop[] = [];
@@ -373,9 +677,8 @@ export async function optimizeRouteNearestNeighbor(
     originalOrder.push(config.endPoint);
   }
 
-  const originalMetrics = await calculateTotalDistanceAsync(originalOrder, useRoadRouting);
-  const originalDistance = originalMetrics.distance;
-  const originalTime = originalMetrics.duration;
+  const { totalDistance: originalDistance, totalTime: originalTime } =
+    calculateRouteMetricsFromMatrix(originalOrder, distanceMatrix, durationMatrix, stopIndexMap);
 
   // Calculate savings
   const distanceSaved = Math.max(0, originalDistance - totalDistance);
@@ -384,10 +687,10 @@ export async function optimizeRouteNearestNeighbor(
 
   // Report completion
   config.onProgress?.({
-    phase: 'calculating_metrics',
+    phase: "calculating_metrics",
     currentStep: stops.length,
     totalSteps: stops.length,
-    message: 'Complete',
+    message: "Complete",
     percent: 100,
   });
 

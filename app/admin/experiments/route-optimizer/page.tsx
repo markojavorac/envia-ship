@@ -6,14 +6,36 @@ import { Zap, TrendingDown, ArrowLeft, Sparkles } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { AdminPageTitle, AdminCard, AdminCardContent, AdminInfoBox } from "@/components/admin/ui";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { RouteComparisonMap } from "@/components/admin/route-optimizer/RouteComparisonMap";
 import { RouteMetrics } from "@/components/admin/route-optimizer/RouteMetrics";
 import { RouteOptimizationProgress } from "@/components/admin/route-optimizer/RouteOptimizationProgress";
-import { MOCK_SCENARIOS, getScenarioById, getDefaultScenario, type MockScenario } from "@/lib/admin/route-optimizer/mock-scenarios";
-import type { OptimizedRoute, RouteConfig, RouteStop, OptimizationProgress } from "@/lib/admin/route-types";
+import {
+  MOCK_SCENARIOS,
+  getScenarioById,
+  getDefaultScenario,
+  type MockScenario,
+} from "@/lib/admin/route-optimizer/mock-scenarios";
+import type {
+  OptimizedRoute,
+  RouteConfig,
+  RouteStop,
+  OptimizationProgress,
+} from "@/lib/admin/route-types";
 import { OptimizationMode, RoutingMode } from "@/lib/admin/route-types";
 import { optimizeRouteNearestNeighbor } from "@/lib/admin/route-utils";
+import {
+  validateVRPPDRoute,
+  hasVRPPDConstraints,
+  getViolationMessages,
+} from "@/lib/admin/vrppd-constraints";
+import type { ValidationResult } from "@/lib/admin/vrppd-constraints";
 import { toast } from "sonner";
 
 /**
@@ -31,25 +53,50 @@ export default function RouteOptimizerPage() {
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [optimizedRoute, setOptimizedRoute] = useState<OptimizedRoute | null>(null);
   const [showResults, setShowResults] = useState(false);
-  const [optimizationProgress, setOptimizationProgress] = useState<OptimizationProgress | null>(null);
+  const [optimizationProgress, setOptimizationProgress] = useState<OptimizationProgress | null>(
+    null
+  );
+  const [validationResult, setValidationResult] = useState<ValidationResult | null>(null);
 
   const selectedScenario = getScenarioById(selectedScenarioId) || getDefaultScenario();
+  const hasVRPPD = selectedScenario.stops.some(
+    (s) => s.stopType === "pickup" || s.stopType === "dropoff"
+  );
 
   const handleOptimize = async () => {
     setIsOptimizing(true);
     setShowResults(false);
     setOptimizationProgress(null);
+    setValidationResult(null);
+
+    // Track start time for minimum delay enforcement
+    const startTime = Date.now();
+    const MIN_OPTIMIZATION_TIME = 2000; // 2 seconds minimum for better UX
 
     try {
       // Convert scenario stops to RouteStops
-      const stops: RouteStop[] = selectedScenario.stops.map((stop) => ({
-        id: `${selectedScenario.id}-${stop.address}`,
+      const stops: RouteStop[] = selectedScenario.stops.map((stop, index) => ({
+        id: `${selectedScenario.id}-${index}`,
         address: stop.address,
         coordinates: stop.coordinates,
         zone: stop.zone,
         notes: stop.notes,
         recipientName: stop.recipientName,
+        stopType: stop.stopType,
+        pairedStopId: stop.pairedStopId ? `${selectedScenario.id}-${stop.pairedStopId}` : undefined,
       }));
+
+      // VRPPD Phase 2: Validate route if it has pickup/dropoff constraints
+      if (hasVRPPDConstraints(stops)) {
+        const validation = validateVRPPDRoute(stops);
+        setValidationResult(validation);
+
+        if (!validation.valid) {
+          toast.error("Route has VRPPD validation errors. Cannot optimize.");
+          setIsOptimizing(false);
+          return;
+        }
+      }
 
       // Configure route optimization
       const config: RouteConfig = {
@@ -61,6 +108,22 @@ export default function RouteOptimizerPage() {
 
       // Optimize route
       const optimized = await optimizeRouteNearestNeighbor(stops, config);
+
+      // Enforce minimum delay for smooth UX (even if cached)
+      const elapsedTime = Date.now() - startTime;
+      const remainingTime = Math.max(0, MIN_OPTIMIZATION_TIME - elapsedTime);
+
+      if (remainingTime > 0) {
+        // Show final progress state while waiting
+        setOptimizationProgress({
+          phase: "calculating_metrics",
+          currentStep: stops.length,
+          totalSteps: stops.length,
+          message: "Finalizing route",
+          percent: 100,
+        });
+        await new Promise((resolve) => setTimeout(resolve, remainingTime));
+      }
 
       setOptimizedRoute(optimized);
       setShowResults(true);
@@ -83,10 +146,20 @@ export default function RouteOptimizerPage() {
           recipientName: stop.recipientName,
           sequenceNumber: index + 1,
         })),
-        totalDistance: selectedScenario.expectedSavings.distanceKm * (100 / (100 + selectedScenario.expectedSavings.improvementPercent)),
-        totalTime: selectedScenario.expectedSavings.timeMin * (100 / (100 + selectedScenario.expectedSavings.improvementPercent)),
-        originalDistance: selectedScenario.expectedSavings.distanceKm / (selectedScenario.expectedSavings.improvementPercent / 100) + selectedScenario.expectedSavings.distanceKm,
-        originalTime: selectedScenario.expectedSavings.timeMin / (selectedScenario.expectedSavings.improvementPercent / 100) + selectedScenario.expectedSavings.timeMin,
+        totalDistance:
+          selectedScenario.expectedSavings.distanceKm *
+          (100 / (100 + selectedScenario.expectedSavings.improvementPercent)),
+        totalTime:
+          selectedScenario.expectedSavings.timeMin *
+          (100 / (100 + selectedScenario.expectedSavings.improvementPercent)),
+        originalDistance:
+          selectedScenario.expectedSavings.distanceKm /
+            (selectedScenario.expectedSavings.improvementPercent / 100) +
+          selectedScenario.expectedSavings.distanceKm,
+        originalTime:
+          selectedScenario.expectedSavings.timeMin /
+            (selectedScenario.expectedSavings.improvementPercent / 100) +
+          selectedScenario.expectedSavings.timeMin,
         distanceSaved: selectedScenario.expectedSavings.distanceKm,
         timeSaved: selectedScenario.expectedSavings.timeMin,
         improvementPercent: selectedScenario.expectedSavings.improvementPercent,
@@ -94,6 +167,14 @@ export default function RouteOptimizerPage() {
         algorithm: "NEAREST_NEIGHBOR",
         routingMode: RoutingMode.ROAD,
       };
+
+      // Enforce minimum delay for fallback too
+      const elapsedTime = Date.now() - startTime;
+      const remainingTime = Math.max(0, MIN_OPTIMIZATION_TIME - elapsedTime);
+
+      if (remainingTime > 0) {
+        await new Promise((resolve) => setTimeout(resolve, remainingTime));
+      }
 
       setOptimizedRoute(fallbackRoute);
       setShowResults(true);
@@ -105,6 +186,7 @@ export default function RouteOptimizerPage() {
   const handleScenarioChange = (scenarioId: string) => {
     setSelectedScenarioId(scenarioId);
     setShowResults(false);
+    setValidationResult(null);
   };
 
   return (
@@ -142,8 +224,8 @@ export default function RouteOptimizerPage() {
 
       {/* Experimental Notice */}
       <AdminInfoBox variant="warning">
-        <strong>Experimental Feature:</strong> This visualizer demonstrates route optimization
-        with mock data. Perfect for exploring &ldquo;what-if&rdquo; scenarios and understanding potential
+        <strong>Experimental Feature:</strong> This visualizer demonstrates route optimization with
+        mock data. Perfect for exploring &ldquo;what-if&rdquo; scenarios and understanding potential
         savings.
       </AdminInfoBox>
 
@@ -172,6 +254,26 @@ export default function RouteOptimizerPage() {
             <AdminInfoBox variant="info">
               <strong>{selectedScenario.name}:</strong> {selectedScenario.description}
             </AdminInfoBox>
+
+            {/* Pickup/Dropoff Validation (only show if errors exist) */}
+            {validationResult && !validationResult.valid && (
+              <AdminInfoBox variant="error">
+                <h4 className="mb-2 font-bold">Route Validation Error</h4>
+                <p className="mb-2 text-sm">
+                  This route contains pickup/dropoff pairs. Each item must be picked up before it
+                  can be dropped off.
+                </p>
+                <ul className="list-inside list-disc space-y-1 text-sm">
+                  {getViolationMessages(validationResult.violations).map((msg, i) => (
+                    <li key={i}>{msg}</li>
+                  ))}
+                </ul>
+                <p className="mt-3 text-sm">
+                  <strong>Fix required:</strong> Reorder stops so pickups come before their paired
+                  dropoffs.
+                </p>
+              </AdminInfoBox>
+            )}
 
             {!isOptimizing && (
               <Button
@@ -213,8 +315,8 @@ export default function RouteOptimizerPage() {
           <AdminCardContent>
             <div className="text-muted-foreground space-y-4 text-sm">
               <p>
-                <strong className="text-foreground">Step 1: Original Route</strong> - Addresses
-                are entered in the order received, creating an inefficient zigzag pattern.
+                <strong className="text-foreground">Step 1: Original Route</strong> - Addresses are
+                entered in the order received, creating an inefficient zigzag pattern.
               </p>
               <p>
                 <strong className="text-foreground">Step 2: Optimization</strong> - Our algorithm
@@ -222,14 +324,14 @@ export default function RouteOptimizerPage() {
                 distances.
               </p>
               <p>
-                <strong className="text-foreground">Step 3: Savings</strong> - The optimized
-                route saves distance, time, fuel cost, and CO₂ emissions. Monthly projections
-                assume 250 routes per month.
+                <strong className="text-foreground">Step 3: Savings</strong> - The optimized route
+                saves distance, time, fuel cost, and CO₂ emissions. Monthly projections assume 250
+                routes per month.
               </p>
               <AdminInfoBox variant="info">
                 <strong>Demo Scenarios:</strong> Each scenario represents a common real-world
-                situation - from dramatic cross-zone chaos to simple same-zone clusters. Select
-                one above to see the optimization in action!
+                situation - from dramatic cross-zone chaos to simple same-zone clusters. Select one
+                above to see the optimization in action!
               </AdminInfoBox>
             </div>
           </AdminCardContent>

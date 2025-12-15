@@ -10,15 +10,15 @@ interface RouteOptimizationProgressProps {
 }
 
 interface Phase {
-  id: 'distance_matrix' | 'nearest_neighbor' | 'calculating_metrics';
+  id: "distance_matrix" | "nearest_neighbor" | "calculating_metrics";
   label: string;
   icon: React.ComponentType<{ className?: string }>;
 }
 
 const PHASES: Phase[] = [
-  { id: 'distance_matrix', label: 'Building distance matrix', icon: Database },
-  { id: 'nearest_neighbor', label: 'Finding optimal sequence', icon: RouteIcon },
-  { id: 'calculating_metrics', label: 'Calculating savings', icon: Calculator },
+  { id: "distance_matrix", label: "Building distance matrix", icon: Database },
+  { id: "nearest_neighbor", label: "Finding optimal sequence", icon: RouteIcon },
+  { id: "calculating_metrics", label: "Calculating savings", icon: Calculator },
 ];
 
 export function RouteOptimizationProgress({ progress }: RouteOptimizationProgressProps) {
@@ -69,7 +69,7 @@ export function RouteOptimizationProgress({ progress }: RouteOptimizationProgres
                   </div>
 
                   {/* Label and Progress */}
-                  <div className="flex-1 min-w-0">
+                  <div className="min-w-0 flex-1">
                     <p
                       className={cn(
                         "text-sm font-semibold",
@@ -80,7 +80,7 @@ export function RouteOptimizationProgress({ progress }: RouteOptimizationProgres
                     >
                       {phase.label}
                     </p>
-                    {isCurrent && progress.phase === 'nearest_neighbor' && (
+                    {isCurrent && progress.phase === "nearest_neighbor" && (
                       <p className="text-muted-foreground mt-0.5 text-xs">
                         {progress.currentStep}/{progress.totalSteps} stops optimized
                       </p>

@@ -1,13 +1,9 @@
 /**
  * Mock Scenarios for Route Optimizer Visualizer
  *
- * 6 diverse test cases showcasing different optimization situations:
- * 1. The Zigzag - Dramatic cross-zone chaos
- * 2. The Same-Zone Cluster - All in business district
- * 3. The Long Haul - Mix of nearby + distant stops
- * 4. The Small Route - Just a few deliveries
- * 5. The Big Day - Full driver load
- * 6. The Zone Pairs - Common business pattern
+ * Test cases showcasing different optimization situations:
+ * 1-6: Standard delivery routes (regular stops)
+ * 7-8: Routes with pickup/dropoff pairs (order validation)
  */
 
 export interface MockRouteStop {
@@ -16,6 +12,9 @@ export interface MockRouteStop {
   zone: string;
   recipientName?: string;
   notes?: string;
+  // Pickup/dropoff fields
+  stopType?: "pickup" | "dropoff" | "delivery";
+  pairedStopId?: string;
 }
 
 export interface MockScenario {
@@ -59,7 +58,7 @@ const zigzagScenario: MockScenario = {
     },
     {
       address: "Ruta 6 8-34, Zona 4, Guatemala City",
-      coordinates: { lat: 14.620000, lng: -90.502500 },
+      coordinates: { lat: 14.62, lng: -90.5025 },
       zone: "Zona 4",
       recipientName: "Ana García",
       notes: "Residential area",
@@ -128,7 +127,7 @@ const sameZoneClusterScenario: MockScenario = {
     },
     {
       address: "Boulevard Los Próceres 24-43, Zona 10, Guatemala City",
-      coordinates: { lat: 14.601250, lng: -90.524306 },
+      coordinates: { lat: 14.60125, lng: -90.524306 },
       zone: "Zona 10",
       recipientName: "Alejandro Torres",
       notes: "Bank headquarters",
@@ -190,14 +189,14 @@ const longHaulScenario: MockScenario = {
     },
     {
       address: "Calzada San Juan 45-12, Zona 7, Guatemala City",
-      coordinates: { lat: 14.620000, lng: -90.560000 },
+      coordinates: { lat: 14.62, lng: -90.56 },
       zone: "Zona 7",
       recipientName: "Pablo Rojas",
       notes: "West residential",
     },
     {
       address: "Carretera a El Salvador Km 10, Zona 16, Guatemala City",
-      coordinates: { lat: 14.530000, lng: -90.480000 },
+      coordinates: { lat: 14.53, lng: -90.48 },
       zone: "Zona 16",
       recipientName: "Sandra Vega",
       notes: "Far south industrial area",
@@ -245,7 +244,7 @@ const smallRouteScenario: MockScenario = {
     },
     {
       address: "Calzada Aguilar Batres 22-00, Zona 12, Guatemala City",
-      coordinates: { lat: 14.580000, lng: -90.545000 },
+      coordinates: { lat: 14.58, lng: -90.545 },
       zone: "Zona 12",
       recipientName: "Claudia Escobar",
       notes: "South zone home",
@@ -320,7 +319,7 @@ const bigDayScenario: MockScenario = {
     },
     {
       address: "25 Calle 10-12, Zona 5, Guatemala City",
-      coordinates: { lat: 14.615000, lng: -90.508889 },
+      coordinates: { lat: 14.615, lng: -90.508889 },
       zone: "Zona 5",
       recipientName: "Javier Sandoval",
     },
@@ -359,7 +358,8 @@ const bigDayScenario: MockScenario = {
 const zonePairsScenario: MockScenario = {
   id: "zone-pairs",
   name: "The Zone Pairs",
-  description: "Common business route (Zona 4 ↔ Zona 10) - alternating pickups/deliveries waste trips",
+  description:
+    "Common business route (Zona 4 ↔ Zona 10) - alternating pickups/deliveries waste trips",
   stopCount: 6,
   stops: [
     {
@@ -385,7 +385,7 @@ const zonePairsScenario: MockScenario = {
     },
     {
       address: "13 Calle 7-33, Zona 10, Guatemala City",
-      coordinates: { lat: 14.602500, lng: -90.516667 },
+      coordinates: { lat: 14.6025, lng: -90.516667 },
       zone: "Zona 10",
       recipientName: "Daniela Cruz",
       notes: "Delivery - Legal docs",
@@ -415,6 +415,122 @@ const zonePairsScenario: MockScenario = {
 };
 
 /**
+ * Scenario 7: Medical Route (Valid Example)
+ * Tests pickup/dropoff validation with correct precedence
+ */
+const vrppdValidScenario: MockScenario = {
+  id: "vrppd-valid",
+  name: "Medical Route",
+  description: "Pick up lab samples, then deliver them to hospital - shows correct stop ordering",
+  stopCount: 5,
+  stops: [
+    {
+      address: "Hospital General San Juan de Dios, Zona 1, Guatemala City",
+      coordinates: { lat: 14.638, lng: -90.515 },
+      zone: "Zona 1",
+      recipientName: "Dr. García",
+      notes: "Depot - Start point",
+      stopType: "delivery",
+    },
+    {
+      address: "Laboratorio Clínico, 6a Avenida 3-45, Zona 4, Guatemala City",
+      coordinates: { lat: 14.62, lng: -90.503 },
+      zone: "Zona 4",
+      recipientName: "Lab Tech María",
+      notes: "PICKUP: Blood samples",
+      stopType: "pickup",
+      pairedStopId: "3",
+    },
+    {
+      address: "Farmacia Central, 10 Calle 4-20, Zona 9, Guatemala City",
+      coordinates: { lat: 14.6097, lng: -90.5256 },
+      zone: "Zona 9",
+      recipientName: "Pharmacist Juan",
+      notes: "Regular delivery",
+      stopType: "delivery",
+    },
+    {
+      address: "Hospital Roosevelt, 5ta Avenida 6-42, Zona 11, Guatemala City",
+      coordinates: { lat: 14.5683, lng: -90.548 },
+      zone: "Zona 11",
+      recipientName: "Dr. Pérez",
+      notes: "DROPOFF: Blood samples for testing",
+      stopType: "dropoff",
+      pairedStopId: "1",
+    },
+    {
+      address: "Clínica Privada, Boulevard Los Próceres 24-69, Zona 10, Guatemala City",
+      coordinates: { lat: 14.6015, lng: -90.5249 },
+      zone: "Zona 10",
+      recipientName: "Dr. López",
+      notes: "Final delivery",
+      stopType: "delivery",
+    },
+  ],
+  expectedSavings: {
+    distanceKm: 5.5,
+    timeMin: 15,
+    fuelCostGTQ: 60,
+    co2Kg: 1.3,
+    improvementPercent: 20,
+  },
+};
+
+/**
+ * Scenario 8: Ordering Error Demo
+ * Tests pickup/dropoff validation with dropoff before pickup (should fail)
+ */
+const vrppdInvalidScenario: MockScenario = {
+  id: "vrppd-invalid",
+  name: "Ordering Error Demo",
+  description: "Delivery scheduled before pickup - this will show an error (demonstration only)",
+  stopCount: 4,
+  stops: [
+    {
+      address: "Warehouse Central, 5a Avenida 12-00, Zona 4, Guatemala City",
+      coordinates: { lat: 14.6194, lng: -90.5028 },
+      zone: "Zona 4",
+      recipientName: "Warehouse Manager",
+      notes: "Depot - Start point",
+      stopType: "delivery",
+    },
+    {
+      address: "Customer Office, 13 Calle 7-33, Zona 10, Guatemala City",
+      coordinates: { lat: 14.6025, lng: -90.5167 },
+      zone: "Zona 10",
+      recipientName: "Client A",
+      notes: "❌ DROPOFF: Package delivery (ERROR: dropoff before pickup!)",
+      stopType: "dropoff",
+      pairedStopId: "3",
+    },
+    {
+      address: "Supplier Store, Ruta 2 9-50, Zona 4, Guatemala City",
+      coordinates: { lat: 14.6206, lng: -90.5008 },
+      zone: "Zona 4",
+      recipientName: "Supplier B",
+      notes: "Regular delivery",
+      stopType: "delivery",
+    },
+    {
+      address: "Vendor Warehouse, 10 Calle 8-18, Zona 4, Guatemala City",
+      coordinates: { lat: 14.6189, lng: -90.5017 },
+      zone: "Zona 4",
+      recipientName: "Vendor C",
+      notes: "❌ PICKUP: Package collection (ERROR: comes after dropoff!)",
+      stopType: "pickup",
+      pairedStopId: "1",
+    },
+  ],
+  expectedSavings: {
+    distanceKm: 3.0,
+    timeMin: 10,
+    fuelCostGTQ: 40,
+    co2Kg: 0.7,
+    improvementPercent: 15,
+  },
+};
+
+/**
  * All mock scenarios for the Route Optimizer Visualizer
  */
 export const MOCK_SCENARIOS: MockScenario[] = [
@@ -424,6 +540,8 @@ export const MOCK_SCENARIOS: MockScenario[] = [
   smallRouteScenario,
   bigDayScenario,
   zonePairsScenario,
+  vrppdValidScenario,
+  vrppdInvalidScenario,
 ];
 
 /**

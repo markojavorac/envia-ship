@@ -36,14 +36,14 @@ export function RouteMetrics({ route }: RouteMetricsProps) {
             <div className="flex-1 text-center md:text-left">
               <h3 className="text-foreground text-xl font-bold">Route Optimized Successfully!</h3>
               <p className="text-muted-foreground mt-1">
-                Saved {formatDistance(comparison.distanceSaved)} and{" "}
-                {comparison.timeSaved} minutes on this route
+                Saved {formatDistance(comparison.distanceSaved)} and {comparison.timeSaved} minutes
+                on this route
               </p>
             </div>
             <div className="flex-shrink-0 text-center">
               <div className="rounded-full bg-green-500/10 px-4 py-2 text-green-600">
                 <p className="text-3xl font-bold">{formatPercent(comparison.improvementPercent)}</p>
-                <p className="text-xs font-semibold uppercase tracking-wide">Better</p>
+                <p className="text-xs font-semibold tracking-wide uppercase">Better</p>
               </div>
             </div>
           </div>
@@ -105,7 +105,7 @@ export function RouteMetrics({ route }: RouteMetricsProps) {
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               {/* Monthly Fuel Savings */}
               <div className="bg-primary/5 border-primary/20 rounded-lg border-2 p-4">
-                <p className="text-muted-foreground mb-1 text-xs font-semibold uppercase tracking-wide">
+                <p className="text-muted-foreground mb-1 text-xs font-semibold tracking-wide uppercase">
                   Monthly Fuel Savings
                 </p>
                 <p className="text-primary text-3xl font-bold">
@@ -118,7 +118,7 @@ export function RouteMetrics({ route }: RouteMetricsProps) {
 
               {/* Monthly Distance Saved */}
               <div className="rounded-lg border-2 border-green-500/20 bg-green-500/5 p-4">
-                <p className="text-muted-foreground mb-1 text-xs font-semibold uppercase tracking-wide">
+                <p className="text-muted-foreground mb-1 text-xs font-semibold tracking-wide uppercase">
                   Monthly Distance Saved
                 </p>
                 <p className="text-3xl font-bold text-green-600">
@@ -131,7 +131,7 @@ export function RouteMetrics({ route }: RouteMetricsProps) {
 
               {/* Monthly CO2 Reduction */}
               <div className="rounded-lg border-2 border-green-500/20 bg-green-500/5 p-4">
-                <p className="text-muted-foreground mb-1 text-xs font-semibold uppercase tracking-wide">
+                <p className="text-muted-foreground mb-1 text-xs font-semibold tracking-wide uppercase">
                   Monthly CO₂ Reduction
                 </p>
                 <p className="text-3xl font-bold text-green-600">
@@ -147,7 +147,9 @@ export function RouteMetrics({ route }: RouteMetricsProps) {
             <div className="border-primary/30 bg-primary/5 rounded-lg border-l-4 p-4">
               <p className="text-foreground text-sm">
                 <strong>💰 ROI Opportunity:</strong> Route optimization could save{" "}
-                <strong className="text-primary">{formatCurrency(comparison.monthlyFuelSavings)}</strong>{" "}
+                <strong className="text-primary">
+                  {formatCurrency(comparison.monthlyFuelSavings)}
+                </strong>{" "}
                 per month in fuel costs alone. That&rsquo;s{" "}
                 <strong className="text-primary">
                   {formatCurrency(comparison.monthlyFuelSavings * 12)}
@@ -181,12 +183,10 @@ function MetricBox({ icon: Icon, label, value, subtitle, variant = "default" }: 
           variant === "success" ? "bg-green-500/10" : "bg-primary/10"
         }`}
       >
-        <Icon
-          className={`h-5 w-5 ${variant === "success" ? "text-green-500" : "text-primary"}`}
-        />
+        <Icon className={`h-5 w-5 ${variant === "success" ? "text-green-500" : "text-primary"}`} />
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-muted-foreground text-xs font-semibold uppercase tracking-wide">
+        <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
           {label}
         </p>
         <p className="text-foreground mt-1 text-2xl font-bold">{value}</p>

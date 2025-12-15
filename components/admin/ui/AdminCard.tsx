@@ -31,7 +31,7 @@ export function AdminCard({
   return (
     <Card
       className={cn(
-        "bg-card border-border rounded-md border py-4 gap-4",
+        "bg-card border-border gap-4 rounded-md border py-4",
         hoverable && "hover:border-primary/50 transition-colors",
         className
       )}

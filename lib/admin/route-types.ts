@@ -30,6 +30,21 @@ export interface RouteStop {
   notes?: string;
   /** Order in optimized route (assigned after optimization) */
   sequenceNumber?: number;
+
+  // ========== VRPPD (Pickup/Dropoff) Fields ==========
+  /** Stop type for VRPPD (default: 'delivery' for backward compatibility) */
+  stopType?: "pickup" | "dropoff" | "delivery";
+  /** ID of paired stop (pickup ↔ dropoff relationship) */
+  pairedStopId?: string;
+  /** Delivery ticket ID for grouping related stops */
+  deliveryId?: string;
+  /** Time window constraints (future use - Phase 5) */
+  timeWindow?: {
+    earliest: Date;
+    latest: Date;
+  };
+  /** Service time at stop in minutes (default: 5) */
+  serviceTime?: number;
 }
 
 /**
@@ -174,7 +189,7 @@ export interface DistanceResult {
  */
 export interface OptimizationProgress {
   /** Current optimization phase */
-  phase: 'distance_matrix' | 'nearest_neighbor' | 'calculating_metrics';
+  phase: "distance_matrix" | "nearest_neighbor" | "calculating_metrics";
   /** Current step number */
   currentStep: number;
   /** Total number of steps */

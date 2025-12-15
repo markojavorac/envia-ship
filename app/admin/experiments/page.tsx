@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Calculator, MapPin, ArrowRight, Zap } from "lucide-react";
+import { Calculator, MapPin, ArrowRight, Zap, Map } from "lucide-react";
 import { AdminPageTitle, AdminCard, AdminCardContent } from "@/components/admin/ui";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
@@ -33,6 +33,15 @@ const EXPERIMENTS = [
       "See route optimization savings with before/after map comparison. Test with 6 diverse scenarios showing distance, time, and fuel cost reductions.",
     icon: Zap,
     href: "/admin/experiments/route-optimizer",
+    status: "active" as const,
+  },
+  {
+    id: "zone-heatmap",
+    title: "Zone Heat Map Dashboard",
+    description:
+      "Visualize delivery zones with order volume, revenue, and performance metrics. Polygon-based heatmap with time-based analytics for strategic planning.",
+    icon: Map,
+    href: "/admin/experiments/zone-heatmap",
     status: "active" as const,
   },
 ];

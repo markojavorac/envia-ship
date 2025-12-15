@@ -53,6 +53,19 @@ export interface DeliveryTicket {
 
   /** Optional sequence number for route optimization */
   sequenceNumber?: number;
+
+  // ========== VRPPD (Pickup/Dropoff) Fields ==========
+  /** Pairing mode for route optimization (default: 'none' for backward compatibility) */
+  pairingMode?: "strict" | "flexible" | "none";
+  // strict: pickup and dropoff must be immediate pair (no batching)
+  // flexible: can pick up multiple before dropping off (batching allowed)
+  // none: regular delivery (current behavior, default)
+
+  /** Pickup stop ID (if this is a paired delivery) */
+  pickupStopId?: string;
+
+  /** Dropoff stop ID (if this is a paired delivery) */
+  dropoffStopId?: string;
 }
 
 export interface Coordinates {

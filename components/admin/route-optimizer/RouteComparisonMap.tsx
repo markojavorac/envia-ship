@@ -6,7 +6,12 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { AdminCard, AdminCardContent } from "@/components/admin/ui";
 import type { OptimizedRoute } from "@/lib/admin/route-types";
 import type { MockScenario } from "@/lib/admin/route-optimizer/mock-scenarios";
-import { formatDistance, formatTime, formatCurrency } from "@/lib/admin/route-optimizer/route-comparison-utils";
+import {
+  formatDistance,
+  formatTime,
+  formatCurrency,
+} from "@/lib/admin/route-optimizer/route-comparison-utils";
+import { getOSRMRouteGeometry, generateStraightLineGeometry } from "@/lib/admin/osrm-route-client";
 
 interface RouteComparisonMapProps {
   scenario: MockScenario;
@@ -19,7 +24,11 @@ interface RouteComparisonMapProps {
  *
  * Side-by-side map view showing BEFORE (red) vs. AFTER (green) routes
  */
-export function RouteComparisonMap({ scenario, optimizedRoute, isLoading }: RouteComparisonMapProps) {
+export function RouteComparisonMap({
+  scenario,
+  optimizedRoute,
+  isLoading,
+}: RouteComparisonMapProps) {
   const beforeMapContainer = useRef<HTMLDivElement>(null);
   const afterMapContainer = useRef<HTMLDivElement>(null);
   const beforeMapRef = useRef<maplibregl.Map | null>(null);
@@ -77,8 +86,11 @@ export function RouteComparisonMap({ scenario, optimizedRoute, isLoading }: Rout
   useEffect(() => {
     if (!mapsReady || !beforeMapRef.current || !afterMapRef.current) return;
 
-    drawOriginalRoute(beforeMapRef.current, scenario.stops);
-    drawOptimizedRoute(afterMapRef.current, optimizedRoute.optimizedStops);
+    // Draw original route with real road geometry too!
+    drawOriginalRouteWithGeometry(beforeMapRef.current, scenario.stops);
+
+    // Draw optimized route with real road geometry
+    drawOptimizedRouteWithGeometry(afterMapRef.current, optimizedRoute.optimizedStops);
   }, [mapsReady, scenario, optimizedRoute]);
 
   return (
@@ -113,7 +125,7 @@ export function RouteComparisonMap({ scenario, optimizedRoute, isLoading }: Rout
           {/* AFTER (Optimized) */}
           <div className="flex flex-col">
             {/* Header */}
-            <div className="border-border bg-green-500/10 border-b p-4">
+            <div className="border-border border-b bg-green-500/10 p-4">
               <h3 className="mb-1 text-lg font-bold text-green-600">AFTER (Optimized)</h3>
               <p className="text-sm text-green-600">Logical sequence - efficient</p>
               <div className="mt-2 flex gap-4 text-sm">
@@ -141,14 +153,15 @@ export function RouteComparisonMap({ scenario, optimizedRoute, isLoading }: Rout
 }
 
 /**
- * Draw original route (BEFORE) with red styling
+ * Draw original route (BEFORE) with red styling and REAL ROAD GEOMETRY
  */
-function drawOriginalRoute(map: maplibregl.Map, stops: any[]) {
+async function drawOriginalRouteWithGeometry(map: maplibregl.Map, stops: any[]) {
   // Add markers for each stop (original order)
   stops.forEach((stop, index) => {
     // Create numbered marker
     const el = document.createElement("div");
-    el.className = "flex h-8 w-8 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white shadow-lg";
+    el.className =
+      "flex h-8 w-8 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white shadow-lg";
     el.textContent = String(index + 1);
 
     new maplibregl.Marker({ element: el })
@@ -165,9 +178,31 @@ function drawOriginalRoute(map: maplibregl.Map, stops: any[]) {
       .addTo(map);
   });
 
-  // Draw route line (dashed red)
-  const coordinates = stops.map((stop) => [stop.coordinates.lng, stop.coordinates.lat]);
+  // Fetch REAL road geometry from OSRM Route API
+  let coordinates: [number, number][];
 
+  try {
+    console.log("[Map] Fetching road geometry for BEFORE route from OSRM...");
+    const routeGeometry = await getOSRMRouteGeometry(stops.map((s) => s.coordinates));
+
+    if (routeGeometry) {
+      // Use actual road coordinates
+      coordinates = routeGeometry.coordinates;
+      console.log(
+        `[Map] ✅ Using road geometry for BEFORE (${coordinates.length} coordinate pairs)`
+      );
+    } else {
+      // Fallback to straight lines
+      coordinates = stops.map((stop) => [stop.coordinates.lng, stop.coordinates.lat]);
+      console.warn("[Map] ⚠️  OSRM Route API failed for BEFORE, using straight lines");
+    }
+  } catch (error) {
+    // Fallback to straight lines
+    coordinates = stops.map((stop) => [stop.coordinates.lng, stop.coordinates.lat]);
+    console.warn("[Map] ⚠️  Error fetching road geometry for BEFORE:", error);
+  }
+
+  // Draw route line (dashed red) - with actual road geometry!
   if (map.getSource("original-route")) {
     (map.getSource("original-route") as maplibregl.GeoJSONSource).setData({
       type: "Feature",
@@ -204,14 +239,15 @@ function drawOriginalRoute(map: maplibregl.Map, stops: any[]) {
 }
 
 /**
- * Draw optimized route (AFTER) with green styling
+ * Draw optimized route (AFTER) with green styling and REAL ROAD GEOMETRY
  */
-function drawOptimizedRoute(map: maplibregl.Map, stops: any[]) {
+async function drawOptimizedRouteWithGeometry(map: maplibregl.Map, stops: any[]) {
   // Add markers for each stop (optimized order)
   stops.forEach((stop, index) => {
     // Create numbered marker with checkmark
     const el = document.createElement("div");
-    el.className = "flex h-8 w-8 items-center justify-center rounded-full bg-green-500 text-xs font-bold text-white shadow-lg";
+    el.className =
+      "flex h-8 w-8 items-center justify-center rounded-full bg-green-500 text-xs font-bold text-white shadow-lg";
     el.textContent = String(index + 1);
 
     new maplibregl.Marker({ element: el })
@@ -228,9 +264,29 @@ function drawOptimizedRoute(map: maplibregl.Map, stops: any[]) {
       .addTo(map);
   });
 
-  // Draw route line (solid green)
-  const coordinates = stops.map((stop) => [stop.coordinates.lng, stop.coordinates.lat]);
+  // Fetch REAL road geometry from OSRM Route API
+  let coordinates: [number, number][];
 
+  try {
+    console.log("[Map] Fetching road geometry from OSRM...");
+    const routeGeometry = await getOSRMRouteGeometry(stops.map((s) => s.coordinates));
+
+    if (routeGeometry) {
+      // Use actual road coordinates
+      coordinates = routeGeometry.coordinates;
+      console.log(`[Map] ✅ Using road geometry (${coordinates.length} coordinate pairs)`);
+    } else {
+      // Fallback to straight lines
+      coordinates = stops.map((stop) => [stop.coordinates.lng, stop.coordinates.lat]);
+      console.warn("[Map] ⚠️  OSRM Route API failed, using straight lines");
+    }
+  } catch (error) {
+    // Fallback to straight lines
+    coordinates = stops.map((stop) => [stop.coordinates.lng, stop.coordinates.lat]);
+    console.warn("[Map] ⚠️  Error fetching road geometry:", error);
+  }
+
+  // Draw route line (solid green) - with actual road geometry!
   if (map.getSource("optimized-route")) {
     (map.getSource("optimized-route") as maplibregl.GeoJSONSource).setData({
       type: "Feature",
