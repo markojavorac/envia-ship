@@ -99,7 +99,7 @@ Modern shipping calculator and marketplace for ENVÍA de Guatemala. Built with N
 ### Select/Dropdown Pattern
 ```tsx
 <Select>
-  <SelectTrigger className="bg-white border-2 border-gray-200 focus:border-primary focus:ring-primary/20">
+  <SelectTrigger className="bg-card border-2 border-border focus:border-primary focus:ring-primary/20">
     <SelectValue />
   </SelectTrigger>
   <SelectContent>
@@ -107,6 +107,51 @@ Modern shipping calculator and marketplace for ENVÍA de Guatemala. Built with N
   </SelectContent>
 </Select>
 ```
+
+## Theming System
+
+### Architecture
+- **Provider**: next-themes with `attribute="class"` (v0.4.6+)
+- **Storage**: localStorage key `envia-theme`
+- **Defaults**: Public (light), Admin (dark via useEffect)
+- **Toggle**: ThemeToggle component in AppSidebar footer
+
+### Theme Definitions
+- **Light** (`:root`): White background, navy/orange brand colors
+- **Dark** (`.dark`): Slate-900 background (#0f172a), slate-800 cards (#1e293b), orange primary
+
+### Color Usage Rules (STRICT)
+
+**ALWAYS use CSS variables (NO hardcoded colors):**
+
+✅ **Correct:**
+```tsx
+<Card className="bg-card border-border">
+  <p className="text-muted-foreground">Description</p>
+</Card>
+```
+
+❌ **Wrong:**
+```tsx
+<Card className="bg-white border-gray-200">
+  <p className="text-gray-600">Description</p>
+</Card>
+```
+
+**Variable Reference:**
+- `bg-background` - Page background
+- `bg-card` - Card/panel backgrounds
+- `bg-muted` - Subtle backgrounds (was bg-gray-100)
+- `bg-input` - Input field backgrounds
+- `text-foreground` - Primary text (was text-gray-900)
+- `text-muted-foreground` - Secondary text (was text-gray-600)
+- `border-border` - Default borders (was border-gray-200)
+- `bg-primary`, `text-primary` - Orange brand (keep as-is)
+- `bg-secondary`, `text-secondary` - Navy brand (keep as-is)
+
+**Exceptions (keep hardcoded):**
+- Brand accent colors: `bg-primary/10`, `border-primary/30`, `hover:bg-primary/90`
+- Utility classes: `bg-black/50` (overlays), `text-white` (explicit contrast)
 
 ### Loading Indicator
 

@@ -3,12 +3,14 @@ import { Inter, DM_Sans, JetBrains_Mono } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
+import { ThemeProvider } from "next-themes";
 import "./globals.css";
-import { ThemeProvider } from "@/contexts/ThemeContext";
 import { MarketplaceProvider } from "@/contexts/MarketplaceContext";
-import Header from "@/components/Header";
 import ConditionalFooter from "@/components/ConditionalFooter";
 import { ProductDiscoveryPopup } from "@/components/copilot/ProductDiscoveryPopup";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import AppSidebar from "@/components/AppSidebar";
+import MobileBottomNav from "@/components/MobileBottomNav";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -41,7 +43,7 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
+    <html lang={locale} suppressHydrationWarning>
       <body
         className={`${inter.variable} ${dmSans.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
@@ -57,13 +59,23 @@ export default async function RootLayout({
             speed={200}
             shadow="0 0 10px #FF8C00,0 0 5px #FF8C00"
           />
-          <ThemeProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem={false}
+            storageKey="envia-theme"
+          >
             <MarketplaceProvider>
-              <div className="flex min-h-screen flex-col">
-                <Header />
-                <main className="flex-1">{children}</main>
-                <ConditionalFooter />
-              </div>
+              <SidebarProvider defaultOpen={true}>
+                <div className="flex min-h-screen w-full">
+                  <AppSidebar />
+                  <main className="flex flex-1 flex-col pb-20 md:pb-0">
+                    <div className="flex-1">{children}</div>
+                    <ConditionalFooter />
+                  </main>
+                  <MobileBottomNav />
+                </div>
+              </SidebarProvider>
               <ProductDiscoveryPopup />
             </MarketplaceProvider>
           </ThemeProvider>

@@ -120,8 +120,8 @@ export function FilterSidebar({ priceRange, className = "" }: FilterSidebarProps
               className="w-full"
             />
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-600">{formatPrice(filterState.priceRange.min)}</span>
-              <span className="text-gray-600">{formatPrice(filterState.priceRange.max)}</span>
+              <span className="text-muted-foreground">{formatPrice(filterState.priceRange.min)}</span>
+              <span className="text-muted-foreground">{formatPrice(filterState.priceRange.max)}</span>
             </div>
           </div>
         </div>

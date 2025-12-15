@@ -100,11 +100,11 @@ function MarketplaceContent() {
                       placeholder="Search products..."
                       value={filterState.searchQuery}
                       onChange={(e) => handleSearch(e.target.value)}
-                      className="focus:border-primary focus:ring-primary/20 border-2 border-gray-200 bg-white pl-10"
+                      className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-background pl-10"
                     />
                   </div>
                   <Select value={sortOption} onValueChange={setSortOption}>
-                    <SelectTrigger className="w-48 border-2 border-gray-200 bg-white">
+                    <SelectTrigger className="w-48 border-2 border-border bg-background">
                       <SelectValue placeholder="Sort by..." />
                     </SelectTrigger>
                     <SelectContent>
@@ -143,11 +143,11 @@ function MarketplaceContent() {
                     placeholder="Search products..."
                     value={filterState.searchQuery}
                     onChange={(e) => handleSearch(e.target.value)}
-                    className="focus:border-primary focus:ring-primary/20 border-2 border-gray-200 bg-white pl-10"
+                    className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-background pl-10"
                   />
                 </div>
                 <Select value={sortOption} onValueChange={setSortOption}>
-                  <SelectTrigger className="w-48 border-2 border-gray-200 bg-white">
+                  <SelectTrigger className="w-48 border-2 border-border bg-background">
                     <SelectValue placeholder="Sort by..." />
                   </SelectTrigger>
                   <SelectContent>
@@ -178,7 +178,7 @@ function MarketplaceContent() {
                   placeholder="Search products..."
                   value={filterState.searchQuery}
                   onChange={(e) => handleSearch(e.target.value)}
-                  className="focus:border-primary focus:ring-primary/20 border-2 border-gray-200 bg-white pl-10"
+                  className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-background pl-10"
                 />
               </div>
 
@@ -200,7 +200,7 @@ function MarketplaceContent() {
                   placeholder="Search products..."
                   value={filterState.searchQuery}
                   onChange={(e) => handleSearch(e.target.value)}
-                  className="focus:border-primary focus:ring-primary/20 border-2 border-gray-200 bg-white pl-10 text-center"
+                  className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-background pl-10 text-center"
                 />
               </div>
 
@@ -223,11 +223,11 @@ function MarketplaceContent() {
                     placeholder="Search products..."
                     value={filterState.searchQuery}
                     onChange={(e) => handleSearch(e.target.value)}
-                    className="focus:border-primary focus:ring-primary/20 border-2 border-gray-200 bg-white pl-10"
+                    className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-background pl-10"
                   />
                 </div>
                 <Select value={sortOption} onValueChange={setSortOption}>
-                  <SelectTrigger className="w-48 border-2 border-gray-200 bg-white">
+                  <SelectTrigger className="w-48 border-2 border-border bg-background">
                     <SelectValue placeholder="Sort by..." />
                   </SelectTrigger>
                   <SelectContent>
@@ -252,7 +252,7 @@ function MarketplaceContent() {
                         FAST DELIVERY
                       </span>
                     )}
-                    <span className="text-sm text-gray-500">({products.length} products)</span>
+                    <span className="text-sm text-muted-foreground">({products.length} products)</span>
                   </div>
                   <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {products.map((product) => (

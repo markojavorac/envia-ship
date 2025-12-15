@@ -81,7 +81,7 @@ export default function AIPackageAnalyzer({ onAnalysisComplete }: AIPackageAnaly
   return (
     <div className="space-y-4">
       {/* Upload Section */}
-      <Card className="border-secondary/25 border-2 bg-white">
+      <Card className="border-secondary/25 border-2 bg-card">
         <CardHeader className="border-secondary/10 bg-secondary/5 border-b pb-3">
           <CardTitle className="text-secondary flex items-center gap-2 text-lg">
             <div className="bg-primary/10 flex h-8 w-8 items-center justify-center rounded-lg">
@@ -140,15 +140,15 @@ export default function AIPackageAnalyzer({ onAnalysisComplete }: AIPackageAnaly
             <div>
               <h4 className="mb-2 font-semibold">Estimated Dimensions</h4>
               <div className="mb-2 grid grid-cols-3 gap-3">
-                <div className="rounded-lg bg-white p-2 text-center">
+                <div className="rounded-lg bg-card p-2 text-center">
                   <p className="text-muted-foreground text-xs">Length</p>
                   <p className="text-lg font-bold">{result.dimensions.length} cm</p>
                 </div>
-                <div className="rounded-lg bg-white p-2 text-center">
+                <div className="rounded-lg bg-card p-2 text-center">
                   <p className="text-muted-foreground text-xs">Width</p>
                   <p className="text-lg font-bold">{result.dimensions.width} cm</p>
                 </div>
-                <div className="rounded-lg bg-white p-2 text-center">
+                <div className="rounded-lg bg-card p-2 text-center">
                   <p className="text-muted-foreground text-xs">Height</p>
                   <p className="text-lg font-bold">{result.dimensions.height} cm</p>
                 </div>
@@ -163,7 +163,7 @@ export default function AIPackageAnalyzer({ onAnalysisComplete }: AIPackageAnaly
             {/* Weight */}
             <div>
               <h4 className="mb-2 font-semibold">Estimated Weight</h4>
-              <div className="mb-2 rounded-lg bg-white p-3 text-center">
+              <div className="mb-2 rounded-lg bg-card p-3 text-center">
                 <p className="text-2xl font-bold">{result.weight.estimate} kg</p>
               </div>
               <ConfidenceIndicator
@@ -174,7 +174,7 @@ export default function AIPackageAnalyzer({ onAnalysisComplete }: AIPackageAnaly
             </div>
 
             {/* Characteristics */}
-            <div className="space-y-2 rounded-lg bg-white p-3">
+            <div className="space-y-2 rounded-lg bg-card p-3">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Shape:</span>
                 <span className="font-semibold capitalize">{result.characteristics.shape}</span>
@@ -193,7 +193,7 @@ export default function AIPackageAnalyzer({ onAnalysisComplete }: AIPackageAnaly
 
             {/* Recommendations */}
             {result.characteristics.recommendations.length > 0 && (
-              <div className="rounded-lg bg-white p-3">
+              <div className="rounded-lg bg-card p-3">
                 <h4 className="mb-2 text-sm font-semibold">Recommendations</h4>
                 <ul className="space-y-1">
                   {result.characteristics.recommendations.map((rec, i) => (

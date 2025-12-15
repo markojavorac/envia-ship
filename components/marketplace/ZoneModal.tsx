@@ -69,7 +69,7 @@ export function ZoneModal() {
               <Package className="text-primary mt-0.5 h-5 w-5 flex-shrink-0" />
               <div className="space-y-1">
                 <p className="text-secondary text-sm font-semibold">Why do we need this?</p>
-                <p className="text-xs text-gray-600">
+                <p className="text-xs text-muted-foreground">
                   Your zone helps us calculate accurate shipping costs and delivery times for each
                   product. You can change it anytime.
                 </p>
@@ -82,7 +82,7 @@ export function ZoneModal() {
           <Button
             variant="outline"
             onClick={() => setShowZoneModal(false)}
-            className="flex-1 border-2 border-gray-200 text-gray-600 hover:bg-gray-50"
+            className="flex-1 border-2 border-gray-200 text-muted-foreground hover:bg-gray-50"
           >
             Browse Without Zone
           </Button>

@@ -28,7 +28,7 @@ export default function PricingResultsCard({ result }: PricingResultsCardProps) 
   }
 
   return (
-    <Card className="border-primary/30 border-2 bg-white">
+    <Card className="border-primary/30 border-2 bg-card">
       <CardHeader className="pb-3">
         <CardTitle className="text-primary flex items-center gap-2 text-lg font-bold">
           <Receipt className="h-5 w-5" />

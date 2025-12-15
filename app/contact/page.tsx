@@ -26,7 +26,7 @@ export default function ContactPage() {
       <section className="py-12">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-2xl">
-            <Card className="border-primary/30 border-2 bg-white">
+            <Card className="border-primary/30 border-2 bg-card">
               <CardContent className="p-8">
                 <div className="space-y-6">
                   {/* Email */}
@@ -35,7 +35,7 @@ export default function ContactPage() {
                       <Mail className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-secondary mb-1 text-lg font-bold">{tFooter("email")}</h3>
+                      <h3 className="text-foreground mb-1 text-lg font-bold">{tFooter("email")}</h3>
                       <a
                         href="mailto:info@enviaguatemala.com"
                         className="text-primary hover:text-primary/80 font-semibold"

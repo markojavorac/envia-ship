@@ -23,8 +23,8 @@ export function ProductImageGallery({ images, productName }: ProductImageGallery
 
   if (images.length === 0) {
     return (
-      <div className="flex aspect-square items-center justify-center rounded-lg bg-gray-100">
-        <p className="text-gray-400">No image available</p>
+      <div className="flex aspect-square items-center justify-center rounded-lg bg-muted">
+        <p className="text-muted-foreground">No image available</p>
       </div>
     );
   }
@@ -32,7 +32,7 @@ export function ProductImageGallery({ images, productName }: ProductImageGallery
   return (
     <div className="space-y-4">
       {/* Main Image */}
-      <div className="group relative aspect-square overflow-hidden rounded-lg bg-gray-100">
+      <div className="group relative aspect-square overflow-hidden rounded-lg bg-muted">
         <Image
           src={images[currentIndex]}
           alt={`${productName} - Image ${currentIndex + 1}`}
@@ -79,7 +79,7 @@ export function ProductImageGallery({ images, productName }: ProductImageGallery
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`relative aspect-square overflow-hidden rounded-lg border-2 bg-gray-100 transition-all ${
+              className={`relative aspect-square overflow-hidden rounded-lg border-2 bg-muted transition-all ${
                 index === currentIndex
                   ? "border-primary ring-primary/20 ring-2"
                   : "hover:border-primary/50 border-gray-200"

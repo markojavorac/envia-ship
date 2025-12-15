@@ -17,7 +17,15 @@ const LANGUAGES = [
   { code: "es", label: "Español", shortCode: "ESP" },
 ];
 
-export default function LanguageSwitcher() {
+interface LanguageSwitcherProps {
+  variant?: "header" | "sidebar";
+  collapsed?: boolean;
+}
+
+export default function LanguageSwitcher({
+  variant = "header",
+  collapsed = false,
+}: LanguageSwitcherProps) {
   const locale = useLocale();
   const router = useRouter();
   const currentLang = LANGUAGES.find((lang) => lang.code === locale);
@@ -30,12 +38,39 @@ export default function LanguageSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="gap-2 text-white hover:text-white">
-          <Globe className="h-4 w-4 text-white" />
-          <span className="font-semibold text-white">{currentLang?.shortCode}</span>
+        <Button
+          variant="ghost"
+          size="sm"
+          className={cn(
+            "gap-2",
+            variant === "sidebar"
+              ? "w-full justify-start text-foreground hover:text-primary hover:bg-muted"
+              : "text-white hover:text-white"
+          )}
+        >
+          <Globe
+            className={cn(
+              "h-4 w-4",
+              variant === "sidebar" ? "text-foreground" : "text-white"
+            )}
+          />
+          {!collapsed && (
+            <span
+              className={cn(
+                "font-semibold",
+                variant === "sidebar" ? "text-foreground" : "text-white"
+              )}
+            >
+              {currentLang?.shortCode}
+            </span>
+          )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="border-2 border-gray-200 bg-white">
+      <DropdownMenuContent
+        align={variant === "sidebar" ? "start" : "end"}
+        side={variant === "sidebar" ? "right" : "bottom"}
+        className="border-2 border-border bg-card"
+      >
         {LANGUAGES.map((lang) => (
           <DropdownMenuItem
             key={lang.code}
@@ -43,8 +78,8 @@ export default function LanguageSwitcher() {
             className={cn(
               "cursor-pointer text-base",
               locale === lang.code
-                ? "bg-primary/10 font-bold text-[#1E3A5F]"
-                : "font-medium text-[#1E3A5F] hover:bg-gray-100"
+                ? "bg-primary/10 font-bold text-foreground"
+                : "font-medium text-foreground hover:bg-muted"
             )}
           >
             {lang.label}

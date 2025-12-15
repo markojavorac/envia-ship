@@ -4,10 +4,16 @@ import Link from "next/link";
 import Image from "next/image";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useTheme } from "@/contexts/ThemeContext";
+
+// Envia brand constants
+const ENVIA_INFO = {
+  companyName: "ENVÍA",
+  tagline: "Comprehensive Logistics Solutions",
+  phone: "2303-7676",
+  email: "info@envia.com.gt",
+} as const;
 
 export default function Footer() {
-  const { theme } = useTheme();
   const t = useTranslations("footer");
   const tNav = useTranslations("navigation");
   const currentYear = new Date().getFullYear();
@@ -25,9 +31,9 @@ export default function Footer() {
               height={33}
               className="h-auto w-[100px]"
             />
-            <p className="text-sm text-white/80">{theme.tagline}</p>
+            <p className="text-sm text-white/80">{ENVIA_INFO.tagline}</p>
             <p className="text-xs text-white/60">
-              © {currentYear} {theme.companyName}. {t("allRightsReserved")}.
+              © {currentYear} {ENVIA_INFO.companyName}. {t("allRightsReserved")}.
             </p>
           </div>
 
@@ -60,14 +66,14 @@ export default function Footer() {
             <ul className="space-y-2">
               <li className="flex items-center gap-2 text-sm text-white/80">
                 <Phone className="h-4 w-4" />
-                <a href={`tel:${theme.phone}`} className="hover:text-primary transition-colors">
-                  {theme.phone}
+                <a href={`tel:${ENVIA_INFO.phone}`} className="hover:text-primary transition-colors">
+                  {ENVIA_INFO.phone}
                 </a>
               </li>
               <li className="flex items-center gap-2 text-sm text-white/80">
                 <Mail className="h-4 w-4" />
-                <a href={`mailto:${theme.email}`} className="hover:text-primary transition-colors">
-                  {theme.email}
+                <a href={`mailto:${ENVIA_INFO.email}`} className="hover:text-primary transition-colors">
+                  {ENVIA_INFO.email}
                 </a>
               </li>
               <li className="flex items-start gap-2 text-sm text-white/80">

@@ -7,6 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2025-12-14
+
+### Added
+- **Theme System**: Unified light/dark mode support using next-themes
+  - ThemeToggle component in sidebar footer (Sun/Moon icon)
+  - Route-based defaults: Public (light), Admin (dark)
+  - User preferences persist in localStorage
+- **Dark Mode Support**: All 25+ public components refactored to use CSS variables
+  - Calculator, Marketplace, Navigation fully theme-aware
+  - Maintains brand colors (orange primary, navy secondary) in both modes
+
+### Changed
+- **BREAKING**: Removed legacy theme systems
+  - Deleted `contexts/ThemeContext.tsx` (manual CSS injection)
+  - Deleted `components/ThemeWrapper.tsx` (data-theme routing)
+  - Deleted `lib/themes.ts` (unused theme config)
+- **Admin Layout**: Switched from `data-theme="admin"` to next-themes dark mode
+- **globals.css**: Consolidated `[data-theme="admin"]` into `.dark` class
+  - Dark mode uses admin's slate/orange palette globally
+  - Light mode unchanged (white/orange/navy brand)
+- **Admin: Reports Page Simplified**
+  - Streamlined UI to focus on trip history and filtering
+  - Page now flows: Data Source Toggle → Filters & Export → Trip History Table
+  - Removed confusing "Load Mock Data" button from data source section
+  - Kept Mock/Database toggle for easy data source switching
+
+### Fixed
+- Hydration warnings from theme switching (suppressHydrationWarning in html tag)
+- Inconsistent theming between public/admin sections
+
+### Removed
+- **Admin: Driver Performance Cards**
+  - Removed 3 driver performance metric cards from reports page top section
+  - API endpoints preserved for potential future use
+  - Mock data functions kept in library for reusability
+  - File deleted: `components/admin/reports/DriverPerformanceCards.tsx`
+
 ## [0.3.0] - 2025-12-13
 
 ### Added

@@ -17,7 +17,7 @@ export default function TimeSlotPicker({ label, value, onChange, error }: TimeSl
   const icons = { sunrise: Sunrise, sun: Sun, moon: Moon };
 
   return (
-    <Card className="border-primary/30 border-2 bg-white">
+    <Card className="border-primary/30 border-2 bg-card">
       <CardHeader className="pb-3">
         <Label className="text-primary text-sm font-semibold">{label}</Label>
       </CardHeader>
@@ -31,7 +31,7 @@ export default function TimeSlotPicker({ label, value, onChange, error }: TimeSl
                 className={`flex cursor-pointer flex-col items-center gap-2 rounded-lg border-2 p-3 transition-all ${
                   value === slot.value
                     ? "border-primary bg-primary/5 shadow-md"
-                    : "hover:border-primary/50 border-gray-200"
+                    : "hover:border-primary/50 border-border"
                 }`}
               >
                 <RadioGroupItem value={slot.value} className="sr-only" />

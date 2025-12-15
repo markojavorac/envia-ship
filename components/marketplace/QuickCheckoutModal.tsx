@@ -106,7 +106,7 @@ export function QuickCheckoutModal({ product, open, onOpenChange }: QuickCheckou
 
           <div className="space-y-4 py-4">
             <div className="bg-primary/5 border-primary/20 rounded-lg border-2 p-4 text-center">
-              <p className="mb-1 text-sm text-gray-600">Order Number</p>
+              <p className="mb-1 text-sm text-muted-foreground">Order Number</p>
               <p className="text-primary text-xl font-bold">{orderId}</p>
             </div>
 
@@ -114,15 +114,15 @@ export function QuickCheckoutModal({ product, open, onOpenChange }: QuickCheckou
 
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-600">Product</span>
+                <span className="text-muted-foreground">Product</span>
                 <span className="text-secondary font-semibold">{product.name}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Quantity</span>
+                <span className="text-muted-foreground">Quantity</span>
                 <span className="text-secondary font-semibold">{quantity}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Total</span>
+                <span className="text-muted-foreground">Total</span>
                 <span className="text-primary text-lg font-bold">{formatPrice(total)}</span>
               </div>
             </div>
@@ -169,7 +169,7 @@ export function QuickCheckoutModal({ product, open, onOpenChange }: QuickCheckou
           {/* Product Summary */}
           <div className="border-primary/30 rounded-lg border-2 bg-white p-4">
             <div className="flex gap-4">
-              <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
+              <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-muted-100">
                 <img
                   src={product.thumbnail}
                   alt={product.name}
@@ -178,14 +178,14 @@ export function QuickCheckoutModal({ product, open, onOpenChange }: QuickCheckou
               </div>
               <div className="flex-grow">
                 <h3 className="text-secondary line-clamp-1 font-bold">{product.name}</h3>
-                <p className="mt-1 text-sm text-gray-600">{formatPrice(product.price)} each</p>
+                <p className="mt-1 text-sm text-muted-foreground">{formatPrice(product.price)} each</p>
                 <Badge variant="secondary" className="mt-2 text-xs">
                   <Package className="mr-1 h-3 w-3" />
                   {product.stock} in stock
                 </Badge>
               </div>
               <div className="text-right">
-                <Label htmlFor="quantity" className="text-xs text-gray-600">
+                <Label htmlFor="quantity" className="text-xs text-muted-foreground">
                   Quantity
                 </Label>
                 <Input
@@ -219,7 +219,7 @@ export function QuickCheckoutModal({ product, open, onOpenChange }: QuickCheckou
                   value={watch("deliveryZone")}
                   onValueChange={(value) => setValue("deliveryZone", value)}
                 >
-                  <SelectTrigger className="focus:border-primary focus:ring-primary/20 border-2 border-gray-200 bg-white">
+                  <SelectTrigger className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-white">
                     <SelectValue placeholder="Select zone..." />
                   </SelectTrigger>
                   <SelectContent>
@@ -243,7 +243,7 @@ export function QuickCheckoutModal({ product, open, onOpenChange }: QuickCheckou
                   value={selectedServiceType}
                   onValueChange={(value) => setValue("serviceType", value as ServiceType)}
                 >
-                  <SelectTrigger className="focus:border-primary focus:ring-primary/20 border-2 border-gray-200 bg-white">
+                  <SelectTrigger className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-white">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -265,7 +265,7 @@ export function QuickCheckoutModal({ product, open, onOpenChange }: QuickCheckou
                 id="deliveryAddress"
                 placeholder="Street address, building number, apartment..."
                 {...register("deliveryAddress")}
-                className="focus:border-primary focus:ring-primary/20 border-2 border-gray-200 bg-white"
+                className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-white"
               />
               {errors.deliveryAddress && (
                 <p className="text-destructive text-xs">{errors.deliveryAddress.message}</p>
@@ -286,7 +286,7 @@ export function QuickCheckoutModal({ product, open, onOpenChange }: QuickCheckou
                   id="customerName"
                   placeholder="Your name"
                   {...register("customerName")}
-                  className="focus:border-primary focus:ring-primary/20 border-2 border-gray-200 bg-white"
+                  className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-white"
                 />
                 {errors.customerName && (
                   <p className="text-destructive text-xs">{errors.customerName.message}</p>
@@ -301,7 +301,7 @@ export function QuickCheckoutModal({ product, open, onOpenChange }: QuickCheckou
                   id="customerPhone"
                   placeholder="12345678"
                   {...register("customerPhone")}
-                  className="focus:border-primary focus:ring-primary/20 border-2 border-gray-200 bg-white"
+                  className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-white"
                 />
                 {errors.customerPhone && (
                   <p className="text-destructive text-xs">{errors.customerPhone.message}</p>
@@ -318,7 +318,7 @@ export function QuickCheckoutModal({ product, open, onOpenChange }: QuickCheckou
                 type="email"
                 placeholder="your@email.com"
                 {...register("customerEmail")}
-                className="focus:border-primary focus:ring-primary/20 border-2 border-gray-200 bg-white"
+                className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-white"
               />
               {errors.customerEmail && (
                 <p className="text-destructive text-xs">{errors.customerEmail.message}</p>
@@ -333,7 +333,7 @@ export function QuickCheckoutModal({ product, open, onOpenChange }: QuickCheckou
                 id="notes"
                 placeholder="Special instructions, delivery preferences..."
                 {...register("notes")}
-                className="focus:border-primary focus:ring-primary/20 border-2 border-gray-200 bg-white"
+                className="focus:border-primary focus:ring-primary/20 border-2 border-border bg-white"
               />
               {errors.notes && <p className="text-destructive text-xs">{errors.notes.message}</p>}
             </div>
@@ -344,11 +344,11 @@ export function QuickCheckoutModal({ product, open, onOpenChange }: QuickCheckou
             <h3 className="text-secondary mb-3 font-bold">Order Summary</h3>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-600">Product Total</span>
+                <span className="text-muted-foreground">Product Total</span>
                 <span className="font-semibold">{formatPrice(productTotal)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Shipping</span>
+                <span className="text-muted-foreground">Shipping</span>
                 <span className="font-semibold">{formatPrice(shippingCost)}</span>
               </div>
               <Separator />
@@ -365,7 +365,7 @@ export function QuickCheckoutModal({ product, open, onOpenChange }: QuickCheckou
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
-              className="flex-1 border-2 border-gray-200"
+              className="flex-1 border-2 border-border"
               disabled={isSubmitting}
             >
               Cancel

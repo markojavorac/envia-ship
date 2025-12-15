@@ -33,7 +33,7 @@ export default function CalculatorPage() {
 
             {/* Quick Guide Cards */}
             <div className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-3">
-              <Card className="border-primary/30 border-2 bg-white/10">
+              <Card className="border-primary/30 border-2 bg-card/10">
                 <CardContent className="flex items-start gap-3 p-4">
                   <div className="bg-primary/20 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg">
                     <Package className="text-primary h-5 w-5" />
@@ -47,7 +47,7 @@ export default function CalculatorPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-primary/30 border-2 bg-white/10">
+              <Card className="border-primary/30 border-2 bg-card/10">
                 <CardContent className="flex items-start gap-3 p-4">
                   <div className="bg-primary/20 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg">
                     <MapPin className="text-primary h-5 w-5" />
@@ -61,7 +61,7 @@ export default function CalculatorPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-primary/30 border-2 bg-white/10">
+              <Card className="border-primary/30 border-2 bg-card/10">
                 <CardContent className="flex items-start gap-3 p-4">
                   <div className="bg-primary/20 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg">
                     <Zap className="text-primary h-5 w-5" />
@@ -89,17 +89,17 @@ export default function CalculatorPage() {
             <Separator className="bg-border my-8 opacity-30" />
 
             {/* Info Section */}
-            <Card className="border-secondary/25 border-2 bg-white">
+            <Card className="border-secondary/25 border-2 bg-card">
               <CardContent className="p-6">
                 <div className="flex items-start gap-3">
                   <div className="bg-primary/10 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full">
                     <Info className="text-primary h-5 w-5" />
                   </div>
                   <div className="flex-1 space-y-3">
-                    <h2 className="text-secondary text-lg font-semibold">
+                    <h2 className="text-foreground text-lg font-semibold">
                       How Our Calculator Works
                     </h2>
-                    <div className="space-y-3 text-sm text-gray-600">
+                    <div className="space-y-3 text-sm text-muted-foreground">
                       <p>
                         <strong className="text-secondary">Dimensional Weight:</strong> We calculate
                         both actual weight and dimensional weight (L × W × H ÷ 5000) and charge
