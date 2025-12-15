@@ -92,7 +92,7 @@ export default function AppSidebar() {
       <SidebarHeader className="border-border border-b">
         <div className={cn(
           "flex items-center py-3",
-          state === "collapsed" ? "justify-center px-2" : "justify-between px-3"
+          state === "collapsed" ? "justify-center px-2" : "px-4"
         )}>
           <Link href="/" className="flex items-center">
             {state === "collapsed" ? (
@@ -100,8 +100,8 @@ export default function AppSidebar() {
                 src="/envia-logo-icon.tiff"
                 alt="ENVÍA"
                 width={40}
-                height={40}
-                className="h-10 w-10"
+                height={62}
+                className="h-auto w-10"
                 priority
               />
             ) : (
@@ -131,7 +131,7 @@ export default function AppSidebar() {
                     isActive={pathname === item.href}
                   >
                     <Link href={item.href}>
-                      <item.icon className="h-5 w-5" />
+                      <item.icon className="h-6 w-6" />
                       <span>{item.label}</span>
                     </Link>
                   </SidebarMenuButton>
@@ -152,7 +152,7 @@ export default function AppSidebar() {
 
           {/* Theme Toggle */}
           <SidebarMenuItem>
-            <ThemeToggle />
+            <ThemeToggle variant="sidebar" collapsed={state === "collapsed"} />
           </SidebarMenuItem>
 
           {/* Admin User Info */}
@@ -160,18 +160,18 @@ export default function AppSidebar() {
             <>
               <SidebarMenuItem>
                 <SidebarMenuButton tooltip={user.username}>
-                  <User className="h-4 w-4" />
+                  <User className="h-5 w-5" />
                   {state !== "collapsed" && (
-                    <span className="text-sm font-semibold">
+                    <span className="text-base font-semibold">
                       {user.username}
                     </span>
                   )}
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton onClick={handleLogout} tooltip="Logout">
-                  <LogOut className="h-4 w-4" />
-                  {state !== "collapsed" && <span>Logout</span>}
+                <SidebarMenuButton onClick={handleLogout} tooltip="Logout" className="justify-start">
+                  <LogOut className="h-5 w-5" />
+                  {state !== "collapsed" && <span className="text-base">Logout</span>}
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </>
