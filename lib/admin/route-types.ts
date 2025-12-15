@@ -46,6 +46,8 @@ export interface RouteConfig {
   optimizationMode: OptimizationMode;
   /** Routing mode for distance calculations (defaults to ROAD) */
   routingMode?: RoutingMode;
+  /** Optional callback for progress updates during optimization */
+  onProgress?: (progress: OptimizationProgress) => void;
 }
 
 /**
@@ -165,6 +167,22 @@ export interface DistanceResult {
   distance: number;
   /** Estimated duration in minutes */
   duration: number;
+}
+
+/**
+ * Progress tracking for route optimization
+ */
+export interface OptimizationProgress {
+  /** Current optimization phase */
+  phase: 'distance_matrix' | 'nearest_neighbor' | 'calculating_metrics';
+  /** Current step number */
+  currentStep: number;
+  /** Total number of steps */
+  totalSteps: number;
+  /** Human-readable message */
+  message: string;
+  /** Completion percentage (0-100) */
+  percent: number;
 }
 
 /**

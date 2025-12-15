@@ -214,5 +214,37 @@ This document contains 9 additional AI-powered capabilities identified during st
 
 ---
 
+## 11. Zone Heat Map Dashboard (Analytics & Insights)
+
+**What**: Interactive map visualization of delivery patterns across Guatemala City zones
+
+**Capabilities**:
+- Heatmap layer showing delivery density by zone (Zona 1-16)
+- Interactive zone click handlers with detailed analytics:
+  - Total orders per zone (last 7/30/90 days)
+  - Revenue by zone
+  - Average delivery time by zone
+  - Cost per delivery by zone
+  - Peak hours/days per zone
+- Time-based filtering (daily, weekly, monthly views)
+- Zone pair analysis (common routes: Zona 4 → Zona 10)
+- Export zone reports as PDF/CSV
+- Trend visualization with Recharts (orders over time by zone)
+
+**Why It's Exciting**: Provides strategic business insights without touching operational workflows. Perfect gateway for gaining trust and accessing more data. Beautiful visualization makes complex patterns immediately understandable.
+
+**Tech Stack**: MapLibre GL with GeoJSON polygons, heatmap layers, Recharts for trends, mock data generators
+
+**Business Value**:
+- Pricing strategy (charge more for high-demand zones)
+- Driver assignment (assign drivers to familiar zones)
+- Expansion planning (identify underserved areas)
+- Capacity planning (predict demand by zone/time)
+
+**Innovation**: Most small logistics companies have no visibility into delivery patterns. This makes data-driven decisions possible.
+
+---
+
 **Document Created**: 2025-12-04
+**Last Updated**: 2025-12-15
 **Status**: Reference for future development phases

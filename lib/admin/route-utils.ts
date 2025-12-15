@@ -286,6 +286,15 @@ export async function optimizeRouteNearestNeighbor(
     unvisited = unvisited.slice(1);
   }
 
+  // Report initial progress
+  config.onProgress?.({
+    phase: 'distance_matrix',
+    currentStep: 0,
+    totalSteps: stops.length,
+    message: 'Building distance matrix',
+    percent: 5,
+  });
+
   // Nearest Neighbor greedy algorithm (async)
   while (unvisited.length > 0) {
     let nearestIndex = 0;
@@ -308,6 +317,15 @@ export async function optimizeRouteNearestNeighbor(
     current = unvisited[nearestIndex];
     ordered.push(current);
     unvisited.splice(nearestIndex, 1);
+
+    // Report progress after each iteration
+    config.onProgress?.({
+      phase: 'nearest_neighbor',
+      currentStep: ordered.length,
+      totalSteps: stops.length,
+      message: 'Finding optimal sequence',
+      percent: 20 + Math.round((ordered.length / stops.length) * 60),
+    });
   }
 
   // Build complete route with start/end points
@@ -325,6 +343,15 @@ export async function optimizeRouteNearestNeighbor(
     // Specific end point
     completeOptimizedRoute.push(config.endPoint);
   }
+
+  // Report progress before metrics calculation
+  config.onProgress?.({
+    phase: 'calculating_metrics',
+    currentStep: stops.length,
+    totalSteps: stops.length,
+    message: 'Calculating savings',
+    percent: 85,
+  });
 
   // Calculate optimized route metrics (async)
   const optimizedMetrics = await calculateTotalDistanceAsync(
@@ -354,6 +381,15 @@ export async function optimizeRouteNearestNeighbor(
   const distanceSaved = Math.max(0, originalDistance - totalDistance);
   const timeSaved = Math.max(0, originalTime - totalTime);
   const improvementPercent = originalDistance > 0 ? (distanceSaved / originalDistance) * 100 : 0;
+
+  // Report completion
+  config.onProgress?.({
+    phase: 'calculating_metrics',
+    currentStep: stops.length,
+    totalSteps: stops.length,
+    message: 'Complete',
+    percent: 100,
+  });
 
   return {
     routeId: `route-${Date.now()}`,

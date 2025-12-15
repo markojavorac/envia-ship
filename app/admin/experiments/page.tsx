@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Calculator, MapPin, ArrowRight } from "lucide-react";
+import { Calculator, MapPin, ArrowRight, Zap } from "lucide-react";
 import { AdminPageTitle, AdminCard, AdminCardContent } from "@/components/admin/ui";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
@@ -24,6 +24,15 @@ const EXPERIMENTS = [
       "Real-time driver locations with route monitoring and status updates. Mock simulation for testing map features.",
     icon: MapPin,
     href: "/admin/experiments/driver-tracking",
+    status: "active" as const,
+  },
+  {
+    id: "route-optimizer",
+    title: "Route Optimizer Visualizer",
+    description:
+      "See route optimization savings with before/after map comparison. Test with 6 diverse scenarios showing distance, time, and fuel cost reductions.",
+    icon: Zap,
+    href: "/admin/experiments/route-optimizer",
     status: "active" as const,
   },
 ];
