@@ -51,7 +51,7 @@ export function ZoneModal() {
           <div className="space-y-2">
             <label className="text-secondary text-sm font-semibold">Delivery Zone</label>
             <Select value={selectedZone} onValueChange={setSelectedZone}>
-              <SelectTrigger className="focus:border-primary focus:ring-primary/20 w-full border-2 border-border bg-input">
+              <SelectTrigger className="focus:border-primary focus:ring-primary/20 border-border bg-input w-full border-2">
                 <SelectValue placeholder="Select your zone..." />
               </SelectTrigger>
               <SelectContent>
@@ -69,7 +69,7 @@ export function ZoneModal() {
               <Package className="text-primary mt-0.5 h-5 w-5 flex-shrink-0" />
               <div className="space-y-1">
                 <p className="text-secondary text-sm font-semibold">Why do we need this?</p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-muted-foreground text-xs">
                   Your zone helps us calculate accurate shipping costs and delivery times for each
                   product. You can change it anytime.
                 </p>
@@ -82,14 +82,14 @@ export function ZoneModal() {
           <Button
             variant="outline"
             onClick={() => setShowZoneModal(false)}
-            className="flex-1 border-2 border-border text-muted-foreground hover:bg-muted"
+            className="border-border text-muted-foreground hover:bg-muted flex-1 border-2"
           >
             Browse Without Zone
           </Button>
           <Button
             onClick={handleConfirm}
             disabled={!selectedZone}
-            className="bg-primary hover:bg-primary/90 flex-1 font-semibold text-white disabled:cursor-not-allowed disabled:bg-muted"
+            className="bg-primary hover:bg-primary/90 disabled:bg-muted flex-1 font-semibold text-white disabled:cursor-not-allowed"
           >
             Continue
           </Button>

@@ -80,39 +80,43 @@ export function saveTickets(tickets: DeliveryTicket[]): void {
 /**
  * Add a new ticket
  */
-export function addTicket(ticket: DeliveryTicket): DeliveryTicket[] {
+export function addTicket(ticket: DeliveryTicket): DeliveryTicket {
   const tickets = loadTickets();
   const updated = [ticket, ...tickets]; // Add to beginning
   saveTickets(updated);
-  return updated;
+  return ticket;
 }
 
 /**
  * Update an existing ticket
  */
-export function updateTicket(ticketId: string, updates: Partial<DeliveryTicket>): DeliveryTicket[] {
+export function updateTicket(ticketId: string, updates: Partial<DeliveryTicket>): DeliveryTicket {
   const tickets = loadTickets();
+  const updatedTicket = tickets.find((t) => t.id === ticketId);
+  if (!updatedTicket) {
+    throw new Error(`Ticket ${ticketId} not found`);
+  }
+
   const updated = tickets.map((ticket) =>
     ticket.id === ticketId ? { ...ticket, ...updates } : ticket
   );
   saveTickets(updated);
-  return updated;
+  return { ...updatedTicket, ...updates };
 }
 
 /**
  * Delete a ticket
  */
-export function deleteTicket(ticketId: string): DeliveryTicket[] {
+export function deleteTicket(ticketId: string): void {
   const tickets = loadTickets();
   const updated = tickets.filter((ticket) => ticket.id !== ticketId);
   saveTickets(updated);
-  return updated;
 }
 
 /**
  * Mark a ticket as completed
  */
-export function completeTicket(ticketId: string): DeliveryTicket[] {
+export function completeTicket(ticketId: string): DeliveryTicket {
   return updateTicket(ticketId, {
     isCompleted: true,
     completedAt: new Date(),
@@ -122,7 +126,7 @@ export function completeTicket(ticketId: string): DeliveryTicket[] {
 /**
  * Start navigation for a ticket (records timestamp)
  */
-export function startNavigation(ticketId: string): DeliveryTicket[] {
+export function startNavigation(ticketId: string): DeliveryTicket {
   return updateTicket(ticketId, {
     navigationStartedAt: new Date(),
   });

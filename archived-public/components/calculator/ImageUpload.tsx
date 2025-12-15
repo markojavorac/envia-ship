@@ -101,7 +101,7 @@ export default function ImageUpload({
               <img
                 src={preview}
                 alt={`Preview ${index + 1}`}
-                className="h-32 w-full rounded-lg border-2 border-border object-cover"
+                className="border-border h-32 w-full rounded-lg border-2 object-cover"
               />
               <Button
                 onClick={(e) => {

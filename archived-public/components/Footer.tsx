@@ -66,13 +66,19 @@ export default function Footer() {
             <ul className="space-y-2">
               <li className="flex items-center gap-2 text-sm text-white/80">
                 <Phone className="h-4 w-4" />
-                <a href={`tel:${ENVIA_INFO.phone}`} className="hover:text-primary transition-colors">
+                <a
+                  href={`tel:${ENVIA_INFO.phone}`}
+                  className="hover:text-primary transition-colors"
+                >
                   {ENVIA_INFO.phone}
                 </a>
               </li>
               <li className="flex items-center gap-2 text-sm text-white/80">
                 <Mail className="h-4 w-4" />
-                <a href={`mailto:${ENVIA_INFO.email}`} className="hover:text-primary transition-colors">
+                <a
+                  href={`mailto:${ENVIA_INFO.email}`}
+                  className="hover:text-primary transition-colors"
+                >
                   {ENVIA_INFO.email}
                 </a>
               </li>

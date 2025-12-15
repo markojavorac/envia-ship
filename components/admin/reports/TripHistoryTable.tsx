@@ -107,14 +107,14 @@ export function TripHistoryTable({ trips, isLoading }: TripHistoryTableProps) {
   }
 
   return (
-    <div className="border-border bg-card rounded-lg border w-full">
-      <div className="overflow-x-auto -mx-px">
+    <div className="border-border bg-card w-full rounded-lg border">
+      <div className="-mx-px overflow-x-auto">
         <Table className="min-w-full">
           <TableHeader>
             <TableRow className="border-border hover:bg-muted/50">
               <TableHead className="text-foreground w-32">Ticket</TableHead>
               <TableHead
-                className="text-foreground hover:text-primary cursor-pointer w-40"
+                className="text-foreground hover:text-primary w-40 cursor-pointer"
                 onClick={() => handleSort("driverName")}
               >
                 Driver
@@ -158,7 +158,7 @@ export function TripHistoryTable({ trips, isLoading }: TripHistoryTableProps) {
                 </TableCell>
                 <TableCell className="text-foreground">{trip.driverName}</TableCell>
                 <TableCell>
-                  <div className="min-w-0 max-w-md space-y-1 sm:min-w-[200px]">
+                  <div className="max-w-md min-w-0 space-y-1 sm:min-w-[200px]">
                     <div className="flex items-start gap-1.5">
                       <MapPin className="text-primary mt-0.5 h-4 w-4 shrink-0" />
                       <span className="text-foreground text-sm">

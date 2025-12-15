@@ -247,7 +247,10 @@ export function TicketCard({
                       {t("from")}
                     </span>
                     <span
-                      className={cn("text-foreground min-w-0 flex-1 truncate", isUpNext ? "text-sm" : "text-xs")}
+                      className={cn(
+                        "text-foreground min-w-0 flex-1 truncate",
+                        isUpNext ? "text-sm" : "text-xs"
+                      )}
                     >
                       {ticket.originAddress}
                     </span>
@@ -268,7 +271,10 @@ export function TicketCard({
                       {t("to")}
                     </span>
                     <span
-                      className={cn("text-foreground min-w-0 flex-1 truncate", isUpNext ? "text-sm" : "text-xs")}
+                      className={cn(
+                        "text-foreground min-w-0 flex-1 truncate",
+                        isUpNext ? "text-sm" : "text-xs"
+                      )}
                     >
                       {ticket.destinationAddress}
                     </span>
@@ -278,7 +284,7 @@ export function TicketCard({
             </div>
 
             {/* Right Section: 3-Button Layout */}
-            <div className="flex w-full shrink-0 flex-col gap-2 sm:w-auto sm:flex-row sm:min-w-0">
+            <div className="flex w-full shrink-0 flex-col gap-2 sm:w-auto sm:min-w-0 sm:flex-row">
               {/* Navigate Button - Orange/Primary */}
               <Button
                 onClick={handleNavigate}

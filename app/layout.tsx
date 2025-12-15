@@ -64,9 +64,7 @@ export default async function RootLayout({
             <SidebarProvider defaultOpen={true}>
               <AppSidebar />
               <SidebarInset>
-                <div className="flex flex-1 flex-col p-4 md:p-6">
-                  {children}
-                </div>
+                <div className="flex flex-1 flex-col p-4 md:p-6">{children}</div>
               </SidebarInset>
             </SidebarProvider>
           </ThemeProvider>

@@ -44,15 +44,12 @@ export default function LanguageSwitcher({
           className={cn(
             "gap-2",
             variant === "sidebar"
-              ? "w-full justify-start text-foreground hover:text-primary hover:bg-muted"
+              ? "text-foreground hover:text-primary hover:bg-muted w-full justify-start"
               : "text-white hover:text-white"
           )}
         >
           <Globe
-            className={cn(
-              "h-4 w-4",
-              variant === "sidebar" ? "text-foreground" : "text-white"
-            )}
+            className={cn("h-4 w-4", variant === "sidebar" ? "text-foreground" : "text-white")}
           />
           {!collapsed && (
             <span
@@ -69,7 +66,7 @@ export default function LanguageSwitcher({
       <DropdownMenuContent
         align={variant === "sidebar" ? "start" : "end"}
         side={variant === "sidebar" ? "right" : "bottom"}
-        className="border-2 border-border bg-card"
+        className="border-border bg-card border-2"
       >
         {LANGUAGES.map((lang) => (
           <DropdownMenuItem
@@ -78,8 +75,8 @@ export default function LanguageSwitcher({
             className={cn(
               "cursor-pointer text-base",
               locale === lang.code
-                ? "bg-primary/10 font-bold text-foreground"
-                : "font-medium text-foreground hover:bg-muted"
+                ? "bg-primary/10 text-foreground font-bold"
+                : "text-foreground hover:bg-muted font-medium"
             )}
           >
             {lang.label}

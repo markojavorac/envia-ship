@@ -23,7 +23,7 @@ export function ProductImageGallery({ images, productName }: ProductImageGallery
 
   if (images.length === 0) {
     return (
-      <div className="flex aspect-square items-center justify-center rounded-lg bg-muted">
+      <div className="bg-muted flex aspect-square items-center justify-center rounded-lg">
         <p className="text-muted-foreground">No image available</p>
       </div>
     );
@@ -32,7 +32,7 @@ export function ProductImageGallery({ images, productName }: ProductImageGallery
   return (
     <div className="space-y-4">
       {/* Main Image */}
-      <div className="group relative aspect-square overflow-hidden rounded-lg bg-muted">
+      <div className="group bg-muted relative aspect-square overflow-hidden rounded-lg">
         <Image
           src={images[currentIndex]}
           alt={`${productName} - Image ${currentIndex + 1}`}
@@ -48,7 +48,7 @@ export function ProductImageGallery({ images, productName }: ProductImageGallery
             <Button
               variant="ghost"
               size="icon"
-              className="absolute top-1/2 left-2 -translate-y-1/2 bg-card/80 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-card"
+              className="bg-card/80 hover:bg-card absolute top-1/2 left-2 -translate-y-1/2 opacity-0 transition-opacity group-hover:opacity-100"
               onClick={goToPrevious}
             >
               <ChevronLeft className="h-6 w-6" />
@@ -56,7 +56,7 @@ export function ProductImageGallery({ images, productName }: ProductImageGallery
             <Button
               variant="ghost"
               size="icon"
-              className="absolute top-1/2 right-2 -translate-y-1/2 bg-card/80 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-card"
+              className="bg-card/80 hover:bg-card absolute top-1/2 right-2 -translate-y-1/2 opacity-0 transition-opacity group-hover:opacity-100"
               onClick={goToNext}
             >
               <ChevronRight className="h-6 w-6" />
@@ -79,7 +79,7 @@ export function ProductImageGallery({ images, productName }: ProductImageGallery
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`relative aspect-square overflow-hidden rounded-lg border-2 bg-muted transition-all ${
+              className={`bg-muted relative aspect-square overflow-hidden rounded-lg border-2 transition-all ${
                 index === currentIndex
                   ? "border-primary ring-primary/20 ring-2"
                   : "hover:border-primary/50 border-border"

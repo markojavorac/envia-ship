@@ -17,7 +17,7 @@ export default function TimeSlotPicker({ label, value, onChange, error }: TimeSl
   const icons = { sunrise: Sunrise, sun: Sun, moon: Moon };
 
   return (
-    <Card className="border-primary/30 border-2 bg-card">
+    <Card className="border-primary/30 bg-card border-2">
       <CardHeader className="pb-3">
         <Label className="text-primary text-sm font-semibold">{label}</Label>
       </CardHeader>

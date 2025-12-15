@@ -46,11 +46,11 @@ function ProductDetailContent() {
 
   if (!product) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-muted">
+      <div className="bg-muted flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <Package className="mx-auto mb-4 h-16 w-16 text-muted-foreground" />
+          <Package className="text-muted-foreground mx-auto mb-4 h-16 w-16" />
           <h2 className="text-secondary mb-2 text-2xl font-bold">Product Not Found</h2>
-          <p className="mb-6 text-muted-foreground">
+          <p className="text-muted-foreground mb-6">
             The product you&rsquo;re looking for doesn&rsquo;t exist or has been removed.
           </p>
           <Button asChild className="bg-primary hover:bg-primary/90 text-white">
@@ -72,7 +72,7 @@ function ProductDetailContent() {
       <MarketplaceControlBar />
 
       {/* Breadcrumb */}
-      <div className="border-b border-border bg-card">
+      <div className="border-border bg-card border-b">
         <div className="container mx-auto px-4 py-4 xl:px-6">
           <Button
             variant="ghost"
@@ -123,7 +123,7 @@ function ProductDetailContent() {
                       />
                     ))}
                   </div>
-                  <span className="text-sm font-semibold text-foreground">
+                  <span className="text-foreground text-sm font-semibold">
                     {product.rating.toFixed(1)} ({product.reviews} reviews)
                   </span>
                 </div>
@@ -145,7 +145,7 @@ function ProductDetailContent() {
               <Separator />
 
               {/* Seller Info */}
-              <Card className="border-primary/20 border-2 bg-card">
+              <Card className="border-primary/20 bg-card border-2">
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-3">
@@ -168,7 +168,7 @@ function ProductDetailContent() {
                             </Badge>
                           )}
                         </div>
-                        <div className="mt-2 flex items-center gap-1 text-xs text-muted-foreground">
+                        <div className="text-muted-foreground mt-2 flex items-center gap-1 text-xs">
                           <MapPin className="h-3 w-3" />
                           <span>Ships from {product.originZone.replace("-", " ")}</span>
                         </div>
@@ -180,8 +180,8 @@ function ProductDetailContent() {
 
               {/* Stock Status */}
               <div className="flex items-center gap-2">
-                <Package className="h-5 w-5 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">
+                <Package className="text-muted-foreground h-5 w-5" />
+                <span className="text-muted-foreground text-sm">
                   {product.stock > 0 ? (
                     <>
                       <span className="text-primary font-semibold">{product.stock}</span> units in
@@ -209,19 +209,19 @@ function ProductDetailContent() {
                   <div className="bg-primary/10 mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full">
                     <Shield className="text-primary h-6 w-6" />
                   </div>
-                  <p className="text-xs font-semibold text-foreground">Secure Payment</p>
+                  <p className="text-foreground text-xs font-semibold">Secure Payment</p>
                 </div>
                 <div className="text-center">
                   <div className="bg-primary/10 mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full">
                     <Truck className="text-primary h-6 w-6" />
                   </div>
-                  <p className="text-xs font-semibold text-foreground">Fast Delivery</p>
+                  <p className="text-foreground text-xs font-semibold">Fast Delivery</p>
                 </div>
                 <div className="text-center">
                   <div className="bg-primary/10 mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full">
                     <CheckCircle2 className="text-primary h-6 w-6" />
                   </div>
-                  <p className="text-xs font-semibold text-foreground">Quality Assured</p>
+                  <p className="text-foreground text-xs font-semibold">Quality Assured</p>
                 </div>
               </div>
             </div>
@@ -229,33 +229,33 @@ function ProductDetailContent() {
 
           {/* Product Description */}
           <div className="mt-12">
-            <Card className="border-primary/20 border-2 bg-card">
+            <Card className="border-primary/20 bg-card border-2">
               <CardContent className="p-6">
                 <h2 className="text-secondary mb-4 text-2xl font-bold">Product Description</h2>
-                <p className="leading-relaxed text-foreground">{product.description}</p>
+                <p className="text-foreground leading-relaxed">{product.description}</p>
 
                 <Separator className="my-6" />
 
                 <h3 className="text-secondary mb-4 text-xl font-bold">Product Details</h3>
                 <div className="grid grid-cols-1 gap-4 text-sm md:grid-cols-2">
-                  <div className="flex justify-between border-b border-border py-2">
+                  <div className="border-border flex justify-between border-b py-2">
                     <span className="text-muted-foreground">Weight</span>
                     <span className="text-secondary font-semibold">
                       {product.weight.toFixed(2)} kg
                     </span>
                   </div>
-                  <div className="flex justify-between border-b border-border py-2">
+                  <div className="border-border flex justify-between border-b py-2">
                     <span className="text-muted-foreground">Dimensions</span>
                     <span className="text-secondary font-semibold">
                       {product.dimensions.length} × {product.dimensions.width} ×{" "}
                       {product.dimensions.height} cm
                     </span>
                   </div>
-                  <div className="flex justify-between border-b border-border py-2">
+                  <div className="border-border flex justify-between border-b py-2">
                     <span className="text-muted-foreground">Category</span>
                     <span className="text-secondary font-semibold">{category?.label}</span>
                   </div>
-                  <div className="flex justify-between border-b border-border py-2">
+                  <div className="border-border flex justify-between border-b py-2">
                     <span className="text-muted-foreground">Origin Zone</span>
                     <span className="text-secondary font-semibold">
                       {product.originZone.replace("-", " ")}

@@ -54,7 +54,7 @@ export function FilterSidebar({ priceRange, className = "" }: FilterSidebarProps
     filterState.minRating > 0;
 
   return (
-    <Card className={`border-primary/30 border-2 bg-card ${className}`}>
+    <Card className={`border-primary/30 bg-card border-2 ${className}`}>
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-primary flex items-center gap-2 text-lg font-bold">
@@ -120,8 +120,12 @@ export function FilterSidebar({ priceRange, className = "" }: FilterSidebarProps
               className="w-full"
             />
             <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">{formatPrice(filterState.priceRange.min)}</span>
-              <span className="text-muted-foreground">{formatPrice(filterState.priceRange.max)}</span>
+              <span className="text-muted-foreground">
+                {formatPrice(filterState.priceRange.min)}
+              </span>
+              <span className="text-muted-foreground">
+                {formatPrice(filterState.priceRange.max)}
+              </span>
             </div>
           </div>
         </div>
@@ -139,7 +143,7 @@ export function FilterSidebar({ priceRange, className = "" }: FilterSidebarProps
                 className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${
                   filterState.minRating === rating
                     ? "bg-primary/10 border-primary border-2"
-                    : "border-2 border-transparent hover:bg-muted"
+                    : "hover:bg-muted border-2 border-transparent"
                 }`}
               >
                 <div className="flex items-center gap-1">
@@ -171,7 +175,7 @@ export function FilterSidebar({ priceRange, className = "" }: FilterSidebarProps
               checked={filterState.inStock}
               onCheckedChange={handleInStockToggle}
             />
-            <label htmlFor="in-stock" className="cursor-pointer text-sm text-foreground">
+            <label htmlFor="in-stock" className="text-foreground cursor-pointer text-sm">
               In stock only
             </label>
           </div>
@@ -199,7 +203,7 @@ export function FilterSidebar({ priceRange, className = "" }: FilterSidebarProps
                 />
                 <label
                   htmlFor={`zone-${zone.value}`}
-                  className="flex-grow cursor-pointer text-sm text-foreground"
+                  className="text-foreground flex-grow cursor-pointer text-sm"
                 >
                   {zone.label}
                 </label>

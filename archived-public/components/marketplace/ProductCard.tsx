@@ -21,8 +21,8 @@ export function ProductCard({ product, variant }: ProductCardProps) {
   if (variant === MarketplaceView.AMAZON) {
     return (
       <Link href={`/marketplace/${product.id}`}>
-        <Card className="border-primary/30 flex h-full cursor-pointer flex-col border-2 bg-card transition-shadow hover:shadow-lg">
-          <div className="relative aspect-square bg-muted">
+        <Card className="border-primary/30 bg-card flex h-full cursor-pointer flex-col border-2 transition-shadow hover:shadow-lg">
+          <div className="bg-muted relative aspect-square">
             <Image
               src={product.thumbnail}
               alt={product.name}
@@ -45,10 +45,10 @@ export function ProductCard({ product, variant }: ProductCardProps) {
             <h3 className="text-secondary mb-2 line-clamp-2 text-sm font-bold">{product.name}</h3>
             <div className="mb-2 flex items-center gap-1">
               <Star className="text-primary fill-primary h-3 w-3" />
-              <span className="text-xs font-semibold text-foreground">
+              <span className="text-foreground text-xs font-semibold">
                 {product.rating.toFixed(1)}
               </span>
-              <span className="text-xs text-muted-foreground">({product.reviews})</span>
+              <span className="text-muted-foreground text-xs">({product.reviews})</span>
             </div>
             <p className="text-primary mb-1 text-lg font-bold">{formatPrice(product.price)}</p>
             {shippingEstimate ? (
@@ -61,7 +61,7 @@ export function ProductCard({ product, variant }: ProductCardProps) {
                 Set zone for shipping
               </Badge>
             )}
-            <p className="mb-3 line-clamp-2 flex-grow text-xs text-muted-foreground">
+            <p className="text-muted-foreground mb-3 line-clamp-2 flex-grow text-xs">
               {product.shortDescription}
             </p>
             <Button
@@ -81,8 +81,8 @@ export function ProductCard({ product, variant }: ProductCardProps) {
   if (variant === MarketplaceView.UBER_EATS) {
     return (
       <Link href={`/marketplace/${product.id}`}>
-        <Card className="border-primary/30 cursor-pointer border-2 bg-card transition-all hover:scale-105 hover:shadow-xl">
-          <div className="relative aspect-video bg-muted">
+        <Card className="border-primary/30 bg-card cursor-pointer border-2 transition-all hover:scale-105 hover:shadow-xl">
+          <div className="bg-muted relative aspect-video">
             <Image
               src={product.thumbnail}
               alt={product.name}
@@ -108,7 +108,7 @@ export function ProductCard({ product, variant }: ProductCardProps) {
                 <h3 className="text-secondary mb-1 line-clamp-1 text-base font-bold">
                   {product.name}
                 </h3>
-                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <div className="text-muted-foreground flex items-center gap-2 text-xs">
                   <MapPin className="h-3 w-3" />
                   <span>From {product.originZone.replace("-", " ")}</span>
                   {shippingEstimate && (
@@ -136,7 +136,7 @@ export function ProductCard({ product, variant }: ProductCardProps) {
   if (variant === MarketplaceView.PINTEREST) {
     return (
       <Link href={`/marketplace/${product.id}`}>
-        <Card className="border-primary/30 group mb-4 cursor-pointer break-inside-avoid overflow-hidden border-2 bg-card">
+        <Card className="border-primary/30 group bg-card mb-4 cursor-pointer break-inside-avoid overflow-hidden border-2">
           <div className="relative">
             <Image
               src={product.thumbnail}
@@ -184,8 +184,8 @@ export function ProductCard({ product, variant }: ProductCardProps) {
   if (variant === MarketplaceView.MINIMALIST) {
     return (
       <Link href={`/marketplace/${product.id}`}>
-        <Card className="cursor-pointer border-0 bg-card shadow-sm transition-shadow hover:shadow-xl">
-          <div className="relative aspect-square bg-muted">
+        <Card className="bg-card cursor-pointer border-0 shadow-sm transition-shadow hover:shadow-xl">
+          <div className="bg-muted relative aspect-square">
             <Image
               src={product.thumbnail}
               alt={product.name}
@@ -204,7 +204,9 @@ export function ProductCard({ product, variant }: ProductCardProps) {
           <CardContent className="p-6 text-center">
             <h3 className="text-secondary mb-3 text-xl font-bold">{product.name}</h3>
             <p className="text-primary mb-4 text-3xl font-bold">{formatPrice(product.price)}</p>
-            <p className="mb-4 line-clamp-1 text-sm text-muted-foreground">{product.shortDescription}</p>
+            <p className="text-muted-foreground mb-4 line-clamp-1 text-sm">
+              {product.shortDescription}
+            </p>
             <Button
               variant="outline"
               className="border-primary text-primary hover:bg-primary w-full border-2 font-bold hover:text-white"
@@ -224,8 +226,8 @@ export function ProductCard({ product, variant }: ProductCardProps) {
 
     return (
       <Link href={`/marketplace/${product.id}`}>
-        <Card className="border-primary/30 cursor-pointer border-2 bg-card transition-shadow hover:shadow-lg">
-          <div className="relative aspect-square bg-muted">
+        <Card className="border-primary/30 bg-card cursor-pointer border-2 transition-shadow hover:shadow-lg">
+          <div className="bg-muted relative aspect-square">
             <Image
               src={product.thumbnail}
               alt={product.name}
@@ -254,7 +256,7 @@ export function ProductCard({ product, variant }: ProductCardProps) {
             <div className="mb-2 flex items-start justify-between">
               <div className="flex-grow">
                 <h3 className="text-secondary line-clamp-1 text-base font-bold">{product.name}</h3>
-                <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+                <p className="text-muted-foreground mt-1 flex items-center gap-1 text-xs">
                   <MapPin className="h-3 w-3" />
                   From {product.originZone.replace("-", " ")}
                 </p>
@@ -263,7 +265,7 @@ export function ProductCard({ product, variant }: ProductCardProps) {
                 <p className="text-primary text-xl font-bold">{formatPrice(product.price)}</p>
               </div>
             </div>
-            <div className="mb-3 flex items-center gap-2 text-xs text-muted-foreground">
+            <div className="text-muted-foreground mb-3 flex items-center gap-2 text-xs">
               <Store className="h-3 w-3" />
               <span>{product.seller.name}</span>
               {product.seller.verified && (
@@ -272,8 +274,8 @@ export function ProductCard({ product, variant }: ProductCardProps) {
                 </Badge>
               )}
             </div>
-            <div className="mt-3 flex items-center justify-between border-t border-border pt-3">
-              <span className="text-xs text-muted-foreground">
+            <div className="border-border mt-3 flex items-center justify-between border-t pt-3">
+              <span className="text-muted-foreground text-xs">
                 {shippingEstimate
                   ? `+ ${formatPrice(shippingEstimate.cost)} shipping`
                   : "Set zone for shipping"}

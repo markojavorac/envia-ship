@@ -16,7 +16,7 @@ export function UIStyleSwitcher() {
 
   return (
     <Select value={currentView} onValueChange={setCurrentView}>
-      <SelectTrigger className="text-foreground hover:border-primary/50 focus:border-primary focus:ring-primary/20 w-32 border-2 border-border bg-card font-semibold">
+      <SelectTrigger className="text-foreground hover:border-primary/50 focus:border-primary focus:ring-primary/20 border-border bg-card w-32 border-2 font-semibold">
         <Layout className="text-primary mr-2 h-4 w-4" />
         <span>Layout</span>
       </SelectTrigger>
@@ -25,7 +25,7 @@ export function UIStyleSwitcher() {
           <SelectItem key={view.value} value={view.value}>
             <div className="flex flex-col">
               <span className="font-semibold">{view.label}</span>
-              <span className="text-xs text-muted-foreground">{view.description}</span>
+              <span className="text-muted-foreground text-xs">{view.description}</span>
             </div>
           </SelectItem>
         ))}

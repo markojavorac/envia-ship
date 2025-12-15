@@ -125,7 +125,7 @@ export default function RoutePlannerPage() {
       </div>
 
       {/* Desktop Header */}
-      <div className="hidden md:flex items-center justify-between">
+      <div className="hidden items-center justify-between md:flex">
         <div>
           <h1 className="text-foreground text-2xl font-bold md:text-3xl">Route Planner</h1>
           <p className="text-muted-foreground mt-1">

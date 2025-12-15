@@ -22,7 +22,7 @@ interface AdminPageTitleProps {
  */
 export function AdminPageTitle({ title, description, actions, className }: AdminPageTitleProps) {
   return (
-    <div className={cn("hidden md:flex items-start justify-between gap-4", className)}>
+    <div className={cn("hidden items-start justify-between gap-4 md:flex", className)}>
       <div className="min-w-0 flex-1">
         <h1 className="text-foreground text-2xl font-bold md:text-3xl">{title}</h1>
         {description && <p className="text-muted-foreground mt-1 text-sm">{description}</p>}

@@ -19,7 +19,7 @@ export function CategoryTabs() {
   };
 
   return (
-    <div className="sticky top-14 z-40 border-b border-border bg-background py-4">
+    <div className="border-border bg-background sticky top-14 z-40 border-b py-4">
       <Tabs value={filterState.category} onValueChange={handleCategoryChange} className="w-full">
         <TabsList className="h-auto w-full justify-start gap-2 bg-transparent p-0">
           <TabsTrigger

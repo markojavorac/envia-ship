@@ -44,22 +44,25 @@ export function ThemeToggle({ variant = "default", collapsed = false }: ThemeTog
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <SidebarMenuButton className="justify-start" tooltip={!collapsed ? undefined : "Toggle theme"}>
+          <SidebarMenuButton
+            className="justify-start"
+            tooltip={!collapsed ? undefined : "Toggle theme"}
+          >
             {isDark ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
             {!collapsed && <span>Theme</span>}
           </SidebarMenuButton>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" side="right" className="border-2 border-border bg-card">
+        <DropdownMenuContent align="start" side="right" className="border-border bg-card border-2">
           <DropdownMenuItem
             onClick={() => setTheme("light")}
-            className="cursor-pointer font-medium text-foreground hover:bg-muted"
+            className="text-foreground hover:bg-muted cursor-pointer font-medium"
           >
             <Sun className="mr-2 h-4 w-4" />
             Light
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => setTheme("dark")}
-            className="cursor-pointer font-medium text-foreground hover:bg-muted"
+            className="text-foreground hover:bg-muted cursor-pointer font-medium"
           >
             <Moon className="mr-2 h-4 w-4" />
             Dark
@@ -78,17 +81,17 @@ export function ThemeToggle({ variant = "default", collapsed = false }: ThemeTog
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="border-2 border-border bg-card">
+      <DropdownMenuContent align="end" className="border-border bg-card border-2">
         <DropdownMenuItem
           onClick={() => setTheme("light")}
-          className="cursor-pointer font-medium text-foreground hover:bg-muted"
+          className="text-foreground hover:bg-muted cursor-pointer font-medium"
         >
           <Sun className="mr-2 h-4 w-4" />
           Light
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => setTheme("dark")}
-          className="cursor-pointer font-medium text-foreground hover:bg-muted"
+          className="text-foreground hover:bg-muted cursor-pointer font-medium"
         >
           <Moon className="mr-2 h-4 w-4" />
           Dark

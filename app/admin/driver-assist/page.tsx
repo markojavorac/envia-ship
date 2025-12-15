@@ -279,7 +279,7 @@ export default function DriverAssistPage() {
       console.error("Error deleting ticket:", error);
       toast.error("Failed to delete ticket");
       // Reload tickets to restore deleted ticket
-      const loaded = await fetchTickets();
+      const loaded = loadTickets();
       setTickets(loaded);
     }
   };
@@ -303,7 +303,7 @@ export default function DriverAssistPage() {
       console.error("Error updating coordinates:", error);
       toast.error("Failed to update coordinates");
       // Revert optimistic update
-      const loaded = await fetchTickets();
+      const loaded = loadTickets();
       setTickets(loaded);
     }
   };
@@ -329,7 +329,7 @@ export default function DriverAssistPage() {
 
   const handleLoadMockData = async () => {
     try {
-      const loaded = await fetchTickets();
+      const loaded = loadTickets();
       setTickets(loaded);
       toast.success("Tickets reloaded from database");
     } catch (error) {
@@ -349,7 +349,7 @@ export default function DriverAssistPage() {
   // Split tickets into pending and completed, sorted by creation date
   const pendingTickets = tickets
     .filter((t) => !t.isCompleted)
-    .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime()); // FIFO - oldest first
+    .sort((a, b) => (a.createdAt?.getTime() ?? 0) - (b.createdAt?.getTime() ?? 0)); // FIFO - oldest first
 
   const completedTickets = tickets
     .filter((t) => t.isCompleted)
@@ -438,7 +438,8 @@ export default function DriverAssistPage() {
                           : `0 ${15 - index * 3}px ${20 - index * 3}px -3px rgba(0, 0, 0, ${0.15 - index * 0.02})`,
                     }}
                   >
-                    {/* eslint-disable-next-line custom/no-inline-styles, custom/no-admin-hardcoded-colors */}
+                    {/* Progressive darkening overlay for stacked effect - requires dynamic opacity */}
+                    {/* eslint-disable custom/no-inline-styles, custom/no-admin-hardcoded-colors */}
                     <div
                       className="pointer-events-none absolute inset-0 rounded-lg bg-black transition-opacity duration-200"
                       style={{
@@ -446,6 +447,7 @@ export default function DriverAssistPage() {
                         zIndex: 10,
                       }}
                     />
+                    {/* eslint-enable custom/no-inline-styles, custom/no-admin-hardcoded-colors */}
                     <TicketCard
                       ticket={ticket}
                       ticketNumber={index + 2}

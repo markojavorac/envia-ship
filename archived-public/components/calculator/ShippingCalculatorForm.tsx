@@ -92,7 +92,7 @@ export default function ShippingCalculatorForm({
   return (
     <div className="space-y-4">
       {/* Form Section */}
-      <Card className="border-secondary/25 border-2 bg-card shadow-lg">
+      <Card className="border-secondary/25 bg-card border-2 shadow-lg">
         <CardHeader className="border-border border-b pb-3">
           <CardTitle className="text-foreground flex items-center gap-2 text-lg font-bold">
             <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-lg">
@@ -104,7 +104,7 @@ export default function ShippingCalculatorForm({
         <CardContent className="p-4 pt-4">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Dimensions Section */}
-            <Card className="border-primary/30 border-2 bg-card">
+            <Card className="border-primary/30 bg-card border-2">
               <CardHeader className="pb-3">
                 <h3 className="text-primary text-sm font-semibold">Dimensions</h3>
               </CardHeader>
@@ -176,7 +176,7 @@ export default function ShippingCalculatorForm({
             </Card>
 
             {/* Locations Section */}
-            <Card className="border-primary/30 border-2 bg-card">
+            <Card className="border-primary/30 bg-card border-2">
               <CardHeader className="pb-3">
                 <h3 className="text-primary text-sm font-semibold">Locations</h3>
               </CardHeader>
@@ -236,7 +236,7 @@ export default function ShippingCalculatorForm({
             </Card>
 
             {/* Service Type */}
-            <Card className="border-primary/30 border-2 bg-card">
+            <Card className="border-primary/30 bg-card border-2">
               <CardHeader className="pb-3">
                 <Label className="text-primary text-sm font-semibold">Service Type</Label>
               </CardHeader>
@@ -253,7 +253,7 @@ export default function ShippingCalculatorForm({
                     <ToggleGroupItem
                       key={service.value}
                       value={service.value}
-                      className="data-[state=on]:bg-primary data-[state=on]:border-primary hover:border-primary/50 h-auto flex-col border-2 border-border bg-card py-4 data-[state=on]:text-white"
+                      className="data-[state=on]:bg-primary data-[state=on]:border-primary hover:border-primary/50 border-border bg-card h-auto flex-col border-2 py-4 data-[state=on]:text-white"
                     >
                       <div className="text-sm font-semibold">{service.label}</div>
                       <div className="text-xs opacity-90">{service.description.split(".")[0]}</div>
@@ -267,7 +267,7 @@ export default function ShippingCalculatorForm({
             </Card>
 
             {/* Delivery Timing */}
-            <Card className="border-primary/30 border-2 bg-card">
+            <Card className="border-primary/30 bg-card border-2">
               <CardHeader className="pb-3">
                 <Label className="text-primary text-sm font-semibold">Delivery Timing</Label>
               </CardHeader>

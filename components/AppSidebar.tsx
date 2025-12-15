@@ -5,13 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  Truck,
-  BarChart3,
-  MapIcon,
-  User,
-  LogOut,
-} from "lucide-react";
+import { Truck, BarChart3, MapIcon, User, LogOut } from "lucide-react";
 import {
   Sidebar,
   SidebarHeader,
@@ -36,9 +30,7 @@ export default function AppSidebar() {
   const router = useRouter();
   const t = useTranslations("navigation");
   const { state } = useSidebar();
-  const [user, setUser] = useState<{ id: string; username: string } | null>(
-    null
-  );
+  const [user, setUser] = useState<{ id: string; username: string } | null>(null);
 
   const isLoginPage = pathname?.startsWith("/admin/login");
   const isAdminRoute = pathname?.startsWith("/admin") && !isLoginPage;
@@ -90,10 +82,12 @@ export default function AppSidebar() {
     <Sidebar collapsible="icon">
       {/* Header with Logo */}
       <SidebarHeader className="border-border border-b">
-        <div className={cn(
-          "flex items-center py-3",
-          state === "collapsed" ? "justify-center px-2" : "px-4"
-        )}>
+        <div
+          className={cn(
+            "flex items-center py-3",
+            state === "collapsed" ? "justify-center px-2" : "px-4"
+          )}
+        >
           <Link href="/" className="flex items-center">
             {state === "collapsed" ? (
               <Image
@@ -126,10 +120,7 @@ export default function AppSidebar() {
             <SidebarMenu>
               {navItems.map((item) => (
                 <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={pathname === item.href}
-                  >
+                  <SidebarMenuButton asChild isActive={pathname === item.href}>
                     <Link href={item.href}>
                       <item.icon className="h-6 w-6" />
                       <span>{item.label}</span>
@@ -162,14 +153,16 @@ export default function AppSidebar() {
                 <SidebarMenuButton tooltip={user.username}>
                   <User className="h-5 w-5" />
                   {state !== "collapsed" && (
-                    <span className="text-base font-semibold">
-                      {user.username}
-                    </span>
+                    <span className="text-base font-semibold">{user.username}</span>
                   )}
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton onClick={handleLogout} tooltip="Logout" className="justify-start">
+                <SidebarMenuButton
+                  onClick={handleLogout}
+                  tooltip="Logout"
+                  className="justify-start"
+                >
                   <LogOut className="h-5 w-5" />
                   {state !== "collapsed" && <span className="text-base">Logout</span>}
                 </SidebarMenuButton>

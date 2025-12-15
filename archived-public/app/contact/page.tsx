@@ -26,7 +26,7 @@ export default function ContactPage() {
       <section className="py-8">
         <div className="container mx-auto px-4 xl:px-6">
           <div className="mx-auto max-w-2xl">
-            <Card className="border-primary/30 border-2 bg-card">
+            <Card className="border-primary/30 bg-card border-2">
               <CardContent className="p-8">
                 <div className="space-y-6">
                   {/* Email */}
