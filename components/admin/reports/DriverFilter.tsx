@@ -49,7 +49,7 @@ export function DriverFilter({ selectedDriverId, onChange }: DriverFilterProps) 
 
   return (
     <div className="flex items-end gap-2">
-      <div className="w-48 space-y-1">
+      <div className="w-full space-y-1 md:w-48">
         <Label htmlFor="driver-filter" className="text-foreground text-xs">
           Filter by Driver
         </Label>

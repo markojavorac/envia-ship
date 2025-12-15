@@ -10,6 +10,7 @@ import { AddTicketCard } from "@/components/admin/driver-assist/AddTicketCard";
 import { AddTicketDialog } from "@/components/admin/driver-assist/AddTicketDialog";
 import { TicketCard } from "@/components/admin/driver-assist/TicketCard";
 import { TicketConfirmationDialog } from "@/components/admin/driver-assist/TicketConfirmationDialog";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import type { DeliveryTicket } from "@/lib/admin/driver-assist-types";
 import {
   loadTickets,
@@ -355,10 +356,15 @@ export default function DriverAssistPage() {
     .sort((a, b) => (b.completedAt?.getTime() ?? 0) - (a.completedAt?.getTime() ?? 0)); // Most recent first
 
   return (
-    <div className="w-full max-w-full space-y-2 pt-6">
-      <AdminPageTitle
-        title={t("title")}
-      />
+    <div className="flex flex-col gap-4">
+      {/* Mobile Header */}
+      <div className="flex items-center gap-2 md:hidden">
+        <SidebarTrigger />
+        <h1 className="text-foreground text-xl font-bold">{t("title")}</h1>
+      </div>
+
+      {/* Desktop Header */}
+      <AdminPageTitle title={t("title")} />
 
       {/* LOGGED IN USER INFO */}
       {currentUser && (

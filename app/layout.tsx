@@ -5,9 +5,8 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/AppSidebar";
-import MobileBottomNav from "@/components/MobileBottomNav";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -42,7 +41,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${dmSans.variable} ${jetbrainsMono.variable} font-sans antialiased overflow-x-hidden`}
+        className={`${inter.variable} ${dmSans.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
         <NextIntlClientProvider messages={messages}>
           <NextTopLoader
@@ -63,13 +62,12 @@ export default async function RootLayout({
             storageKey="envia-theme"
           >
             <SidebarProvider defaultOpen={true}>
-              <div className="flex min-h-screen w-full max-w-full overflow-x-hidden">
-                <AppSidebar />
-                <main className="flex flex-1 flex-col px-4 pb-20 md:px-6 md:pb-0">
-                  <div className="flex-1">{children}</div>
-                </main>
-                <MobileBottomNav />
-              </div>
+              <AppSidebar />
+              <SidebarInset>
+                <div className="flex flex-1 flex-col p-4 md:p-6">
+                  {children}
+                </div>
+              </SidebarInset>
             </SidebarProvider>
           </ThemeProvider>
         </NextIntlClientProvider>

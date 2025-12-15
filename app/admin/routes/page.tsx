@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { RouteStop, RouteConfig, OptimizedRoute, OptimizationMode } from "@/lib/admin/route-types";
 import { optimizeRouteNearestNeighbor } from "@/lib/admin/route-utils";
 import { RouteBuilderForm } from "@/components/admin/routes/RouteBuilderForm";
@@ -116,9 +117,15 @@ export default function RoutePlannerPage() {
   };
 
   return (
-    <div className="w-full max-w-full space-y-6 pt-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+    <div className="flex flex-col gap-6">
+      {/* Mobile Header */}
+      <div className="flex items-center gap-2 md:hidden">
+        <SidebarTrigger />
+        <h1 className="text-foreground text-xl font-bold">Route Planner</h1>
+      </div>
+
+      {/* Desktop Header */}
+      <div className="hidden md:flex items-center justify-between">
         <div>
           <h1 className="text-foreground text-2xl font-bold md:text-3xl">Route Planner</h1>
           <p className="text-muted-foreground mt-1">

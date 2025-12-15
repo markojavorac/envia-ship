@@ -12,14 +12,15 @@ import {
 } from "lucide-react";
 import { AdminPageTitle } from "@/components/admin/ui/AdminPageTitle";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { TripHistoryTable } from "@/components/admin/reports/TripHistoryTable";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { DateRangeFilter } from "@/components/admin/reports/DateRangeFilter";
 import { DriverFilter } from "@/components/admin/reports/DriverFilter";
 import { toast } from "sonner";
 import Papa from "papaparse";
 import { generatePDFReport } from "@/lib/reports/pdf-export";
 import { getMockTrips } from "@/lib/admin/mock-driver-assist";
-import { AdminInfoBox } from "@/components/admin/ui";
 
 interface TripData {
   id: string;
@@ -61,6 +62,17 @@ export default function ReportsPage() {
     startDate: null,
     endDate: null,
   });
+
+  // Initialize date range with smart defaults (30 days ago to today)
+  useEffect(() => {
+    const today = new Date();
+    const oneMonthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+
+    setDateRange({
+      startDate: oneMonthAgo,
+      endDate: today,
+    });
+  }, []);
 
   // Fetch data from either mock or database
   const fetchData = useCallback(
@@ -212,17 +224,24 @@ export default function ReportsPage() {
   }
 
   return (
-    <div className="w-full max-w-full space-y-6 pt-6">
-      {/* Header */}
+    <div className="flex flex-col gap-6">
+      {/* Mobile Header */}
+      <div className="flex items-center gap-2 md:hidden">
+        <SidebarTrigger />
+        <h1 className="text-foreground text-xl font-bold">Reports & Analytics</h1>
+      </div>
+
+      {/* Desktop Header */}
       <AdminPageTitle
         title="Reports & Analytics"
         description="View trip history and driver performance metrics"
       />
 
-      {/* Data Source Toggle */}
-      <div className="w-full max-w-full border-border bg-card rounded-lg border p-4">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="space-y-2">
+      {/* Data Source Toggle - Compact */}
+      <div className="border-border bg-card rounded-lg border p-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          {/* Left: Title + Status Badge */}
+          <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
               {dataSource === "mock" ? (
                 <TestTube className="text-primary h-5 w-5" />
@@ -231,13 +250,21 @@ export default function ReportsPage() {
               )}
               <span className="text-foreground font-semibold">Data Source</span>
             </div>
-            <AdminInfoBox variant={dataSource === "mock" ? "warning" : "info"}>
-              {dataSource === "mock"
-                ? "Using mock data - switch to Database to view real trips from Turso"
-                : "Using real database - viewing actual trips from Turso"}
-            </AdminInfoBox>
+
+            {/* Inline status badge */}
+            <Badge
+              variant={dataSource === "mock" ? "outline" : "default"}
+              className={
+                dataSource === "mock"
+                  ? "border-primary/30 bg-primary/10 text-primary"
+                  : "bg-primary text-white"
+              }
+            >
+              {dataSource === "mock" ? "Mock Data" : "Live Database"}
+            </Badge>
           </div>
 
+          {/* Right: Toggle buttons */}
           <div className="flex flex-wrap gap-2">
             <Button
               onClick={() => {
@@ -253,7 +280,7 @@ export default function ReportsPage() {
               }
             >
               <TestTube className="mr-2 h-4 w-4" />
-              Mock Data
+              Mock
             </Button>
 
             <Button
@@ -277,46 +304,56 @@ export default function ReportsPage() {
       </div>
 
       {/* Filters & Export */}
-      <div className="w-full max-w-full border-border bg-card rounded-lg border p-4">
-        <div className="mb-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Calendar className="text-primary h-5 w-5" />
-            <span className="text-foreground font-semibold">Filters & Export</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-muted-foreground text-sm">
-              {trips.length} {trips.length === 1 ? "result" : "results"} to export
-            </span>
-            <Button
-              onClick={handleExportPDF}
-              disabled={trips.length === 0}
-              variant="outline"
-              size="sm"
-              className="border-primary text-primary hover:bg-primary/10"
-            >
-              <FileText className="mr-2 h-4 w-4" />
-              Export PDF
-            </Button>
-            <Button
-              onClick={handleExportCSV}
-              disabled={trips.length === 0}
-              variant="outline"
-              size="sm"
-              className="border-primary text-primary hover:bg-primary/10"
-            >
-              <Download className="mr-2 h-4 w-4" />
-              Export CSV
-            </Button>
-          </div>
+      <div className="border-border bg-card rounded-lg border p-4">
+        {/* Header - Icon + Title only */}
+        <div className="mb-3 flex items-center gap-2">
+          <Calendar className="text-primary h-5 w-5" />
+          <span className="text-foreground font-semibold">Filters & Export</span>
         </div>
 
-        <div className="flex flex-col gap-3 md:flex-row md:items-center">
-          <DriverFilter selectedDriverId={selectedDriverId} onChange={setSelectedDriverId} />
-          <DateRangeFilter
-            startDate={dateRange.startDate}
-            endDate={dateRange.endDate}
-            onChange={setDateRange}
-          />
+        {/* Content - Responsive split layout */}
+        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          {/* Left: Filters */}
+          <div className="flex flex-col gap-2 md:flex-row md:items-end md:gap-3">
+            <DriverFilter selectedDriverId={selectedDriverId} onChange={setSelectedDriverId} />
+            <DateRangeFilter
+              startDate={dateRange.startDate}
+              endDate={dateRange.endDate}
+              onChange={setDateRange}
+            />
+          </div>
+
+          {/* Right: Export controls */}
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center gap-2">
+              <span className="text-foreground text-sm font-semibold">Export:</span>
+              <span className="text-muted-foreground text-sm">
+                {trips.length} {trips.length === 1 ? "result" : "results"}
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                onClick={handleExportPDF}
+                disabled={trips.length === 0}
+                variant="outline"
+                size="sm"
+                className="border-primary text-primary hover:bg-primary/10"
+              >
+                <FileText className="mr-2 h-4 w-4" />
+                PDF
+              </Button>
+              <Button
+                onClick={handleExportCSV}
+                disabled={trips.length === 0}
+                variant="outline"
+                size="sm"
+                className="border-primary text-primary hover:bg-primary/10"
+              >
+                <Download className="mr-2 h-4 w-4" />
+                CSV
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
 

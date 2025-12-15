@@ -277,15 +277,15 @@ export function TicketCard({
               </div>
             </div>
 
-            {/* Right Section: 3-Button Layout (33% each) */}
-            <div className="flex w-full shrink-0 gap-2 sm:w-auto sm:flex-1">
+            {/* Right Section: 3-Button Layout */}
+            <div className="flex w-full shrink-0 flex-col gap-2 sm:w-auto sm:flex-row sm:min-w-0">
               {/* Navigate Button - Orange/Primary */}
               <Button
                 onClick={handleNavigate}
                 disabled={ticket.isCompleted || isGeocoding}
                 size={isUpNext ? "default" : "sm"}
                 className={cn(
-                  "bg-primary hover:bg-primary/90 flex-1 font-semibold text-white",
+                  "bg-primary hover:bg-primary/90 w-full font-semibold text-white sm:w-auto",
                   isUpNext && "text-base"
                 )}
               >
@@ -306,7 +306,7 @@ export function TicketCard({
                   size={isUpNext ? "default" : "sm"}
                   // eslint-disable-next-line custom/no-admin-hardcoded-colors
                   className={cn(
-                    "flex-1 bg-green-600 font-semibold text-white hover:bg-green-700",
+                    "w-full bg-green-600 font-semibold text-white hover:bg-green-700 sm:w-auto",
                     isUpNext && "text-base"
                   )}
                 >
@@ -320,7 +320,7 @@ export function TicketCard({
                     size={isUpNext ? "default" : "sm"}
                     // eslint-disable-next-line custom/no-admin-hardcoded-colors
                     className={cn(
-                      "flex-1 bg-red-600 font-semibold text-white hover:bg-red-700",
+                      "w-full bg-red-600 font-semibold text-white hover:bg-red-700 sm:w-auto",
                       isUpNext && "text-base"
                     )}
                   >
@@ -335,7 +335,7 @@ export function TicketCard({
                 onClick={() => setIsExpanded(!isExpanded)}
                 size={isUpNext ? "default" : "sm"}
                 className={cn(
-                  "bg-secondary hover:bg-secondary/90 flex-1 font-semibold text-white",
+                  "bg-secondary hover:bg-secondary/90 w-full font-semibold text-white sm:w-auto",
                   isUpNext && "text-base"
                 )}
               >

@@ -6,6 +6,7 @@ import { Plus, Send, Sparkles, ArrowLeft, Share2, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AdminPageTitle } from "@/components/admin/ui/AdminPageTitle";
 import { AdminCard } from "@/components/admin/ui/AdminCard";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { AdminInfoBox } from "@/components/admin/ui/AdminInfoBox";
 import { AddTicketDialog } from "@/components/admin/driver-assist/AddTicketDialog";
 import { ShareableUrlDisplay } from "@/components/admin/dispatch/ShareableUrlDisplay";
@@ -171,8 +172,20 @@ export default function DispatcherUtilityPage() {
   // === RENDER === //
 
   return (
-    <div className="w-full max-w-full space-y-6 pt-6">
-      {/* Page Header */}
+    <div className="flex flex-col gap-6">
+      {/* Mobile Header */}
+      <div className="flex items-center gap-2 md:hidden">
+        <SidebarTrigger />
+        <h1 className="text-foreground text-xl font-bold">
+          {pageState === "TICKET_COLLECTION"
+            ? t("title")
+            : pageState === "OPTIMIZATION_RESULTS"
+              ? "Route Optimization"
+              : "Share Route"}
+        </h1>
+      </div>
+
+      {/* Desktop Header */}
       <AdminPageTitle
         title={
           pageState === "TICKET_COLLECTION"
@@ -251,12 +264,12 @@ export default function DispatcherUtilityPage() {
                   </li>
                 </ol>
 
-                <div className="flex gap-3 pt-4">
+                <div className="flex flex-col gap-3 pt-4 sm:flex-row">
                   <Button
                     onClick={handleLoadDemoData}
                     size="lg"
                     variant="outline"
-                    className="border-primary text-primary hover:bg-primary/5 flex-1 border-2 font-semibold"
+                    className="border-primary text-primary hover:bg-primary/5 w-full flex-1 border-2 font-semibold sm:w-auto"
                   >
                     <Sparkles className="mr-2 h-5 w-5" />
                     {t("loadDemoData")}
@@ -264,7 +277,7 @@ export default function DispatcherUtilityPage() {
                   <Button
                     onClick={() => setIsAddDialogOpen(true)}
                     size="lg"
-                    className="bg-primary hover:bg-primary/90 flex-1 font-semibold text-white"
+                    className="bg-primary hover:bg-primary/90 w-full flex-1 font-semibold text-white sm:w-auto"
                   >
                     <Plus className="mr-2 h-5 w-5" />
                     {t("addFirstTicket")}
@@ -279,8 +292,8 @@ export default function DispatcherUtilityPage() {
 
               {/* Optimize Button */}
               <AdminCard>
-                <div className="flex items-center justify-between">
-                  <div>
+                <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+                  <div className="min-w-0">
                     <h3 className="text-foreground text-lg font-semibold">
                       {t("readyToOptimize")}
                     </h3>
@@ -292,7 +305,7 @@ export default function DispatcherUtilityPage() {
                   <Button
                     onClick={handleOptimizeRoute}
                     disabled={tickets.length < 2 || isOptimizing}
-                    className="bg-primary hover:bg-primary/90 font-semibold text-white"
+                    className="bg-primary hover:bg-primary/90 w-full shrink-0 font-semibold text-white md:w-auto"
                     size="lg"
                   >
                     {isOptimizing ? (
