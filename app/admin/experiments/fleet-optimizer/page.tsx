@@ -3,21 +3,27 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Sparkles, MapPin, Truck, Database } from "lucide-react";
+import { Sparkles, MapPin, Truck, Database, Play } from "lucide-react";
 import type { RouteStop } from "@/lib/admin/route-types";
 import type { FleetConfig, FleetSolution } from "@/lib/admin/fleet-types";
 import { optimizeFleetClarkeWright } from "@/lib/admin/fleet-optimizer/clarke-wright";
 import { createFleet } from "@/lib/admin/fleet-optimizer/vehicle-presets";
 import { getDemoScenario } from "@/lib/admin/fleet-optimizer/demo-data";
+import { DEFAULT_SIMULATION_CONFIG } from "@/lib/admin/fleet-optimizer/simulation-types";
 import { FleetConfigForm } from "@/components/admin/fleet-optimizer/FleetConfigForm";
 import { FleetMetrics } from "@/components/admin/fleet-optimizer/FleetMetrics";
 import { GraphVisualization } from "@/components/admin/fleet-optimizer/GraphVisualization";
 import { RouteDetailsTable } from "@/components/admin/fleet-optimizer/RouteDetailsTable";
+import { SimulationControls } from "@/components/admin/fleet-optimizer/SimulationControls";
+import { LiveStatusPanel } from "@/components/admin/fleet-optimizer/LiveStatusPanel";
+import { FleetSimulationMap } from "@/components/admin/fleet-optimizer/FleetSimulationMap";
 import { StopInput } from "@/components/admin/fleet-optimizer/StopInput";
 import { RouteStopsList } from "@/components/admin/routes/RouteStopsList";
 import { CSVImportButton } from "@/components/admin/routes/CSVImportButton";
 import { AdminInfoBox } from "@/components/admin/ui";
+import { useFleetSimulation } from "@/hooks/useFleetSimulation";
 
 const MAX_STOPS = 50;
 
@@ -47,6 +53,27 @@ export default function FleetOptimizerPage() {
 
   // Loading state
   const [isOptimizing, setIsOptimizing] = useState(false);
+
+  // Simulation mode state
+  const [simulationMode, setSimulationMode] = useState(false);
+
+  // Simulation hook
+  const {
+    simState,
+    isInitialized,
+    activeVehicles,
+    availableVehicles,
+    start,
+    pause,
+    setSpeed,
+    toggleTicketGeneration,
+    manualReoptimize,
+  } = useFleetSimulation({
+    solution: simulationMode ? solution : null,
+    config: DEFAULT_SIMULATION_CONFIG,
+    depot: fleetConfig.depot,
+    fleetConfig,
+  });
 
   // Can optimize if we have vehicles and at least 2 stops
   const canOptimize =
@@ -97,6 +124,23 @@ export default function FleetOptimizerPage() {
     toast({
       title: "Demo Data Loaded",
       description: `Added ${demoStops.length} sample delivery stops across Guatemala City`,
+    });
+  };
+
+  const handleLoadTestFleet = () => {
+    // Generate larger test data for simulation
+    const { generateLoadTestStops, generateLoadTestFleet } = require("@/lib/admin/fleet-optimizer/load-test-data");
+
+    const testStops = generateLoadTestStops(30); // 30 stops
+    const testFleet = generateLoadTestFleet("small", fleetConfig.depot); // 5 vehicles
+
+    setStops(testStops);
+    setFleetConfig(testFleet);
+    setSolution(null);
+
+    toast({
+      title: "Test Fleet Loaded",
+      description: `Generated 5 vehicles and 30 stops for simulation testing`,
     });
   };
 
@@ -187,6 +231,15 @@ export default function FleetOptimizerPage() {
                 <Database className="h-4 w-4 mr-2" />
                 Load Demo Data
               </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleLoadTestFleet}
+                className="font-semibold"
+              >
+                <Truck className="h-4 w-4 mr-2" />
+                Load Test Fleet
+              </Button>
               <CSVImportButton onImport={handleImportStops} />
             </div>
           </div>
@@ -236,12 +289,24 @@ export default function FleetOptimizerPage() {
         )}
 
         {/* Results */}
-        {solution && (
+        {solution && !simulationMode && (
           <div className="space-y-6">
             <div className="border-t border-border pt-6">
-              <h2 className="text-xl font-bold text-foreground mb-4">
-                Optimization Results
-              </h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-foreground">
+                  Optimization Results
+                </h2>
+                <Button
+                  onClick={() => {
+                    setSimulationMode(true);
+                    setTimeout(() => start(), 100);
+                  }}
+                  className="bg-primary text-white hover:bg-primary/90 font-semibold"
+                >
+                  <Play className="h-4 w-4 mr-2" />
+                  Start Real-Time Simulation
+                </Button>
+              </div>
             </div>
 
             {/* Metrics */}
@@ -249,6 +314,62 @@ export default function FleetOptimizerPage() {
 
             {/* Graph Visualization */}
             <GraphVisualization graph={solution.graph} height={500} />
+
+            {/* Route Details */}
+            <RouteDetailsTable solution={solution} />
+          </div>
+        )}
+
+        {/* Simulation Mode */}
+        {solution && simulationMode && simState && (
+          <div className="space-y-4">
+            <div className="border-t border-border pt-6">
+              <h2 className="text-xl font-bold text-foreground mb-4">
+                Real-Time Fleet Simulation
+              </h2>
+            </div>
+
+            {/* Controls and Metrics - Tighter spacing */}
+            <div className="space-y-4">
+              {/* Simulation Controls */}
+              <SimulationControls
+                simState={simState}
+                onStart={start}
+                onPause={pause}
+                onSpeedChange={setSpeed}
+                onToggleTicketGeneration={toggleTicketGeneration}
+                onManualReoptimize={manualReoptimize}
+              />
+
+              {/* Live Status and Metrics */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <div className="lg:col-span-2">
+                  <FleetMetrics solution={solution} />
+                </div>
+                <div className="lg:col-span-1">
+                  <LiveStatusPanel simState={simState} />
+                </div>
+              </div>
+            </div>
+
+            {/* Visual separator */}
+            <div className="border-t border-border pt-6">
+              {/* Tabs: Graph View vs Map View */}
+              <Tabs defaultValue="graph" className="w-full">
+                <TabsList className="grid w-full max-w-md grid-cols-2">
+                  <TabsTrigger value="graph">Graph View</TabsTrigger>
+                  <TabsTrigger value="map">Map View</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="graph" className="mt-4">
+                  <GraphVisualization graph={solution.graph} height={500} />
+                </TabsContent>
+
+                <TabsContent value="map" className="mt-4">
+                  <FleetSimulationMap simState={simState} depot={fleetConfig.depot} />
+                </TabsContent>
+              </Tabs>
+            </div>
 
             {/* Route Details */}
             <RouteDetailsTable solution={solution} />

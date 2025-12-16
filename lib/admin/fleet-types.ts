@@ -7,6 +7,7 @@
 
 import type { RouteStop, Coordinates } from "./route-types";
 import type { DeliveryGraph } from "./fleet-graph-types";
+import type { OSRMRouteGeometry } from "./osrm-route-client";
 
 /**
  * Vehicle type definition (template for creating vehicles)
@@ -80,6 +81,8 @@ export interface VehicleRoute {
   utilizationPercent: number;
   /** Whether this route is empty (no stops assigned) */
   isEmpty: boolean;
+  /** OSRM route geometry for map visualization (null if OSRM failed) */
+  geometry?: OSRMRouteGeometry | null;
 }
 
 /**

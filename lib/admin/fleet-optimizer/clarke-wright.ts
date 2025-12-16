@@ -28,6 +28,13 @@ import type {
 } from "../fleet-types";
 import { buildDistanceMatrixAsync } from "../route-utils";
 import { buildDeliveryGraph, updateGraphWithRoutes } from "./graph-builder";
+import { getOSRMRouteGeometry } from "../osrm-route-client";
+
+/**
+ * Maximum stops per route (industry standard for urban last-mile delivery)
+ * Prevents overloading single vehicle even if capacity allows
+ */
+const MAX_STOPS_PER_ROUTE = 15;
 
 /**
  * Optimize fleet routes using Clarke-Wright Savings Algorithm
@@ -129,7 +136,7 @@ export async function optimizeFleetClarkeWright(
     percent: 90,
   });
 
-  const solution = buildFinalSolution(
+  const solution = await buildFinalSolution(
     routes,
     fleet,
     stops,
@@ -143,6 +150,45 @@ export async function optimizeFleetClarkeWright(
   );
 
   return solution;
+}
+
+/**
+ * Fetch OSRM route geometry for a vehicle route
+ * Returns null if OSRM fails (map will fall back to straight lines)
+ */
+async function fetchRouteGeometry(
+  stops: RouteStop[],
+  depot: RouteStop,
+  returnToDepot: boolean
+): Promise<import("../osrm-route-client").OSRMRouteGeometry | null> {
+  if (stops.length === 0) return null;
+
+  try {
+    // Build full coordinate sequence: depot → stops → depot (if round trip)
+    const coordinates = [
+      depot.coordinates,
+      ...stops.map((s) => s.coordinates),
+    ];
+
+    if (returnToDepot) {
+      coordinates.push(depot.coordinates);
+    }
+
+    console.log(`[Clarke-Wright] Fetching OSRM geometry for ${coordinates.length} waypoints...`);
+
+    const geometry = await getOSRMRouteGeometry(coordinates);
+
+    if (geometry) {
+      console.log(`[Clarke-Wright] ✅ Got geometry: ${geometry.coordinates.length} road coordinates`);
+    } else {
+      console.warn(`[Clarke-Wright] ⚠️ OSRM geometry fetch failed, will use straight lines`);
+    }
+
+    return geometry;
+  } catch (error) {
+    console.warn(`[Clarke-Wright] ⚠️ Error fetching OSRM geometry:`, error);
+    return null;
+  }
 }
 
 /**
@@ -260,6 +306,15 @@ function tryMergeRoutes(
     return false; // Exceeds capacity
   }
 
+  // Check max stops constraint (industry standard for urban delivery)
+  const combinedStops = routeI.stops.length + routeJ.stops.length;
+  if (combinedStops > MAX_STOPS_PER_ROUTE) {
+    console.log(
+      `[Clarke-Wright] Cannot merge: combined ${combinedStops} stops exceeds max ${MAX_STOPS_PER_ROUTE}`
+    );
+    return false; // Too many stops for realistic route
+  }
+
   // Merge routes
   mergeRoutes(routeI, routeJ, saving);
   return true;
@@ -315,14 +370,14 @@ function mergeRoutes(
 /**
  * Build final FleetSolution from internal routes
  */
-function buildFinalSolution(
+async function buildFinalSolution(
   internalRoutes: InternalRoute[],
   fleet: FleetConfig,
   originalStops: RouteStop[],
   distanceMatrix: number[][],
   durationMatrix: number[][],
   optimizationTime: number
-): FleetSolution {
+): Promise<FleetSolution> {
   const vehicleRoutes: VehicleRoute[] = [];
 
   // Create map of stop ID to matrix index (depot is 0, stops start at 1)
@@ -360,6 +415,7 @@ function buildFinalSolution(
         vehicleCapacity: vehicle.packageCapacity,
         utilizationPercent: 0,
         isEmpty: true,
+        geometry: null, // No geometry for empty route
       });
       continue;
     }
@@ -399,6 +455,9 @@ function buildFinalSolution(
       }
     }
 
+    // Fetch OSRM route geometry for map visualization
+    const geometry = await fetchRouteGeometry(allStops, fleet.depot, fleet.returnToDepot);
+
     vehicleRoutes.push({
       vehicleId: vehicle.id,
       vehicleLabel: vehicle.label,
@@ -410,6 +469,7 @@ function buildFinalSolution(
       vehicleCapacity: vehicle.packageCapacity,
       utilizationPercent: (totalPackages / vehicle.packageCapacity) * 100,
       isEmpty: false,
+      geometry, // Add OSRM geometry
     });
   }
 

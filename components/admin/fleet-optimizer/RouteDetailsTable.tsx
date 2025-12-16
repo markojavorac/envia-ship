@@ -6,7 +6,7 @@
  * Displays detailed breakdown of each vehicle's route with expandable stops.
  */
 
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -88,8 +88,8 @@ export function RouteDetailsTable({ solution }: RouteDetailsTableProps) {
               const isExpanded = expandedRoutes.has(route.vehicleId);
 
               return (
-                <>
-                  <TableRow key={route.vehicleId} className="cursor-pointer hover:bg-muted/50" onClick={() => toggleRoute(route.vehicleId)}>
+                <Fragment key={route.vehicleId}>
+                  <TableRow className="cursor-pointer hover:bg-muted/50" onClick={() => toggleRoute(route.vehicleId)}>
                     <TableCell>
                       <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
                         {isExpanded ? (
@@ -166,7 +166,7 @@ export function RouteDetailsTable({ solution }: RouteDetailsTableProps) {
                       </TableCell>
                     </TableRow>
                   )}
-                </>
+                </Fragment>
               );
             })}
           </TableBody>

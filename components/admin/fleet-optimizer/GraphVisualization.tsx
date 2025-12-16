@@ -25,61 +25,81 @@ export function GraphVisualization({ graph, height = 600 }: GraphVisualizationPr
   const containerRef = useRef<HTMLDivElement>(null);
   const cyRef = useRef<Core | null>(null);
   const [selectedNode, setSelectedNode] = useState<string | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Client-side only mounting
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    // Prevent SSR and double initialization
+    if (!isMounted || !containerRef.current || cyRef.current) return;
 
-    // Convert graph to Cytoscape elements
-    const elements: ElementDefinition[] = graphToCytoscapeElements(graph).map((el) => ({
-      data: el.data,
-      classes: el.classes,
-    }));
+    let cy: Core | null = null;
 
-    // Initialize Cytoscape
-    const cy = cytoscape({
-      container: containerRef.current,
-      elements,
-      style: getCytoscapeStyles(),
-      layout: {
-        name: "cose", // Force-directed layout
-        animate: true,
-        animationDuration: 500,
-        nodeRepulsion: 8000,
-        idealEdgeLength: 100,
-        edgeElasticity: 100,
-        nestingFactor: 1.2,
-        gravity: 1,
-        numIter: 1000,
-        initialTemp: 200,
-        coolingFactor: 0.95,
-        minTemp: 1.0,
-      },
-      minZoom: 0.5,
-      maxZoom: 3,
-      wheelSensitivity: 0.2,
-    });
+    try {
+      // Convert graph to Cytoscape elements
+      const elements: ElementDefinition[] = graphToCytoscapeElements(graph).map((el) => ({
+        data: el.data,
+        classes: el.classes,
+      }));
 
-    // Add click handlers
-    cy.on("tap", "node", (evt) => {
-      const node = evt.target;
-      setSelectedNode(node.id());
-      console.log("Node clicked:", node.data());
-    });
+      // Initialize Cytoscape
+      cy = cytoscape({
+        container: containerRef.current,
+        elements,
+        style: getCytoscapeStyles(),
+        layout: {
+          name: "cose", // Force-directed layout
+          animate: true,
+          animationDuration: 500,
+          nodeRepulsion: 8000,
+          idealEdgeLength: 100,
+          edgeElasticity: 100,
+          nestingFactor: 1.2,
+          gravity: 1,
+          numIter: 1000,
+          initialTemp: 200,
+          coolingFactor: 0.95,
+          minTemp: 1.0,
+        },
+        minZoom: 0.5,
+        maxZoom: 3,
+        wheelSensitivity: 0.2,
+      });
 
-    cy.on("tap", "edge", (evt) => {
-      const edge = evt.target;
-      console.log("Edge clicked:", edge.data());
-    });
+      // Add click handlers
+      cy.on("tap", "node", (evt) => {
+        const node = evt.target;
+        setSelectedNode(node.id());
+        console.log("Node clicked:", node.data());
+      });
 
-    // Fit view to content
-    cy.fit(undefined, 50);
+      cy.on("tap", "edge", (evt) => {
+        const edge = evt.target;
+        console.log("Edge clicked:", edge.data());
+      });
 
-    cyRef.current = cy;
+      // Fit view to content
+      cy.fit(undefined, 50);
+
+      cyRef.current = cy;
+    } catch (error) {
+      console.error("Cytoscape initialization error:", error);
+    }
 
     return () => {
-      cy.destroy();
+      if (cy) {
+        try {
+          cy.destroy();
+        } catch (e) {
+          console.warn("Cytoscape cleanup error:", e);
+        }
+      }
+      cyRef.current = null;
     };
-  }, [graph]);
+  }, [graph, isMounted]);
 
   const handleZoomIn = () => {
     cyRef.current?.zoom(cyRef.current.zoom() * 1.2);
@@ -94,6 +114,26 @@ export function GraphVisualization({ graph, height = 600 }: GraphVisualizationPr
   const handleResetView = () => {
     cyRef.current?.fit(undefined, 50);
   };
+
+  if (!isMounted) {
+    return (
+      <Card className="bg-card border-border">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg font-bold text-foreground">
+            Network Graph
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <div
+            style={{ width: "100%", height: `${height}px` }}
+            className="rounded-lg border border-border bg-background flex items-center justify-center"
+          >
+            <p className="text-muted-foreground">Loading visualization...</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="bg-card border-border">
