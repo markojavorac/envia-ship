@@ -51,7 +51,7 @@ export default function DriverTrackingMap() {
   const markersRef = useRef<Map<string, maplibregl.Marker>>(new Map());
   const stopMarkersRef = useRef<maplibregl.Marker[]>([]);
   const [mapLoaded, setMapLoaded] = useState(false);
-  const [currentStyle, setCurrentStyle] = useState("voyager");
+  const [currentStyle, setCurrentStyle] = useState("dark-matter");
 
   const { drivers, allDrivers, selectedDriver, setSelectedDriver, filters, setFilters, stats } =
     useDriverTracking();

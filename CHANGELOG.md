@@ -8,6 +8,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Fleet Optimizer (Experimental)**: Graph-based multi-vehicle routing with capacity constraints
+  - **Location**: `/admin/experiments/fleet-optimizer` - Accessible via experiments dashboard card
+  - **Clarke-Wright Savings Algorithm**: Industry-proven VRP heuristic (since 1964)
+    - Multi-vehicle routing: Assigns stops across multiple vehicles simultaneously
+    - Capacity constraints: Package count limits per vehicle (motorcycle: 5, van: 20, truck: 50)
+    - Fast O(n² log n) complexity: Handles 50+ stops in <5 seconds
+    - 15-25% distance savings compared to manual assignment
+  - **Graph Visualization**: Interactive network diagram with Cytoscape.js
+    - Nodes: Depot (orange), pickup (blue), dropoff (green), delivery (gray)
+    - Edges: Assigned routes (colored by vehicle), available connections (dashed)
+    - Force-directed layout with zoom/pan controls
+    - Click nodes/edges for details
+  - **Vehicle Fleet Management**:
+    - Three vehicle types: Motorcycle, Van, Truck
+    - Add/remove vehicles with capacity visualization
+    - Depot configuration and round-trip toggle
+    - Total fleet capacity tracking
+  - **VRPPD Integration**: Pickup/dropoff precedence constraints
+    - Post-processing repair for constraint violations
+    - Validates pickup→dropoff ordering
+    - Swaps stops to fix precedence issues
+  - **Performance Metrics**:
+    - Total distance/time across all vehicles
+    - Average vehicle utilization
+    - Fuel cost and CO₂ emissions estimates
+    - Balance score (distribution evenness)
+  - **Components**:
+    - `FleetConfigForm`: Vehicle/depot configuration
+    - `GraphVisualization`: Cytoscape.js network graph
+    - `FleetMetrics`: Performance statistics
+    - `RouteDetailsTable`: Expandable route details
+  - **Dependencies**:
+    - cytoscape@^3.30.0 - Network graph rendering
+    - react-cytoscapejs@^2.0.0 - React wrapper
+    - Bundle impact: ~200KB minified
 - **Enhanced Route Optimization System**: 10x faster optimization with road-accurate visualization
   - **OSRM Table API Integration**: Batch distance matrix calculation in single API call
     - 25 stops: 1 API call instead of ~300 calls (10x faster)

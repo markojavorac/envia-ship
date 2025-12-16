@@ -11,7 +11,7 @@ import { AddTicketDialog } from "@/components/admin/driver-assist/AddTicketDialo
 import { TicketCard } from "@/components/admin/driver-assist/TicketCard";
 import { TicketConfirmationDialog } from "@/components/admin/driver-assist/TicketConfirmationDialog";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import type { DeliveryTicket } from "@/lib/admin/driver-assist-types";
+import type { DeliveryTicket, Coordinates } from "@/lib/admin/driver-assist-types";
 import {
   loadTickets,
   addTicket,
@@ -264,6 +264,8 @@ export default function DriverAssistPage() {
     ticketNumber?: string;
     originAddress: string;
     destinationAddress: string;
+    originCoordinates?: Coordinates;
+    destinationCoordinates?: Coordinates;
     recipientName?: string;
     recipientPhone?: string;
     notes?: string;
@@ -274,6 +276,8 @@ export default function DriverAssistPage() {
       ticketNumber: ticketData.ticketNumber,
       originAddress: ticketData.originAddress,
       destinationAddress: ticketData.destinationAddress,
+      originCoordinates: ticketData.originCoordinates,
+      destinationCoordinates: ticketData.destinationCoordinates,
       recipientName: ticketData.recipientName,
       recipientPhone: ticketData.recipientPhone,
       notes: ticketData.notes,

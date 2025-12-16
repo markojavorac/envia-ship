@@ -45,6 +45,10 @@ export interface RouteStop {
   };
   /** Service time at stop in minutes (default: 5) */
   serviceTime?: number;
+
+  // ========== Fleet Optimization Fields ==========
+  /** Number of packages at this stop (default: 1, for fleet capacity constraints) */
+  packageCount?: number;
 }
 
 /**

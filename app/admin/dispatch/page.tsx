@@ -14,7 +14,7 @@ import { TicketList } from "@/components/admin/dispatch/TicketList";
 import { RouteOptimizationResults } from "@/components/admin/dispatch/RouteOptimizationResults";
 import { DriverSelect } from "@/components/admin/dispatch/DriverSelect";
 import { AdminCardContent } from "@/components/admin/ui/AdminCard";
-import type { DeliveryTicket } from "@/lib/admin/driver-assist-types";
+import type { DeliveryTicket, Coordinates } from "@/lib/admin/driver-assist-types";
 import type { OptimizedRoute, RouteConfig, RoutingMode } from "@/lib/admin/route-types";
 import { OptimizationMode } from "@/lib/admin/route-types";
 import { optimizeRouteNearestNeighbor } from "@/lib/admin/route-utils";
@@ -51,6 +51,8 @@ export default function DispatcherUtilityPage() {
     ticketNumber?: string;
     originAddress: string;
     destinationAddress: string;
+    originCoordinates?: Coordinates;
+    destinationCoordinates?: Coordinates;
     recipientName?: string;
     recipientPhone?: string;
     notes?: string;
@@ -61,6 +63,8 @@ export default function DispatcherUtilityPage() {
       ticketNumber: ticketData.ticketNumber,
       originAddress: ticketData.originAddress,
       destinationAddress: ticketData.destinationAddress,
+      originCoordinates: ticketData.originCoordinates,
+      destinationCoordinates: ticketData.destinationCoordinates,
       recipientName: ticketData.recipientName,
       recipientPhone: ticketData.recipientPhone,
       notes: ticketData.notes,

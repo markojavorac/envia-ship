@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Calculator, MapPin, ArrowRight, Zap, Map } from "lucide-react";
+import { Calculator, MapPin, ArrowRight, Zap, Map, Truck } from "lucide-react";
 import { AdminPageTitle, AdminCard, AdminCardContent } from "@/components/admin/ui";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
@@ -42,6 +42,15 @@ const EXPERIMENTS = [
       "Visualize delivery zones with order volume, revenue, and performance metrics. Polygon-based heatmap with time-based analytics for strategic planning.",
     icon: Map,
     href: "/admin/experiments/zone-heatmap",
+    status: "active" as const,
+  },
+  {
+    id: "fleet-optimizer",
+    title: "Fleet Optimizer",
+    description:
+      "Graph-based multi-vehicle routing with capacity constraints. Clarke-Wright algorithm assigns stops across multiple vehicles with interactive network visualization.",
+    icon: Truck,
+    href: "/admin/experiments/fleet-optimizer",
     status: "active" as const,
   },
 ];
