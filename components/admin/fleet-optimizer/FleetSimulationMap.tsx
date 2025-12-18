@@ -21,8 +21,7 @@ import {
 } from "@/lib/admin/fleet-optimizer/fleet-simulation";
 
 // CartoDB Dark Matter style (free, no API key)
-const CARTO_DARK_MATTER =
-  "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
+const CARTO_DARK_MATTER = "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
 
 interface FleetSimulationMapProps {
   simState: FleetSimulationState | null;
@@ -33,6 +32,7 @@ export function FleetSimulationMap({ simState, depot }: FleetSimulationMapProps)
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const vehicleMarkersRef = useRef<Map<string, maplibregl.Marker>>(new Map());
+  const renderedRoutesRef = useRef<Map<string, string>>(new Map()); // routeKey -> vehicleId
   const [isMounted, setIsMounted] = useState(false);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
 
@@ -72,9 +72,7 @@ export function FleetSimulationMap({ simState, depot }: FleetSimulationMapProps)
 
       new maplibregl.Marker({ element: depotEl })
         .setLngLat([depot.coordinates.lng, depot.coordinates.lat])
-        .setPopup(
-          new maplibregl.Popup({ offset: 25 }).setText("Depot: " + depot.address)
-        )
+        .setPopup(new maplibregl.Popup({ offset: 25 }).setText("Depot: " + depot.address))
         .addTo(map);
     });
 
@@ -133,86 +131,169 @@ export function FleetSimulationMap({ simState, depot }: FleetSimulationMapProps)
     });
   }, [simState, isMapLoaded]);
 
-  // Update route polylines
+  // Helper: Generate stable route key
+  const getRouteKey = (vehicle: SimulatedVehicle): string | null => {
+    if (!vehicle.assignedRoute || vehicle.assignedRoute.stops.length === 0) {
+      return null;
+    }
+    // Create key from vehicle ID + route stop IDs
+    const stopIds = vehicle.assignedRoute.stops.map((s) => s.id).join(",");
+    return `${vehicle.id}-${stopIds}`;
+  };
+
+  // Helper: Add route layer to map
+  const addRouteLayer = (map: maplibregl.Map, vehicle: SimulatedVehicle, layerId: string) => {
+    if (!vehicle.assignedRoute) return;
+
+    // Determine coordinates: use OSRM geometry if available, otherwise straight lines
+    let coordinates: [number, number][];
+
+    if (vehicle.assignedRoute.geometry && vehicle.assignedRoute.geometry.coordinates.length > 0) {
+      // Use actual road geometry from OSRM
+      coordinates = vehicle.assignedRoute.geometry.coordinates;
+      console.log(
+        `[Map] Using OSRM geometry for ${vehicle.label}: ${coordinates.length} road coordinates`
+      );
+    } else {
+      // Fallback to straight lines between stops
+      coordinates = vehicle.assignedRoute.stops.map((stop) => [
+        stop.coordinates.lng,
+        stop.coordinates.lat,
+      ]);
+      console.warn(
+        `[Map] No geometry for ${vehicle.label}, using straight lines (${coordinates.length} stops)`
+      );
+    }
+
+    map.addSource(layerId, {
+      type: "geojson",
+      data: {
+        type: "Feature",
+        properties: {},
+        geometry: {
+          type: "LineString",
+          coordinates,
+        },
+      },
+    });
+
+    map.addLayer({
+      id: layerId,
+      type: "line",
+      source: layerId,
+      paint: {
+        "line-color": vehicle.color,
+        "line-width": 3,
+        "line-opacity": 0.7,
+        "line-dasharray": [5, 3],
+      },
+    });
+  };
+
+  // Helper: Remove route layer from map
+  const removeRouteLayer = (map: maplibregl.Map, layerId: string) => {
+    if (map.getLayer(layerId)) {
+      map.removeLayer(layerId);
+    }
+    if (map.getSource(layerId)) {
+      map.removeSource(layerId);
+    }
+  };
+
+  // Update route polylines (smart updates - only when routes change)
   useEffect(() => {
     if (!mapRef.current || !simState || !isMapLoaded) return;
 
     const map = mapRef.current;
     const activeVehicles = getActiveVehicles(simState);
 
-    // Remove existing route layers
-    for (let i = 0; i < 20; i++) {
-      const layerId = `route-${i}`;
-      if (map.getLayer(layerId)) {
-        map.removeLayer(layerId);
+    // Build current route keys
+    const currentRouteKeys = new Map<string, SimulatedVehicle>();
+    activeVehicles.forEach((vehicle) => {
+      const key = getRouteKey(vehicle);
+      if (key) {
+        currentRouteKeys.set(key, vehicle);
       }
-      if (map.getSource(layerId)) {
-        map.removeSource(layerId);
+    });
+
+    // Remove routes that no longer exist
+    const keysToRemove: string[] = [];
+    renderedRoutesRef.current.forEach((vehicleId, routeKey) => {
+      if (!currentRouteKeys.has(routeKey)) {
+        const layerId = `route-${vehicleId}`;
+        removeRouteLayer(map, layerId);
+        keysToRemove.push(routeKey);
+      }
+    });
+    keysToRemove.forEach((key) => renderedRoutesRef.current.delete(key));
+
+    // Add new routes
+    let boundsChanged = false;
+    currentRouteKeys.forEach((vehicle, routeKey) => {
+      if (!renderedRoutesRef.current.has(routeKey)) {
+        const layerId = `route-${vehicle.id}`;
+        addRouteLayer(map, vehicle, layerId);
+        renderedRoutesRef.current.set(routeKey, vehicle.id);
+        boundsChanged = true;
+      }
+    });
+
+    // Auto-fit bounds when routes are first added
+    if (boundsChanged && activeVehicles.length > 0) {
+      const allCoordinates: [number, number][] = [];
+
+      // Collect all route coordinates
+      activeVehicles.forEach((vehicle) => {
+        if (vehicle.assignedRoute?.geometry?.coordinates) {
+          allCoordinates.push(...vehicle.assignedRoute.geometry.coordinates);
+        } else if (vehicle.assignedRoute?.stops) {
+          vehicle.assignedRoute.stops.forEach((stop) => {
+            allCoordinates.push([stop.coordinates.lng, stop.coordinates.lat]);
+          });
+        }
+      });
+
+      // Add depot
+      allCoordinates.push([depot.coordinates.lng, depot.coordinates.lat]);
+
+      if (allCoordinates.length > 0) {
+        // Calculate bounds
+        const lngs = allCoordinates.map((c) => c[0]);
+        const lats = allCoordinates.map((c) => c[1]);
+        const bounds: [[number, number], [number, number]] = [
+          [Math.min(...lngs), Math.min(...lats)],
+          [Math.max(...lngs), Math.max(...lats)],
+        ];
+
+        // Fit map to bounds with padding
+        map.fitBounds(bounds, {
+          padding: { top: 50, bottom: 50, left: 50, right: 50 },
+          maxZoom: 14,
+          duration: 1000,
+        });
+
+        console.log("[Map] Auto-fitted bounds to show all routes");
       }
     }
-
-    // Add route layers for active vehicles
-    activeVehicles.forEach((vehicle, index) => {
-      if (!vehicle.assignedRoute) return;
-
-      // Determine coordinates: use OSRM geometry if available, otherwise straight lines
-      let coordinates: [number, number][];
-
-      if (vehicle.assignedRoute.geometry && vehicle.assignedRoute.geometry.coordinates.length > 0) {
-        // Use actual road geometry from OSRM
-        coordinates = vehicle.assignedRoute.geometry.coordinates;
-        console.log(
-          `[Map] Using OSRM geometry for ${vehicle.label}: ${coordinates.length} road coordinates`
-        );
-      } else {
-        // Fallback to straight lines between stops
-        coordinates = vehicle.assignedRoute.stops.map((stop) => [
-          stop.coordinates.lng,
-          stop.coordinates.lat,
-        ]);
-        console.warn(
-          `[Map] No geometry for ${vehicle.label}, using straight lines (${coordinates.length} stops)`
-        );
-      }
-
-      const sourceId = `route-${index}`;
-
-      map.addSource(sourceId, {
-        type: "geojson",
-        data: {
-          type: "Feature",
-          properties: {},
-          geometry: {
-            type: "LineString",
-            coordinates,
-          },
-        },
-      });
-
-      map.addLayer({
-        id: sourceId,
-        type: "line",
-        source: sourceId,
-        paint: {
-          "line-color": vehicle.color,
-          "line-width": 3, // Increased from 2
-          "line-opacity": 0.7, // Increased from 0.4 for better visibility
-          "line-dasharray": [5, 3], // Increased from [2, 2] for clearer dashes
-        },
-      });
-    });
-  }, [simState, isMapLoaded]);
+  }, [
+    simState?.vehicles
+      .map((v) => getRouteKey(v))
+      .filter(Boolean)
+      .join("|"),
+    isMapLoaded,
+    depot,
+  ]);
 
   if (!isMounted) {
     return (
-      <div className="h-[600px] flex items-center justify-center bg-background border border-border rounded-lg">
+      <div className="bg-background border-border flex h-[600px] items-center justify-center rounded-lg border">
         <p className="text-muted-foreground">Loading map...</p>
       </div>
     );
   }
 
   return (
-    <div className="relative h-[600px] bg-muted border border-border rounded-lg overflow-hidden">
+    <div className="bg-muted border-border relative h-[600px] overflow-hidden rounded-lg border">
       <div ref={mapContainerRef} className="absolute inset-0 h-full w-full" />
     </div>
   );
@@ -227,11 +308,14 @@ function createVehicleMarker(vehicle: SimulatedVehicle): HTMLDivElement {
 
   const size = vehicle.status === "idle" || vehicle.status === "completed" ? "24px" : "28px";
 
+  // Different border color for waiting status
+  const borderColor = vehicle.status === "waiting" ? "#fbbf24" : "white"; // Yellow border for waiting
+
   el.style.cssText = `
     width: ${size};
     height: ${size};
     background-color: ${vehicle.color};
-    border: 2px solid white;
+    border: 2px solid ${borderColor};
     border-radius: 50%;
     box-shadow: 0 2px 4px rgba(0,0,0,0.3);
     cursor: pointer;
@@ -241,6 +325,12 @@ function createVehicleMarker(vehicle: SimulatedVehicle): HTMLDivElement {
   // Add pulse animation for active vehicles
   if (vehicle.status === "en_route" || vehicle.status === "servicing") {
     el.style.animation = "pulse 2s infinite";
+  }
+
+  // Add different animation for waiting
+  if (vehicle.status === "waiting") {
+    el.style.animation = "pulse 3s infinite"; // Slower pulse
+    el.style.opacity = "0.8";
   }
 
   return el;

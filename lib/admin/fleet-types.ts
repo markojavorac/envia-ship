@@ -83,6 +83,28 @@ export interface VehicleRoute {
   isEmpty: boolean;
   /** OSRM route geometry for map visualization (null if OSRM failed) */
   geometry?: OSRMRouteGeometry | null;
+  /** Time window violations (if any) */
+  timeWindowViolations?: TimeWindowViolation[];
+}
+
+/**
+ * Time window violation record
+ */
+export interface TimeWindowViolation {
+  /** Stop ID where violation occurred */
+  stopId: string;
+  /** Actual arrival time */
+  arrivalTime: Date;
+  /** Window start time */
+  windowStart: Date;
+  /** Window end time */
+  windowEnd: Date;
+  /** Type of violation */
+  violationType: "early" | "late";
+  /** Severity of violation */
+  severity: "hard" | "soft";
+  /** Delay in minutes (negative if early) */
+  delayMinutes: number;
 }
 
 /**
@@ -118,12 +140,7 @@ export interface FleetSolution {
  */
 export interface FleetOptimizationProgress {
   /** Current optimization phase */
-  phase:
-    | "distance_matrix"
-    | "calculating_savings"
-    | "merging_routes"
-    | "validating"
-    | "finalizing";
+  phase: "distance_matrix" | "calculating_savings" | "merging_routes" | "validating" | "finalizing";
   /** Current step number */
   currentStep: number;
   /** Total number of steps */

@@ -112,6 +112,77 @@ Modern shipping calculator and marketplace platform for ENVÍA de Guatemala.
   - Position updates: Linear interpolation between route waypoints
 - Access via `/admin/experiments/driver-tracking`
 
+### Fleet Optimizer Simulation (Experimental - Admin)
+- **Multi-Vehicle Route Optimization**: Clarke-Wright savings algorithm for capacity-constrained VRP
+  - Automatic vehicle assignment based on package capacity
+  - Route merging optimization to minimize total fleet distance
+  - Support for multiple vehicle types (motorcycle, van, truck)
+  - Depot-based routing with return-to-depot option
+- **Real-Time Fleet Simulation**: Live execution of optimized routes with realistic vehicle movement
+  - **Road-Following Movement**: Vehicles follow actual OSRM geometry using Turf.js geospatial library
+    - Per-segment geometry slicing with `turf.lineSlice()`
+    - Stop snapping to route geometry with `turf.nearestPointOnLine()`
+    - Smooth interpolation along road coordinates (no straight-line movement)
+  - **Smart Map Rendering**: Optimized layer management eliminates visual flashing
+    - Stable route keys prevent unnecessary re-renders
+    - Routes only update when assignments change (not every position update)
+    - Vehicle markers update smoothly at 1-second intervals
+  - **Auto-Fit Map Bounds**: Automatic zoom to show all active vehicles and routes on simulation start
+- **Time Window Constraints**: Support for delivery time windows with validation
+  - Hard time windows: Must be met (reject route if violated)
+  - Soft time windows: Preferred with penalty function
+  - WAITING vehicle status: Arrived early, waiting for time window to open
+  - Real-time violation tracking and display
+- **Variable Service Times**: Per-stop service duration configuration
+  - Stop-specific service times (residential: 3min, commercial: 5min, warehouse: 15min)
+  - Service type presets for common delivery types
+  - Automatic ETA calculations with variable service durations
+- **Dynamic Reoptimization**: Queue-based ticket insertion with automatic reoptimization
+  - New tickets added to queue during simulation
+  - Configurable reoptimization threshold (default: 5 tickets)
+  - Optional auto-generation with realistic patterns
+  - Seamless route updates for in-progress vehicles
+- **Interactive Map Visualization**: MapLibre GL with real-time updates
+  - Color-coded vehicle routes with utilization badges
+  - Vehicle markers showing current status (idle, en route, servicing, waiting, returning, completed)
+  - Route polylines following actual OSRM road geometry
+  - Numbered stop markers with completion tracking
+  - Depot marker with distinct styling
+- **Comprehensive Metrics Dashboard**: Real-time simulation state monitoring
+  - **Fleet Status**: Active, waiting, idle, and completed vehicle counts
+  - **Delivery Progress**: Stops completed/remaining with progress bar
+  - **Queue Status**: Queued tickets with threshold warnings
+  - **Configuration Display**: Segment duration, service duration, reoptimization threshold
+  - **Live Statistics**: Total distance, time, packages, utilization percentages
+- **Graph-Based Analysis**: Visual route network and metrics
+  - Interactive graph visualization with vehicle routes
+  - Detailed route breakdown table with expandable stops
+  - Fleet utilization charts and statistics
+  - Before/after comparison for reoptimization events
+- **Simulation Controls**: Full playback control and speed adjustment
+  - Play/pause simulation
+  - Speed control (1x, 2x, 5x, 10x)
+  - Manual ticket generation
+  - Reset simulation
+  - Enable/disable auto-generation
+- **Technical Stack**:
+  - **Turf.js**: Geospatial operations for road-following movement (@turf/turf@^7.2.0)
+  - **MapLibre GL**: Hardware-accelerated map rendering
+  - **OSRM Integration**: Actual road distances and route geometry
+  - **Clarke-Wright Algorithm**: Multi-vehicle VRP optimization
+  - **State Management**: Custom useFleetSimulation hook with React state
+  - **Position Updates**: Geometry-based interpolation at 1-second intervals
+- **Test Data**: Guatemala City realistic scenarios
+  - Depot: Zona 10 office location
+  - 3 vehicles: Motorcycle (5 packages), Van (10 packages), Truck (20 packages)
+  - 15+ stops distributed across Guatemala City zones
+  - Actual Guatemala City coordinates and addresses
+- **Known Limitations**:
+  - Fleet utilization: Currently assigns most stops to single vehicle instead of balanced distribution
+  - Route balancing: Clarke-Wright savings algorithm may create uneven vehicle workloads
+  - Future work: Implement route balancing heuristics and load distribution constraints
+- Access via `/admin/experiments/fleet-optimizer`
+
 ### Reports Dashboard (Admin)
 - **Trip History Table**: Complete delivery analytics with advanced filtering
   - Sortable columns: driver, completed date, duration

@@ -13,10 +13,7 @@
 
 import type { RouteStop } from "../route-types";
 import type { VehicleRoute, FleetSolution } from "../fleet-types";
-import {
-  validateVRPPDRoute,
-  type ViolationReport,
-} from "../vrppd-constraints";
+import { validateVRPPDRoute, type ViolationReport } from "../vrppd-constraints";
 
 /**
  * Repair VRPPD violations in a fleet solution
@@ -49,9 +46,7 @@ export function repairVRPPDViolations(solution: FleetSolution): {
     }
 
     // Try to repair violations
-    const { repairedStops, success, remainingViolations } = repairRoute(
-      route.stops
-    );
+    const { repairedStops, success, remainingViolations } = repairRoute(route.stops);
 
     if (success) {
       // Repair successful

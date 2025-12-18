@@ -19,10 +19,7 @@ import { Badge } from "@/components/ui/badge";
 import { Plus, Trash2, Warehouse } from "lucide-react";
 import type { Vehicle, FleetConfig } from "@/lib/admin/fleet-types";
 import type { RouteStop } from "@/lib/admin/route-types";
-import {
-  VEHICLE_TYPES,
-  createVehicle,
-} from "@/lib/admin/fleet-optimizer/vehicle-presets";
+import { VEHICLE_TYPES, createVehicle } from "@/lib/admin/fleet-optimizer/vehicle-presets";
 
 interface FleetConfigFormProps {
   config: FleetConfig | null;
@@ -83,24 +80,23 @@ export function FleetConfigForm({ config, onChange }: FleetConfigFormProps) {
     }
   };
 
-  const totalCapacity =
-    config?.vehicles.reduce((sum, v) => sum + v.packageCapacity, 0) ?? 0;
+  const totalCapacity = config?.vehicles.reduce((sum, v) => sum + v.packageCapacity, 0) ?? 0;
 
   return (
     <Card className="bg-card border-border">
       <CardHeader className="pb-3">
-        <CardTitle className="text-lg font-bold text-foreground flex items-center gap-2">
-          <Warehouse className="h-5 w-5 text-primary" />
+        <CardTitle className="text-foreground flex items-center gap-2 text-lg font-bold">
+          <Warehouse className="text-primary h-5 w-5" />
           Fleet Configuration
         </CardTitle>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           Configure your delivery fleet and depot location
         </p>
       </CardHeader>
-      <CardContent className="pt-0 space-y-6">
+      <CardContent className="space-y-6 pt-0">
         {/* Depot Configuration */}
         <div className="space-y-2">
-          <Label htmlFor="depot" className="font-semibold text-foreground">
+          <Label htmlFor="depot" className="text-foreground font-semibold">
             Depot Location
           </Label>
           <div className="flex gap-2">
@@ -120,10 +116,10 @@ export function FleetConfigForm({ config, onChange }: FleetConfigFormProps) {
         {/* Round Trip Toggle */}
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
-            <Label htmlFor="round-trip" className="font-semibold text-foreground">
+            <Label htmlFor="round-trip" className="text-foreground font-semibold">
               Return to Depot
             </Label>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Vehicles return to depot after completing routes
             </p>
           </div>
@@ -136,7 +132,7 @@ export function FleetConfigForm({ config, onChange }: FleetConfigFormProps) {
 
         {/* Vehicle Presets */}
         <div className="space-y-3">
-          <Label className="font-semibold text-foreground">Add Vehicles</Label>
+          <Label className="text-foreground font-semibold">Add Vehicles</Label>
           <div className="grid grid-cols-3 gap-2">
             {VEHICLE_TYPES.map((type) => (
               <Button
@@ -147,7 +143,7 @@ export function FleetConfigForm({ config, onChange }: FleetConfigFormProps) {
                 className="font-semibold"
                 style={{ borderColor: type.color }}
               >
-                <Plus className="h-4 w-4 mr-1" />
+                <Plus className="mr-1 h-4 w-4" />
                 {type.name}
               </Button>
             ))}
@@ -158,7 +154,7 @@ export function FleetConfigForm({ config, onChange }: FleetConfigFormProps) {
         {config && config.vehicles.length > 0 && (
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <Label className="font-semibold text-foreground">Current Fleet</Label>
+              <Label className="text-foreground font-semibold">Current Fleet</Label>
               <Badge variant="secondary" className="font-semibold">
                 {totalCapacity} pkg total
               </Badge>
@@ -167,15 +163,17 @@ export function FleetConfigForm({ config, onChange }: FleetConfigFormProps) {
               {config.vehicles.map((vehicle) => (
                 <div
                   key={vehicle.id}
-                  className="flex items-center justify-between p-2.5 rounded-lg border border-border bg-background hover:bg-muted/50 transition-colors"
+                  className="border-border bg-background hover:bg-muted/50 flex items-center justify-between rounded-lg border p-2.5 transition-colors"
                 >
-                  <div className="flex items-center gap-2 min-w-0">
+                  <div className="flex min-w-0 items-center gap-2">
                     <div
-                      className="w-3 h-3 rounded-full flex-shrink-0"
+                      className="h-3 w-3 flex-shrink-0 rounded-full"
                       style={{ backgroundColor: vehicle.color }}
                     />
-                    <span className="font-medium text-foreground text-sm truncate">{vehicle.label}</span>
-                    <Badge variant="outline" className="text-xs flex-shrink-0">
+                    <span className="text-foreground truncate text-sm font-medium">
+                      {vehicle.label}
+                    </span>
+                    <Badge variant="outline" className="flex-shrink-0 text-xs">
                       {vehicle.packageCapacity}
                     </Badge>
                   </div>
@@ -183,7 +181,7 @@ export function FleetConfigForm({ config, onChange }: FleetConfigFormProps) {
                     variant="ghost"
                     size="sm"
                     onClick={() => handleRemoveVehicle(vehicle.id)}
-                    className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10 flex-shrink-0 ml-1"
+                    className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 ml-1 h-7 w-7 flex-shrink-0 p-0"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </Button>
@@ -195,7 +193,7 @@ export function FleetConfigForm({ config, onChange }: FleetConfigFormProps) {
 
         {/* Empty State */}
         {(!config || config.vehicles.length === 0) && (
-          <div className="text-center py-8 text-muted-foreground">
+          <div className="text-muted-foreground py-8 text-center">
             <p>No vehicles added yet. Add vehicles using the buttons above.</p>
           </div>
         )}

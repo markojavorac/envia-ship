@@ -119,14 +119,12 @@ export function GraphVisualization({ graph, height = 600 }: GraphVisualizationPr
     return (
       <Card className="bg-card border-border">
         <CardHeader className="pb-3">
-          <CardTitle className="text-lg font-bold text-foreground">
-            Network Graph
-          </CardTitle>
+          <CardTitle className="text-foreground text-lg font-bold">Network Graph</CardTitle>
         </CardHeader>
         <CardContent className="pt-0">
           <div
             style={{ width: "100%", height: `${height}px` }}
-            className="rounded-lg border border-border bg-background flex items-center justify-center"
+            className="border-border bg-background flex items-center justify-center rounded-lg border"
           >
             <p className="text-muted-foreground">Loading visualization...</p>
           </div>
@@ -139,37 +137,20 @@ export function GraphVisualization({ graph, height = 600 }: GraphVisualizationPr
     <Card className="bg-card border-border">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-bold text-foreground">
-            Network Graph
-          </CardTitle>
+          <CardTitle className="text-foreground text-lg font-bold">Network Graph</CardTitle>
           <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleZoomIn}
-              className="h-8 w-8 p-0"
-            >
+            <Button variant="outline" size="sm" onClick={handleZoomIn} className="h-8 w-8 p-0">
               <ZoomIn className="h-4 w-4" />
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleZoomOut}
-              className="h-8 w-8 p-0"
-            >
+            <Button variant="outline" size="sm" onClick={handleZoomOut} className="h-8 w-8 p-0">
               <ZoomOut className="h-4 w-4" />
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleResetView}
-              className="h-8 w-8 p-0"
-            >
+            <Button variant="outline" size="sm" onClick={handleResetView} className="h-8 w-8 p-0">
               <Maximize2 className="h-4 w-4" />
             </Button>
           </div>
         </div>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           Interactive network visualization • Click nodes for details
         </p>
       </CardHeader>
@@ -177,7 +158,7 @@ export function GraphVisualization({ graph, height = 600 }: GraphVisualizationPr
         <div
           ref={containerRef}
           style={{ width: "100%", height: `${height}px` }}
-          className="rounded-lg border border-border bg-background"
+          className="border-border bg-background rounded-lg border"
         />
       </CardContent>
     </Card>

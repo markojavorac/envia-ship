@@ -46,10 +46,7 @@ export function buildDeliveryGraph(
   };
 
   // Create nodes for all stops
-  const nodes: GraphNode[] = [
-    depotNode,
-    ...stops.map((stop) => createGraphNode(stop)),
-  ];
+  const nodes: GraphNode[] = [depotNode, ...stops.map((stop) => createGraphNode(stop))];
 
   // Create edges for all connections
   const edges: GraphEdge[] = [];
@@ -145,10 +142,7 @@ function createGraphEdge(
  * @param routes - Vehicle routes from optimization
  * @returns Updated graph with assigned edges
  */
-export function updateGraphWithRoutes(
-  graph: DeliveryGraph,
-  routes: VehicleRoute[]
-): DeliveryGraph {
+export function updateGraphWithRoutes(graph: DeliveryGraph, routes: VehicleRoute[]): DeliveryGraph {
   // Clone edges
   const updatedEdges = graph.edges.map((edge) => ({ ...edge }));
 
@@ -163,9 +157,7 @@ export function updateGraphWithRoutes(
       const toNodeId = `node-${toStopId}`;
 
       // Find the edge and mark as assigned
-      const edge = updatedEdges.find(
-        (e) => e.fromNodeId === fromNodeId && e.toNodeId === toNodeId
-      );
+      const edge = updatedEdges.find((e) => e.fromNodeId === fromNodeId && e.toNodeId === toNodeId);
 
       if (edge) {
         edge.type = "assigned";
@@ -188,9 +180,7 @@ export function updateGraphWithRoutes(
  * @param graph - Delivery graph
  * @returns Array of Cytoscape elements (nodes + edges)
  */
-export function graphToCytoscapeElements(
-  graph: DeliveryGraph
-): CytoscapeElement[] {
+export function graphToCytoscapeElements(graph: DeliveryGraph): CytoscapeElement[] {
   const elements: CytoscapeElement[] = [];
 
   // Convert nodes

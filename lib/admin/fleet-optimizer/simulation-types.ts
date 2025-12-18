@@ -13,6 +13,7 @@ import type { Vehicle, VehicleRoute } from "../fleet-types";
 export enum VehicleSimulationStatus {
   IDLE = "idle", // At depot, available for new routes
   EN_ROUTE = "en_route", // Moving between stops
+  WAITING = "waiting", // Arrived early, waiting for time window
   SERVICING = "servicing", // At stop, unloading packages
   RETURNING = "returning", // Returning to depot after last stop
   COMPLETED = "completed", // Route finished, at depot

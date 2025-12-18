@@ -77,9 +77,7 @@ export function createVehicle(typeId: string, label: string): Vehicle {
  * // Returns: [Van 1, Van 2, Truck 1]
  * ```
  */
-export function createFleet(
-  config: Array<{ typeId: string; count: number }>
-): Vehicle[] {
+export function createFleet(config: Array<{ typeId: string; count: number }>): Vehicle[] {
   const vehicles: Vehicle[] = [];
 
   for (const { typeId, count } of config) {

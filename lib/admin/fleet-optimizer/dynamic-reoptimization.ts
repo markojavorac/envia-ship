@@ -26,7 +26,8 @@ export async function reoptimizeWithQueue(
 
   // Get only available vehicles
   const availableVehicles = state.vehicles.filter(
-    (v) => v.status === VehicleSimulationStatus.IDLE || v.status === VehicleSimulationStatus.COMPLETED
+    (v) =>
+      v.status === VehicleSimulationStatus.IDLE || v.status === VehicleSimulationStatus.COMPLETED
   );
 
   if (availableVehicles.length === 0 || queuedStops.length === 0) {

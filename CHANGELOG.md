@@ -8,6 +8,57 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Fleet Simulation Engine (Experimental)**: Real-time fleet tracking with live route visualization
+  - **Location**: `/admin/experiments/fleet-optimizer` - Start simulation after optimizing routes
+  - **Road-Following Vehicle Movement**: Proper geometry-based interpolation using Turf.js
+    - Vehicles follow actual OSRM road geometry instead of straight lines
+    - Per-segment geometry slicing with `turf.lineSlice()` and `turf.nearestPointOnLine()`
+    - Smooth position interpolation along curved routes
+    - Graceful fallback to linear interpolation if geometry unavailable
+    - Comprehensive logging for geometry extraction and position updates
+  - **Smart Map Rendering**: Optimized layer management eliminates visual flashing
+    - Routes only update when assignments change (not every position update)
+    - Stable route keys prevent unnecessary layer removal/recreation
+    - Auto-fit bounds to show all routes clearly on simulation start
+    - Zoom level capped at 14 for optimal detail
+    - Vehicle markers with status-specific styling (yellow border for waiting)
+  - **Time Window Support**: Hard and soft delivery time constraints
+    - New `WAITING` vehicle status for early arrivals
+    - Vehicles pause at stops until time window opens
+    - Configurable hard windows (must meet) and soft windows (preferred)
+    - Priority field for soft violation penalty calculations
+    - `TimeWindowViolation` tracking for constraint analysis
+    - Real-time validation during simulation
+  - **Variable Service Times**: Per-stop service duration configuration
+    - Default 5 minutes (configurable in `SimulationConfig`)
+    - Override per stop with `RouteStop.serviceTime` field
+    - Automatic conversion from minutes to milliseconds
+    - Supports different delivery types (residential: 3min, warehouse: 15min)
+  - **Simulation Metrics Panel**: Real-time state monitoring
+    - Fleet status breakdown: Active/Waiting/Idle/Completed vehicles
+    - Delivery progress with visual progress bar
+    - Simulation time and speed multiplier display
+    - Queue status with reoptimization threshold tracking
+    - Configuration details (segment duration, service duration)
+  - **Simulation States**: Complete vehicle lifecycle tracking
+    - `IDLE`: At depot, available for assignment
+    - `EN_ROUTE`: Moving between stops along geometry
+    - `WAITING`: Arrived early, waiting for time window
+    - `SERVICING`: At stop, unloading packages
+    - `RETURNING`: Returning to depot after route completion
+    - `COMPLETED`: Route finished, back at depot
+  - **Components**:
+    - `FleetSimulationMap.tsx`: MapLibre GL map with live vehicle positions
+    - `SimulationConfigPanel.tsx`: Real-time metrics dashboard (NEW)
+    - `SimulationControls.tsx`: Play/pause, speed control, ticket generation
+    - `LiveStatusPanel.tsx`: Active vehicle status cards
+  - **Dependencies**:
+    - `@turf/turf@^7.2.0` - Geospatial operations (142 packages)
+    - Bundle impact: ~158KB for Turf.js (production-grade geometry handling)
+  - **Known Limitations**:
+    - Fleet utilization: Currently assigns most stops to single vehicle
+    - Route balancing: Clarke-Wright may create uneven distribution
+    - Future work: Implement route balancing heuristics and load distribution
 - **Fleet Optimizer (Experimental)**: Graph-based multi-vehicle routing with capacity constraints
   - **Location**: `/admin/experiments/fleet-optimizer` - Accessible via experiments dashboard card
   - **Clarke-Wright Savings Algorithm**: Industry-proven VRP heuristic (since 1964)

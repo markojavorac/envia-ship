@@ -38,11 +38,14 @@ export interface RouteStop {
   pairedStopId?: string;
   /** Delivery ticket ID for grouping related stops */
   deliveryId?: string;
-  /** Time window constraints (future use - Phase 5) */
+  /** Time window constraints */
   timeWindow?: {
     earliest: Date;
     latest: Date;
+    type: "hard" | "soft"; // Hard = must meet, Soft = preference with penalty
   };
+  /** Priority for soft time window violations (1-10, higher = more important) */
+  priority?: number;
   /** Service time at stop in minutes (default: 5) */
   serviceTime?: number;
 

@@ -43,20 +43,20 @@ export function SimulationControls({
   return (
     <Card className="bg-card border-border">
       <CardContent className="pt-6">
-        <div className="flex items-center gap-4 flex-wrap">
+        <div className="flex flex-wrap items-center gap-4">
           {/* Play/Pause */}
           <Button
             onClick={isRunning ? onPause : onStart}
-            className="bg-primary text-white hover:bg-primary/90"
+            className="bg-primary hover:bg-primary/90 text-white"
           >
             {isRunning ? (
               <>
-                <Pause className="h-4 w-4 mr-2" />
+                <Pause className="mr-2 h-4 w-4" />
                 Pause
               </>
             ) : (
               <>
-                <Play className="h-4 w-4 mr-2" />
+                <Play className="mr-2 h-4 w-4" />
                 Play
               </>
             )}
@@ -64,12 +64,12 @@ export function SimulationControls({
 
           {/* Speed Selector */}
           <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold text-foreground">Speed:</span>
+            <span className="text-foreground text-sm font-semibold">Speed:</span>
             <Select
               value={simulationSpeed.toString()}
               onValueChange={(value) => onSpeedChange(Number(value))}
             >
-              <SelectTrigger className="w-24 bg-card border-border">
+              <SelectTrigger className="bg-card border-border w-24">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -83,20 +83,20 @@ export function SimulationControls({
 
           {/* Ticket Generation Toggle */}
           <Button variant="outline" onClick={onToggleTicketGeneration} className="border-border">
-            <Ticket className="h-4 w-4 mr-2" />
+            <Ticket className="mr-2 h-4 w-4" />
             Tickets: {ticketGenerationEnabled ? "ON" : "OFF"}
           </Button>
 
           {/* Manual Reoptimize */}
           <Button variant="outline" onClick={onManualReoptimize} className="border-border">
-            <RefreshCw className="h-4 w-4 mr-2" />
+            <RefreshCw className="mr-2 h-4 w-4" />
             Reoptimize Now
           </Button>
 
           {/* Simulation Time */}
-          <div className="flex items-center gap-2 ml-auto">
-            <Clock className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm font-mono text-foreground">
+          <div className="ml-auto flex items-center gap-2">
+            <Clock className="text-muted-foreground h-4 w-4" />
+            <span className="text-foreground font-mono text-sm">
               {format(currentTime, "HH:mm:ss")}
             </span>
           </div>

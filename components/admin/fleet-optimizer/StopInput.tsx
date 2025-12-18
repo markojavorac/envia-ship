@@ -23,12 +23,7 @@ interface StopInputProps {
   currentCount: number;
 }
 
-export function StopInput({
-  onAddStop,
-  disabled = false,
-  maxStops,
-  currentCount,
-}: StopInputProps) {
+export function StopInput({ onAddStop, disabled = false, maxStops, currentCount }: StopInputProps) {
   const [address, setAddress] = useState("");
   const [packageCount, setPackageCount] = useState("1");
 
@@ -49,11 +44,11 @@ export function StopInput({
   return (
     <Card className="bg-card border-border">
       <CardHeader className="pb-3">
-        <CardTitle className="text-lg font-bold text-foreground flex items-center gap-2">
-          <MapPin className="h-5 w-5 text-primary" />
+        <CardTitle className="text-foreground flex items-center gap-2 text-lg font-bold">
+          <MapPin className="text-primary h-5 w-5" />
           Add Stop
         </CardTitle>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           {currentCount} / {maxStops} stops added
         </p>
       </CardHeader>
@@ -61,7 +56,7 @@ export function StopInput({
         <div className="space-y-4">
           {/* Address Input */}
           <div className="space-y-2">
-            <Label htmlFor="stop-address" className="font-semibold text-foreground">
+            <Label htmlFor="stop-address" className="text-foreground font-semibold">
               Address
             </Label>
             <AddressAutocomplete
@@ -77,7 +72,7 @@ export function StopInput({
 
           {/* Package Count */}
           <div className="space-y-2">
-            <Label htmlFor="package-count" className="font-semibold text-foreground">
+            <Label htmlFor="package-count" className="text-foreground font-semibold">
               Packages
             </Label>
             <Input
@@ -90,7 +85,7 @@ export function StopInput({
               disabled={disabled}
               className="bg-input border-border focus-visible:border-primary"
             />
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               Number of packages to deliver at this stop
             </p>
           </div>

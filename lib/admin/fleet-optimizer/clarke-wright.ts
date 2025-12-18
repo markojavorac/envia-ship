@@ -165,10 +165,7 @@ async function fetchRouteGeometry(
 
   try {
     // Build full coordinate sequence: depot → stops → depot (if round trip)
-    const coordinates = [
-      depot.coordinates,
-      ...stops.map((s) => s.coordinates),
-    ];
+    const coordinates = [depot.coordinates, ...stops.map((s) => s.coordinates)];
 
     if (returnToDepot) {
       coordinates.push(depot.coordinates);
@@ -179,7 +176,9 @@ async function fetchRouteGeometry(
     const geometry = await getOSRMRouteGeometry(coordinates);
 
     if (geometry) {
-      console.log(`[Clarke-Wright] ✅ Got geometry: ${geometry.coordinates.length} road coordinates`);
+      console.log(
+        `[Clarke-Wright] ✅ Got geometry: ${geometry.coordinates.length} road coordinates`
+      );
     } else {
       console.warn(`[Clarke-Wright] ⚠️ OSRM geometry fetch failed, will use straight lines`);
     }
@@ -195,10 +194,7 @@ async function fetchRouteGeometry(
  * Calculate savings for all pairs of stops
  * S(i,j) = d(depot,i) + d(depot,j) - d(i,j)
  */
-function calculateSavings(
-  stops: RouteStop[],
-  distanceMatrix: number[][]
-): SavingsPair[] {
+function calculateSavings(stops: RouteStop[], distanceMatrix: number[][]): SavingsPair[] {
   const savings: SavingsPair[] = [];
   const depotIndex = 0; // Depot is always first in distance matrix
 
@@ -234,10 +230,7 @@ function calculateSavings(
  * Assigns stops to vehicles in order until vehicles run out,
  * then marks remaining stops as unassigned
  */
-function initializeRoutes(
-  stops: RouteStop[],
-  fleet: FleetConfig
-): InternalRoute[] {
+function initializeRoutes(stops: RouteStop[], fleet: FleetConfig): InternalRoute[] {
   const routes: InternalRoute[] = [];
 
   for (let i = 0; i < stops.length; i++) {
@@ -277,12 +270,8 @@ function tryMergeRoutes(
   distanceMatrix: number[][]
 ): boolean {
   // Find routes containing these stops
-  const routeI = routes.find(
-    (r) => r.active && r.stops.some((s) => s.id === saving.stopI)
-  );
-  const routeJ = routes.find(
-    (r) => r.active && r.stops.some((s) => s.id === saving.stopJ)
-  );
+  const routeI = routes.find((r) => r.active && r.stops.some((s) => s.id === saving.stopI));
+  const routeJ = routes.find((r) => r.active && r.stops.some((s) => s.id === saving.stopJ));
 
   if (!routeI || !routeJ || routeI.id === routeJ.id) {
     return false; // Can't merge same route or inactive routes
@@ -324,11 +313,7 @@ function tryMergeRoutes(
  * Merge two routes into one
  * Modifies routeI to contain both routes, marks routeJ as inactive
  */
-function mergeRoutes(
-  routeI: InternalRoute,
-  routeJ: InternalRoute,
-  saving: SavingsPair
-): void {
+function mergeRoutes(routeI: InternalRoute, routeJ: InternalRoute, saving: SavingsPair): void {
   // Determine merge order (which route comes first)
   let firstRoute = routeI;
   let secondRoute = routeJ;
@@ -484,12 +469,7 @@ async function buildFinalSolution(
       : 0;
 
   // Build graph for visualization (use original stops to match matrix)
-  const graph = buildDeliveryGraph(
-    originalStops,
-    fleet.depot,
-    distanceMatrix,
-    durationMatrix
-  );
+  const graph = buildDeliveryGraph(originalStops, fleet.depot, distanceMatrix, durationMatrix);
 
   // Update graph with assigned routes
   const graphWithRoutes = updateGraphWithRoutes(graph, vehicleRoutes);

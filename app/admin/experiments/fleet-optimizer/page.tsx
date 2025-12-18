@@ -19,6 +19,7 @@ import { RouteDetailsTable } from "@/components/admin/fleet-optimizer/RouteDetai
 import { SimulationControls } from "@/components/admin/fleet-optimizer/SimulationControls";
 import { LiveStatusPanel } from "@/components/admin/fleet-optimizer/LiveStatusPanel";
 import { FleetSimulationMap } from "@/components/admin/fleet-optimizer/FleetSimulationMap";
+import { SimulationConfigPanel } from "@/components/admin/fleet-optimizer/SimulationConfigPanel";
 import { StopInput } from "@/components/admin/fleet-optimizer/StopInput";
 import { RouteStopsList } from "@/components/admin/routes/RouteStopsList";
 import { CSVImportButton } from "@/components/admin/routes/CSVImportButton";
@@ -76,8 +77,7 @@ export default function FleetOptimizerPage() {
   });
 
   // Can optimize if we have vehicles and at least 2 stops
-  const canOptimize =
-    fleetConfig.vehicles.length > 0 && stops.length >= 2;
+  const canOptimize = fleetConfig.vehicles.length > 0 && stops.length >= 2;
 
   const handleAddStop = (stop: RouteStop) => {
     if (stops.length >= MAX_STOPS) {
@@ -129,7 +129,10 @@ export default function FleetOptimizerPage() {
 
   const handleLoadTestFleet = () => {
     // Generate larger test data for simulation
-    const { generateLoadTestStops, generateLoadTestFleet } = require("@/lib/admin/fleet-optimizer/load-test-data");
+    const {
+      generateLoadTestStops,
+      generateLoadTestFleet,
+    } = require("@/lib/admin/fleet-optimizer/load-test-data");
 
     const testStops = generateLoadTestStops(30); // 30 stops
     const testFleet = generateLoadTestFleet("small", fleetConfig.depot); // 5 vehicles
@@ -179,28 +182,29 @@ export default function FleetOptimizerPage() {
   return (
     <div className="flex flex-col">
       {/* Header */}
-      <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b border-border bg-background px-4 md:px-6">
+      <header className="border-border bg-background sticky top-0 z-10 flex h-16 items-center gap-4 border-b px-4 md:px-6">
         <SidebarTrigger />
         <div className="flex-1">
-          <h1 className="text-2xl font-bold text-foreground">
-            Fleet Optimizer
-          </h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="text-foreground text-2xl font-bold">Fleet Optimizer</h1>
+          <p className="text-muted-foreground text-sm">
             Experimental • Graph-based multi-vehicle routing
           </p>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 p-4 md:p-6 space-y-6 pb-20 md:pb-6">
+      <main className="flex-1 space-y-6 p-4 pb-20 md:p-6 md:pb-6">
         {/* Info Banner - Less aggressive */}
-        <div className="rounded-lg border-l-4 border-primary bg-primary/5 p-4">
+        <div className="border-primary bg-primary/5 rounded-lg border-l-4 p-4">
           <div className="flex items-start gap-3">
-            <Sparkles className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+            <Sparkles className="text-primary mt-0.5 h-5 w-5 flex-shrink-0" />
             <div>
-              <p className="font-semibold text-foreground">Experimental: Graph-Based Fleet Optimization</p>
-              <p className="text-sm text-muted-foreground mt-1">
-                Multi-vehicle routing with Clarke-Wright algorithm • Supports capacity constraints and pickup/dropoff sequencing
+              <p className="text-foreground font-semibold">
+                Experimental: Graph-Based Fleet Optimization
+              </p>
+              <p className="text-muted-foreground mt-1 text-sm">
+                Multi-vehicle routing with Clarke-Wright algorithm • Supports capacity constraints
+                and pickup/dropoff sequencing
               </p>
             </div>
           </div>
@@ -213,11 +217,11 @@ export default function FleetOptimizerPage() {
         <div className="space-y-4">
           <div className="flex items-center justify-between gap-4">
             <div className="flex-1">
-              <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <MapPin className="h-5 w-5 text-primary" />
+              <h2 className="text-foreground flex items-center gap-2 text-xl font-bold">
+                <MapPin className="text-primary h-5 w-5" />
                 Delivery Stops
               </h2>
-              <p className="text-sm text-muted-foreground mt-1">
+              <p className="text-muted-foreground mt-1 text-sm">
                 Add stops manually or import from CSV • Max {MAX_STOPS} stops
               </p>
             </div>
@@ -228,7 +232,7 @@ export default function FleetOptimizerPage() {
                 onClick={handleLoadDemoData}
                 className="font-semibold"
               >
-                <Database className="h-4 w-4 mr-2" />
+                <Database className="mr-2 h-4 w-4" />
                 Load Demo Data
               </Button>
               <Button
@@ -237,7 +241,7 @@ export default function FleetOptimizerPage() {
                 onClick={handleLoadTestFleet}
                 className="font-semibold"
               >
-                <Truck className="h-4 w-4 mr-2" />
+                <Truck className="mr-2 h-4 w-4" />
                 Load Test Fleet
               </Button>
               <CSVImportButton onImport={handleImportStops} />
@@ -261,29 +265,27 @@ export default function FleetOptimizerPage() {
 
         {/* Optimize Button */}
         {stops.length > 0 && (
-          <div className="flex flex-col items-center gap-3 py-6 border-y border-border bg-muted/20">
+          <div className="border-border bg-muted/20 flex flex-col items-center gap-3 border-y py-6">
             <Button
               size="lg"
               onClick={handleOptimizeFleet}
               disabled={!canOptimize || isOptimizing}
-              className="bg-primary text-white hover:bg-primary/90 font-semibold px-8 shadow-lg hover:shadow-xl transition-shadow"
+              className="bg-primary hover:bg-primary/90 px-8 font-semibold text-white shadow-lg transition-shadow hover:shadow-xl"
             >
               {isOptimizing ? (
                 <>
-                  <span className="animate-spin mr-2">⏳</span>
+                  <span className="mr-2 animate-spin">⏳</span>
                   Optimizing Fleet...
                 </>
               ) : (
                 <>
-                  <Sparkles className="h-5 w-5 mr-2" />
+                  <Sparkles className="mr-2 h-5 w-5" />
                   Optimize {stops.length} Stops Across {fleetConfig.vehicles.length} Vehicles
                 </>
               )}
             </Button>
             {!canOptimize && stops.length < 2 && (
-              <p className="text-sm text-muted-foreground">
-                Add at least 2 stops to optimize
-              </p>
+              <p className="text-muted-foreground text-sm">Add at least 2 stops to optimize</p>
             )}
           </div>
         )}
@@ -291,19 +293,17 @@ export default function FleetOptimizerPage() {
         {/* Results */}
         {solution && !simulationMode && (
           <div className="space-y-6">
-            <div className="border-t border-border pt-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold text-foreground">
-                  Optimization Results
-                </h2>
+            <div className="border-border border-t pt-6">
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="text-foreground text-xl font-bold">Optimization Results</h2>
                 <Button
                   onClick={() => {
                     setSimulationMode(true);
                     setTimeout(() => start(), 100);
                   }}
-                  className="bg-primary text-white hover:bg-primary/90 font-semibold"
+                  className="bg-primary hover:bg-primary/90 font-semibold text-white"
                 >
-                  <Play className="h-4 w-4 mr-2" />
+                  <Play className="mr-2 h-4 w-4" />
                   Start Real-Time Simulation
                 </Button>
               </div>
@@ -323,10 +323,8 @@ export default function FleetOptimizerPage() {
         {/* Simulation Mode */}
         {solution && simulationMode && simState && (
           <div className="space-y-4">
-            <div className="border-t border-border pt-6">
-              <h2 className="text-xl font-bold text-foreground mb-4">
-                Real-Time Fleet Simulation
-              </h2>
+            <div className="border-border border-t pt-6">
+              <h2 className="text-foreground mb-4 text-xl font-bold">Real-Time Fleet Simulation</h2>
             </div>
 
             {/* Controls and Metrics - Tighter spacing */}
@@ -342,18 +340,19 @@ export default function FleetOptimizerPage() {
               />
 
               {/* Live Status and Metrics */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
                 <div className="lg:col-span-2">
                   <FleetMetrics solution={solution} />
                 </div>
-                <div className="lg:col-span-1">
+                <div className="space-y-4 lg:col-span-1">
+                  <SimulationConfigPanel simState={simState} config={DEFAULT_SIMULATION_CONFIG} />
                   <LiveStatusPanel simState={simState} />
                 </div>
               </div>
             </div>
 
             {/* Visual separator */}
-            <div className="border-t border-border pt-6">
+            <div className="border-border border-t pt-6">
               {/* Tabs: Graph View vs Map View */}
               <Tabs defaultValue="graph" className="w-full">
                 <TabsList className="grid w-full max-w-md grid-cols-2">
@@ -378,21 +377,25 @@ export default function FleetOptimizerPage() {
 
         {/* Empty State */}
         {!solution && stops.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-16 px-4 border-2 border-dashed border-border rounded-lg bg-muted/20">
-            <div className="bg-primary/10 rounded-full p-4 mb-4">
-              <Truck className="h-12 w-12 text-primary" />
+          <div className="border-border bg-muted/20 flex flex-col items-center justify-center rounded-lg border-2 border-dashed px-4 py-16">
+            <div className="bg-primary/10 mb-4 rounded-full p-4">
+              <Truck className="text-primary h-12 w-12" />
             </div>
-            <h3 className="text-xl font-bold text-foreground mb-2">Ready to Optimize Your Fleet</h3>
-            <p className="text-muted-foreground text-center max-w-md mb-4">
-              Add delivery stops below to see multi-vehicle routing in action. The algorithm will automatically distribute stops across your fleet.
+            <h3 className="text-foreground mb-2 text-xl font-bold">Ready to Optimize Your Fleet</h3>
+            <p className="text-muted-foreground mb-4 max-w-md text-center">
+              Add delivery stops below to see multi-vehicle routing in action. The algorithm will
+              automatically distribute stops across your fleet.
             </p>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <div className="text-muted-foreground flex items-center gap-2 text-sm">
               <span className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-primary"></span>
+                <span className="bg-primary h-2 w-2 rounded-full"></span>
                 {fleetConfig.vehicles.length} vehicles configured
               </span>
               <span>•</span>
-              <span>Capacity: {fleetConfig.vehicles.reduce((sum, v) => sum + v.packageCapacity, 0)} packages</span>
+              <span>
+                Capacity: {fleetConfig.vehicles.reduce((sum, v) => sum + v.packageCapacity, 0)}{" "}
+                packages
+              </span>
             </div>
           </div>
         )}

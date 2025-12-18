@@ -46,14 +46,10 @@ export function RouteDetailsTable({ solution }: RouteDetailsTableProps) {
     return (
       <Card className="bg-card border-border">
         <CardHeader>
-          <CardTitle className="text-lg font-bold text-foreground">
-            Route Details
-          </CardTitle>
+          <CardTitle className="text-foreground text-lg font-bold">Route Details</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-center text-muted-foreground py-8">
-            No routes assigned yet
-          </p>
+          <p className="text-muted-foreground py-8 text-center">No routes assigned yet</p>
         </CardContent>
       </Card>
     );
@@ -62,10 +58,8 @@ export function RouteDetailsTable({ solution }: RouteDetailsTableProps) {
   return (
     <Card className="bg-card border-border">
       <CardHeader className="pb-3">
-        <CardTitle className="text-lg font-bold text-foreground">
-          Route Details
-        </CardTitle>
-        <p className="text-sm text-muted-foreground">
+        <CardTitle className="text-foreground text-lg font-bold">Route Details</CardTitle>
+        <p className="text-muted-foreground text-sm">
           {nonEmptyRoutes.length} {nonEmptyRoutes.length === 1 ? "route" : "routes"} with stops
         </p>
       </CardHeader>
@@ -74,12 +68,12 @@ export function RouteDetailsTable({ solution }: RouteDetailsTableProps) {
           <TableHeader>
             <TableRow>
               <TableHead className="w-8"></TableHead>
-              <TableHead className="font-semibold text-foreground">Vehicle</TableHead>
-              <TableHead className="font-semibold text-foreground">Stops</TableHead>
-              <TableHead className="font-semibold text-foreground">Distance</TableHead>
-              <TableHead className="font-semibold text-foreground">Time</TableHead>
-              <TableHead className="font-semibold text-foreground">Packages</TableHead>
-              <TableHead className="font-semibold text-foreground">Utilization</TableHead>
+              <TableHead className="text-foreground font-semibold">Vehicle</TableHead>
+              <TableHead className="text-foreground font-semibold">Stops</TableHead>
+              <TableHead className="text-foreground font-semibold">Distance</TableHead>
+              <TableHead className="text-foreground font-semibold">Time</TableHead>
+              <TableHead className="text-foreground font-semibold">Packages</TableHead>
+              <TableHead className="text-foreground font-semibold">Utilization</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -89,7 +83,10 @@ export function RouteDetailsTable({ solution }: RouteDetailsTableProps) {
 
               return (
                 <Fragment key={route.vehicleId}>
-                  <TableRow className="cursor-pointer hover:bg-muted/50" onClick={() => toggleRoute(route.vehicleId)}>
+                  <TableRow
+                    className="hover:bg-muted/50 cursor-pointer"
+                    onClick={() => toggleRoute(route.vehicleId)}
+                  >
                     <TableCell>
                       <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
                         {isExpanded ? (
@@ -102,12 +99,10 @@ export function RouteDetailsTable({ solution }: RouteDetailsTableProps) {
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <div
-                          className="w-3 h-3 rounded-full"
+                          className="h-3 w-3 rounded-full"
                           style={{ backgroundColor: stats.vehicleColor }}
                         />
-                        <span className="font-medium text-foreground">
-                          {stats.vehicleLabel}
-                        </span>
+                        <span className="text-foreground font-medium">{stats.vehicleLabel}</span>
                       </div>
                     </TableCell>
                     <TableCell className="text-foreground">{stats.stopCount}</TableCell>
@@ -131,28 +126,26 @@ export function RouteDetailsTable({ solution }: RouteDetailsTableProps) {
                     <TableRow>
                       <TableCell colSpan={7} className="bg-muted/30 p-4">
                         <div className="space-y-2">
-                          <h4 className="font-semibold text-sm text-foreground mb-3">
+                          <h4 className="text-foreground mb-3 text-sm font-semibold">
                             Route Sequence:
                           </h4>
                           {route.stops.map((stop, index) => (
                             <div
                               key={stop.id}
-                              className="flex items-start gap-3 p-2 rounded bg-background border border-border"
+                              className="bg-background border-border flex items-start gap-3 rounded border p-2"
                             >
-                              <div className="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-white text-xs font-bold">
+                              <div className="bg-primary flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold text-white">
                                 {index + 1}
                               </div>
                               <div className="flex-1">
                                 <div className="flex items-center gap-2">
-                                  <MapPin className="h-3 w-3 text-muted-foreground" />
-                                  <span className="text-sm font-medium text-foreground">
+                                  <MapPin className="text-muted-foreground h-3 w-3" />
+                                  <span className="text-foreground text-sm font-medium">
                                     {stop.address}
                                   </span>
                                 </div>
                                 {stop.notes && (
-                                  <p className="text-xs text-muted-foreground mt-1">
-                                    {stop.notes}
-                                  </p>
+                                  <p className="text-muted-foreground mt-1 text-xs">{stop.notes}</p>
                                 )}
                                 {stop.packageCount && stop.packageCount > 1 && (
                                   <Badge variant="outline" className="mt-1 text-xs">

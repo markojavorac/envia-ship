@@ -41,8 +41,7 @@ export function formatUtilization(percent: number): string {
  */
 export function calculateFuelCost(solution: FleetSolution): number {
   const { totalDistance } = solution;
-  const { FUEL_CONSUMPTION_KM_PER_LITER, FUEL_PRICE_GTQ_PER_LITER } =
-    GUATEMALA_DELIVERY_CONSTANTS;
+  const { FUEL_CONSUMPTION_KM_PER_LITER, FUEL_PRICE_GTQ_PER_LITER } = GUATEMALA_DELIVERY_CONSTANTS;
 
   const litersUsed = totalDistance / FUEL_CONSUMPTION_KM_PER_LITER;
   const cost = litersUsed * FUEL_PRICE_GTQ_PER_LITER;
@@ -55,8 +54,7 @@ export function calculateFuelCost(solution: FleetSolution): number {
  */
 export function calculateCO2Emissions(solution: FleetSolution): number {
   const { totalDistance } = solution;
-  const { FUEL_CONSUMPTION_KM_PER_LITER, CO2_PER_LITER_KG } =
-    GUATEMALA_DELIVERY_CONSTANTS;
+  const { FUEL_CONSUMPTION_KM_PER_LITER, CO2_PER_LITER_KG } = GUATEMALA_DELIVERY_CONSTANTS;
 
   const litersUsed = totalDistance / FUEL_CONSUMPTION_KM_PER_LITER;
   const co2Kg = litersUsed * CO2_PER_LITER_KG;
@@ -67,9 +65,7 @@ export function calculateCO2Emissions(solution: FleetSolution): number {
 /**
  * Get utilization category for color coding
  */
-export function getUtilizationCategory(
-  percent: number
-): "low" | "medium" | "high" | "optimal" {
+export function getUtilizationCategory(percent: number): "low" | "medium" | "high" | "optimal" {
   if (percent < 40) return "low";
   if (percent < 70) return "medium";
   if (percent < 90) return "high";
@@ -109,9 +105,7 @@ export interface FleetSummaryStats {
   optimizationTime: string;
 }
 
-export function calculateFleetSummary(
-  solution: FleetSolution
-): FleetSummaryStats {
+export function calculateFleetSummary(solution: FleetSolution): FleetSummaryStats {
   const fuelCost = calculateFuelCost(solution);
   const co2 = calculateCO2Emissions(solution);
 

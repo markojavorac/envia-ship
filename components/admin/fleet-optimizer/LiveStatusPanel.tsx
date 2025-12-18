@@ -35,7 +35,7 @@ export function LiveStatusPanel({ simState }: LiveStatusPanelProps) {
       {/* Active Vehicles */}
       <Card className="bg-card border-border">
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-lg font-bold text-foreground">
+          <CardTitle className="text-foreground flex items-center gap-2 text-lg font-bold">
             <Truck className="h-5 w-5 text-green-600" />
             Active Vehicles ({activeVehicles.length})
           </CardTitle>
@@ -56,7 +56,7 @@ export function LiveStatusPanel({ simState }: LiveStatusPanelProps) {
       {/* Available Vehicles */}
       <Card className="bg-card border-border">
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-lg font-bold text-foreground">
+          <CardTitle className="text-foreground flex items-center gap-2 text-lg font-bold">
             <CheckCircle className="h-5 w-5 text-blue-600" />
             Available at Depot ({availableVehicles.length})
           </CardTitle>
@@ -69,13 +69,13 @@ export function LiveStatusPanel({ simState }: LiveStatusPanelProps) {
               {availableVehicles.map((vehicle) => (
                 <div
                   key={vehicle.id}
-                  className="flex items-center gap-2 px-3 py-2 rounded bg-background border border-border"
+                  className="bg-background border-border flex items-center gap-2 rounded border px-3 py-2"
                 >
                   <div
-                    className="w-3 h-3 rounded-full"
+                    className="h-3 w-3 rounded-full"
                     style={{ backgroundColor: vehicle.color }}
                   />
-                  <span className="text-sm font-medium text-foreground">{vehicle.label}</span>
+                  <span className="text-foreground text-sm font-medium">{vehicle.label}</span>
                   <Badge variant="outline" className="text-xs">
                     {vehicle.packageCapacity} capacity
                   </Badge>
@@ -90,12 +90,12 @@ export function LiveStatusPanel({ simState }: LiveStatusPanelProps) {
       <Card className="bg-card border-border">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-2 text-lg font-bold text-foreground">
+            <CardTitle className="text-foreground flex items-center gap-2 text-lg font-bold">
               <Clock className="h-5 w-5 text-orange-600" />
               Queued Tickets ({ticketQueue.length})
             </CardTitle>
             {ticketQueue.length > 0 && (
-              <span className="text-sm text-muted-foreground">
+              <span className="text-muted-foreground text-sm">
                 Auto-reoptimize at {autoReoptimizeThreshold}
               </span>
             )}
@@ -105,17 +105,17 @@ export function LiveStatusPanel({ simState }: LiveStatusPanelProps) {
           {ticketQueue.length === 0 ? (
             <p className="text-muted-foreground text-sm">No tickets in queue</p>
           ) : (
-            <div className="space-y-2 max-h-64 overflow-y-auto">
+            <div className="max-h-64 space-y-2 overflow-y-auto">
               {ticketQueue.map((ticket) => (
                 <div
                   key={ticket.id}
-                  className="p-3 border-l-4 border-primary bg-background rounded"
+                  className="border-primary bg-background rounded border-l-4 p-3"
                 >
                   <div className="flex items-start gap-2">
-                    <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
+                    <MapPin className="text-muted-foreground mt-0.5 h-4 w-4" />
                     <div className="flex-1">
-                      <p className="font-medium text-sm text-foreground">{ticket.stop.address}</p>
-                      <p className="text-xs text-muted-foreground mt-1">
+                      <p className="text-foreground text-sm font-medium">{ticket.stop.address}</p>
+                      <p className="text-muted-foreground mt-1 text-xs">
                         Added {formatDistanceToNow(ticket.addedAt, { addSuffix: true })}
                       </p>
                     </div>
@@ -147,36 +147,24 @@ function VehicleStatusCard({ vehicle }: { vehicle: SimulatedVehicle }) {
   const getStatusBadge = () => {
     switch (vehicle.status) {
       case "en_route":
-        return (
-          <Badge className="bg-blue-600 text-white">
-            En Route
-          </Badge>
-        );
+        return <Badge className="bg-blue-600 text-white">En Route</Badge>;
       case "servicing":
-        return (
-          <Badge className="bg-yellow-600 text-white">
-            Servicing
-          </Badge>
-        );
+        return <Badge className="bg-yellow-600 text-white">Servicing</Badge>;
       case "returning":
-        return (
-          <Badge className="bg-purple-600 text-white">
-            Returning
-          </Badge>
-        );
+        return <Badge className="bg-purple-600 text-white">Returning</Badge>;
       default:
         return <Badge variant="outline">Unknown</Badge>;
     }
   };
 
   return (
-    <div className="flex items-center justify-between p-3 rounded bg-background border border-border">
+    <div className="bg-background border-border flex items-center justify-between rounded border p-3">
       <div className="flex items-center gap-3">
-        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: vehicle.color }} />
+        <div className="h-3 w-3 rounded-full" style={{ backgroundColor: vehicle.color }} />
         <div>
-          <span className="font-medium text-foreground">{vehicle.label}</span>
+          <span className="text-foreground font-medium">{vehicle.label}</span>
           {vehicle.estimatedArrival && (
-            <p className="text-xs text-muted-foreground mt-0.5">
+            <p className="text-muted-foreground mt-0.5 text-xs">
               ETA: {format(vehicle.estimatedArrival, "HH:mm:ss")}
             </p>
           )}
@@ -185,7 +173,7 @@ function VehicleStatusCard({ vehicle }: { vehicle: SimulatedVehicle }) {
 
       <div className="flex items-center gap-3">
         {getStatusBadge()}
-        <span className="text-sm text-foreground">
+        <span className="text-foreground text-sm">
           {vehicle.completedStops} / {vehicle.completedStops + vehicle.remainingStops} stops
         </span>
       </div>
